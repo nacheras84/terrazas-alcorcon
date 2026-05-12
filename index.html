@@ -286,11 +286,22 @@ const BARS=[
   {n:"Mesón A Lareira",lat:40.3501,lng:-3.8211,r:4.5,rv:5670,a:"C. Príncipe Don Juan Carlos, 7",p:"+34 916 12 12 04",s:"sombrilla",t:"Gran terraza marisquería",h:"Lun-Mar y Jue-Dom 9:00-00:00 · Mié cerrado",pr:"€€"},
   {n:"Cafetería Acuario",lat:40.3526,lng:-3.8176,r:4.1,rv:15,a:"Av. de los Derechos Humanos, 3-5",p:"+34 642 02 84 04",s:"natural",t:"Terraza junto a parque infantil",h:"Lun-Dom 9:30-23:00",pr:"€"},
   {n:"Sidrería El Trasgu",lat:40.3523,lng:-3.81,r:4.4,rv:244,a:"C. Venus, 1",p:"+34 692 79 35 46",s:"sombrilla",t:"Terraza sidrería tapas",h:"Lun 7:00-16:30 · Mar-Vie 7:00-00:00 · Sáb 9:00-00:00 · Dom 10:00-00:00",pr:"€"},
+  // ── NUEVOS BARRIOS ──
+  {n:"Restaurante La Casona de Luis",lat:40.3527,lng:-3.809,r:4.1,rv:546,a:"C. Venus, 18",p:"+34 919 35 26 33",s:"sombrilla",t:"Terraza restaurante mediterráneo",h:"Mar-Mié 9:00-18:00 · Jue-Sáb 9:00-00:00 · Dom 9:00-18:00 · Lun cerrado",pr:"€"},
+  {n:"Bar El Majuelo",lat:40.3479,lng:-3.8073,r:4.1,rv:70,a:"C. Parque Bujaruelo, 10",p:"+34 916 11 09 76",s:"sombrilla",t:"Terraza Parque Bujaruelo",h:"Lun-Dom 11:00-23:00",pr:"€"},
+  {n:"Cafetería Tres Rosas",lat:40.3486,lng:-3.8098,r:4.8,rv:6,a:"C. Timanfaya, 34",s:"sombrilla",t:"Terraza barrio tranquila",h:"Consultar horario",pr:"€"},
+  {n:"Cervecería el Castillo",lat:40.3537,lng:-3.8118,r:3.9,rv:17,a:"C. Caldas de Reyes",s:"sombrilla",t:"Terraza Valderas",h:"Lun 8:00-22:00 · Mar-Dom 9:00-22:30",pr:"€"},
+  {n:"El Toke Castillo Restaurante",lat:40.3494,lng:-3.8026,r:3.8,rv:1891,a:"Av. los Castillos, 1022",p:"+34 916 12 02 92",s:"sombrilla",t:"Terraza zona Castillos",h:"Lun-Dom 6:30-01:30",pr:"€"},
+  {n:"Sushisom Parque Oeste",lat:40.3502,lng:-3.8481,r:4.0,rv:3078,a:"Av. de Europa, 4",p:"+34 917 27 02 74",s:"cubierta",t:"Terraza restaurante japonés",h:"Lun-Dom 13:00-16:30 y 20:00-23:30",pr:"€€"},
+  // ── PARQUE LISBOA ──
+  {n:"Bar La Prórroga",lat:40.353,lng:-3.8215,r:3.1,rv:15,a:"Av. de Lisboa (Piscinas Parque Lisboa)",p:"+34 678 58 91 29",s:"natural",t:"Terraza piscinas verano",h:"Lun-Mié-Jue 9:30-22:00 · Vie-Sáb 9:30-02:00 · Dom 9:30-00:00",pr:"€"},
+  {n:"Chez Michel Sabores del Líbano",lat:40.357,lng:-3.813,r:4.8,rv:1222,a:"Av. de Lisboa, 24",p:"+34 916 84 57 58",s:"sombrilla",t:"Terraza restaurante libanés",h:"Mar-Sáb 13:00-16:00 y 20:00-23:00 · Dom 13:00-16:00 · Lun cerrado",pr:"€€"},
+  {n:"Trabuco Bar",lat:40.3529,lng:-3.8197,r:4.9,rv:8,a:"C. Porto Cristo, 1 local 6/7",s:"sombrilla",t:"Terraza bar de barrio",h:"Consultar horario",pr:"€"},
 ];
 
 const SH={natural:{i:"🌳",l:"Sombra natural",c:"tn",col:"#2e7d32"},sombrilla:{i:"⛱️",l:"Sombrilla",c:"ts",col:"#bf360c"},cubierta:{i:"🏠",l:"Cubierta",c:"tc",col:"#1565c0"}};
 const MUN="28007",BASE="https://opendata.aemet.es/opendata/api";
-const DEFAULT_KEY='eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ25hY2lvdG9ycmVzNjJAZ21haWwuY29tIiwianRpIjoiNzgwYjY0NDQtN2I4ZS00NDZhLWFiZTMtNDM4ZDIyYjhmZTBjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3Nzg1Nzk5MzksInVzZXJJZCI6Ijc4MGI2NDQ0LTdiOGUtNDQ2YS1hYmUzLTQzOGQyMmI4ZmUwYyIsInJvbGUiOiIifQ.EAJF0HEXpxkqgNDRaAXfQG6Dr3wrxJRPkmFCxoAeswg';
+const DEFAULT_KEY='eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ25hY2lvdG9ycmVzNjJAZ21haWwuY29tIiwianRpIjoiNzgwYjY0NDQtN2I4ZS00NDZhLWFiZTMtNDM4ZDIyYjhmZTBjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3Nzg1Nzk5MzksInVzZXJJZCI6Ijc4MGI2NDQ0LTdiOGUtNDQ2YS1hYmUzLTQzOGQyMmI4ZmUwYyIsInJvbGUiOiIifQ.EAJF0HEXpxkqgNDRaAXfQG6Dr3wrxJRPkmFCxoAeswg'; 
 let map,mkrs=[],vis=[...Array(BARS.length).keys()],af="all",q="",sel=null;
 let hForecast={},dForecast=[],selDay=0,selHour=null;
 let panelOpen=true;
