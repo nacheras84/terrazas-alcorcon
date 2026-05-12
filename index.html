@@ -72,6 +72,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .ts{background:#fff3e0;color:#e65100}
 .tc{background:#e3f2fd;color:#1565c0}
 .tt{background:#f3e5f5;color:#6a1b9a}
+.trip{background:#fff8e1;color:#ff6f00;border:1px solid #ffcc02}
 .tw-good{background:#e8f5e9;color:#2e7d32;border:1px solid #4caf50}
 .tw-warn{background:#fffde7;color:#f57f17;border:1px solid #ffa726}
 .tw-bad{background:#ffebee;color:#c62828;border:1px solid #ef5350}
@@ -84,6 +85,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 .prec.warn{background:#fffde7;border:1px solid #ffa726;color:#f57f17}
 .prec.bad{background:#ffebee;border:1px solid #ef5350;color:#c62828}
 .gmaps-btn{display:block;text-align:center;margin-top:10px;padding:10px;background:#1b5e20;color:white;border-radius:8px;font-size:.82rem;text-decoration:none;font-weight:600}
+.trip-btn{display:block;text-align:center;margin-top:6px;padding:10px;background:#ff6f00;color:white;border-radius:8px;font-size:.82rem;text-decoration:none;font-weight:600}
 .back-btn{display:flex;align-items:center;gap:6px;color:#1b5e20;font-size:.78rem;font-weight:600;cursor:pointer;margin-bottom:8px;touch-action:manipulation;border:none;background:none;padding:0}
 
 /* POPUP */
@@ -115,6 +117,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
   <button class="fb" onclick="sf(this,'natural')">🌳</button>
   <button class="fb" onclick="sf(this,'sombrilla')">⛱️</button>
   <button class="fb" onclick="sf(this,'cubierta')">🏠</button>
+  <button class="fb" onclick="sf(this,'tripadvisor')">⭐TA</button>
   <span id="badge">0</span>
   <span id="met-st"></span>
 </div>
@@ -142,6 +145,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
 
 <script>
 const BARS=[
+  // ── ORIGINALES ──
   {n:"Restaurante Terraza Amphora",lat:40.3447,lng:-3.8119,r:4.4,rv:4372,a:"Av. de Leganés, 54",p:"+34 916 44 39 17",s:"sombrilla",t:"Gran terraza exterior",h:"Mar-Vie 9:30-00:00 · Sáb-Dom 12:00-01:30 · Lun cerrado",pr:"€"},
   {n:"Bar Restaurante La Paloma",lat:40.3471,lng:-3.821,r:4.6,rv:1093,a:"Av. Torres Bellas, 12",p:"+34 910 70 98 64",s:"cubierta",t:"Terraza con jets de agua",h:"Mar-Jue 9:00-23:30 · Vie 9:00-00:00 · Sáb 10:00-01:30 · Lun cerrado",pr:"€"},
   {n:"Antigua Taberna La Marcela",lat:40.346,lng:-3.8411,r:4.2,rv:2024,a:"C. Oslo, 31",p:"+34 916 89 17 82",s:"natural",t:"Exterior arbolado",h:"Lun-Dom 12:00-00:00",pr:"€"},
@@ -273,7 +277,6 @@ const BARS=[
   {n:"Blanco y Negro Bar",lat:40.3558,lng:-3.8136,r:4.2,rv:119,a:"C. Vicedo, 4",p:"+34 916 10 69 06",s:"sombrilla",t:"Terraza barrio vintage",h:"Lun-Dom 8:00-23:00 · Vie-Sáb hasta 00:00",pr:"€"},
   {n:"Bar Casa Collado",lat:40.3536,lng:-3.8114,r:4.8,rv:48,a:"C. Caldas de Reyes, 15",p:"+34 685 14 91 89",s:"sombrilla",t:"Terraza bar de barrio clásico",h:"Mar-Dom 6:30-00:00 · Lun cerrado",pr:"€"},
   {n:"Bar 5ª Avenida",lat:40.3473,lng:-3.8265,r:3.9,rv:69,a:"C. Espada, 9",p:"+34 642 05 42 86",s:"sombrilla",t:"Terraza exterior",h:"Lun-Dom 7:30-00:00 · Vie-Sáb hasta 01:00",pr:"€"},
-  // ── ALGARABÍA + CARBALLINO + VALDERAS ──
   {n:"Algarabía",lat:40.3396,lng:-3.8312,r:3.8,rv:82,a:"C. Juan Ramón Jiménez, 4",p:"+34 914 55 02 79",s:"sombrilla",t:"Terraza restaurante asador",h:"Lun-Dom 12:30-00:00 · Sáb hasta 00:30",pr:"€€"},
   {n:"Restaurante Marisquería Casa Valadouro",lat:40.351,lng:-3.8101,r:4.1,rv:1728,a:"C. Carballino, 21",p:"+34 915 42 50 70",s:"sombrilla",t:"Terraza marisquería gallega",h:"Mar-Jue 10:00-17:00 · Vie-Sáb 10:00-00:00 · Dom 11:30-18:00 · Lun cerrado",pr:"€"},
   {n:"Muriel Bar Restaurante",lat:40.3509,lng:-3.8077,r:4.2,rv:146,a:"C. Carballino, 29",p:"+34 603 11 54 75",s:"sombrilla",t:"Terraza restaurante",h:"Mar-Jue 12:00-01:00 · Vie-Sáb 12:00-02:00 · Dom 12:00-01:00 · Lun cerrado",pr:"€"},
@@ -286,39 +289,47 @@ const BARS=[
   {n:"Mesón A Lareira",lat:40.3501,lng:-3.8211,r:4.5,rv:5670,a:"C. Príncipe Don Juan Carlos, 7",p:"+34 916 12 12 04",s:"sombrilla",t:"Gran terraza marisquería",h:"Lun-Mar y Jue-Dom 9:00-00:00 · Mié cerrado",pr:"€€"},
   {n:"Cafetería Acuario",lat:40.3526,lng:-3.8176,r:4.1,rv:15,a:"Av. de los Derechos Humanos, 3-5",p:"+34 642 02 84 04",s:"natural",t:"Terraza junto a parque infantil",h:"Lun-Dom 9:30-23:00",pr:"€"},
   {n:"Sidrería El Trasgu",lat:40.3523,lng:-3.81,r:4.4,rv:244,a:"C. Venus, 1",p:"+34 692 79 35 46",s:"sombrilla",t:"Terraza sidrería tapas",h:"Lun 7:00-16:30 · Mar-Vie 7:00-00:00 · Sáb 9:00-00:00 · Dom 10:00-00:00",pr:"€"},
-  // ── NUEVOS BARRIOS ──
   {n:"Restaurante La Casona de Luis",lat:40.3527,lng:-3.809,r:4.1,rv:546,a:"C. Venus, 18",p:"+34 919 35 26 33",s:"sombrilla",t:"Terraza restaurante mediterráneo",h:"Mar-Mié 9:00-18:00 · Jue-Sáb 9:00-00:00 · Dom 9:00-18:00 · Lun cerrado",pr:"€"},
   {n:"Bar El Majuelo",lat:40.3479,lng:-3.8073,r:4.1,rv:70,a:"C. Parque Bujaruelo, 10",p:"+34 916 11 09 76",s:"sombrilla",t:"Terraza Parque Bujaruelo",h:"Lun-Dom 11:00-23:00",pr:"€"},
   {n:"Cafetería Tres Rosas",lat:40.3486,lng:-3.8098,r:4.8,rv:6,a:"C. Timanfaya, 34",s:"sombrilla",t:"Terraza barrio tranquila",h:"Consultar horario",pr:"€"},
   {n:"Cervecería el Castillo",lat:40.3537,lng:-3.8118,r:3.9,rv:17,a:"C. Caldas de Reyes",s:"sombrilla",t:"Terraza Valderas",h:"Lun 8:00-22:00 · Mar-Dom 9:00-22:30",pr:"€"},
   {n:"El Toke Castillo Restaurante",lat:40.3494,lng:-3.8026,r:3.8,rv:1891,a:"Av. los Castillos, 1022",p:"+34 916 12 02 92",s:"sombrilla",t:"Terraza zona Castillos",h:"Lun-Dom 6:30-01:30",pr:"€"},
   {n:"Sushisom Parque Oeste",lat:40.3502,lng:-3.8481,r:4.0,rv:3078,a:"Av. de Europa, 4",p:"+34 917 27 02 74",s:"cubierta",t:"Terraza restaurante japonés",h:"Lun-Dom 13:00-16:30 y 20:00-23:30",pr:"€€"},
-  // ── PARQUE LISBOA ──
   {n:"Bar La Prórroga",lat:40.353,lng:-3.8215,r:3.1,rv:15,a:"Av. de Lisboa (Piscinas Parque Lisboa)",p:"+34 678 58 91 29",s:"natural",t:"Terraza piscinas verano",h:"Lun-Mié-Jue 9:30-22:00 · Vie-Sáb 9:30-02:00 · Dom 9:30-00:00",pr:"€"},
   {n:"Chez Michel Sabores del Líbano",lat:40.357,lng:-3.813,r:4.8,rv:1222,a:"Av. de Lisboa, 24",p:"+34 916 84 57 58",s:"sombrilla",t:"Terraza restaurante libanés",h:"Mar-Sáb 13:00-16:00 y 20:00-23:00 · Dom 13:00-16:00 · Lun cerrado",pr:"€€"},
   {n:"Trabuco Bar",lat:40.3529,lng:-3.8197,r:4.9,rv:8,a:"C. Porto Cristo, 1 local 6/7",s:"sombrilla",t:"Terraza bar de barrio",h:"Consultar horario",pr:"€"},
+
+  // ── NUEVOS DE TRIPADVISOR ──
+  {n:"Sibuya Urban Sushi Bar X-Madrid",lat:40.3405,lng:-3.8477,r:4.6,rv:396,a:"C. Oslo, 53 (X-Madrid)",s:"cubierta",t:"Sushi fusión japonesa — TripAdvisor Top 7",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d19488194-Reviews-Sibuya_Urban_Sushi_Bar_X_Madrid-Alcorcon.html"},
+  {n:"Kamado Asian Food X-Madrid",lat:40.3408,lng:-3.8479,r:4.4,rv:258,a:"C. Oslo, 53 (X-Madrid)",s:"cubierta",t:"Cocina asiática fusión — TripAdvisor Top 8",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d19526813-Reviews-Kamado_Asian_Food_X_Madrid-Alcorcon.html"},
+  {n:"Bálamo Restaurante",lat:40.349,lng:-3.8302,r:3.4,rv:961,a:"Av. de Leganés (Alcorcón)",s:"sombrilla",t:"Pescado y marisco — TripAdvisor Top 4",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d15635942-Reviews-Balamo_Restaurante-Alcorcon.html"},
+  {n:"Sidrería Camino",lat:40.3478,lng:-3.8195,r:4.3,rv:324,a:"Alcorcón",s:"sombrilla",t:"Mediterránea y española — TripAdvisor Top 5",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d13344759-Reviews-Sidreria_Camino-Alcorcon.html"},
+  {n:"La Boscaiola",lat:40.3465,lng:-3.822,r:4.4,rv:97,a:"Alcorcón",s:"sombrilla",t:"Restaurante italiano — TripAdvisor destacado",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d12879453-Reviews-La_Boscaiola-Alcorcon.html"},
+  {n:"Amphora Madrid",lat:40.3447,lng:-3.8122,r:4.2,rv:133,a:"Av. de Leganés (Alcorcón)",s:"sombrilla",t:"Mediterránea y española — TripAdvisor Top 10",h:"Consultar horario",pr:"€€€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d23209976-Reviews-Amphora_Madrid-Alcorcon.html"},
+  {n:"Nativo Urban Grill",lat:40.3376,lng:-3.8321,r:4.2,rv:13,a:"Av. las Retamas (Alcorcón)",s:"sombrilla",t:"Grill urbano — TripAdvisor elegante",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d23406228-Reviews-Nativo_Urban_Grill-Alcorcon.html"},
+  {n:"Restaurante Chino Dragón Oriental",lat:40.347,lng:-3.8248,r:4.4,rv:152,a:"Alcorcón",s:"sombrilla",t:"Cocina china e internacional — TripAdvisor destacado",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d990417-Reviews-Dragon_Oriental-Alcorcon.html"},
 ];
 
 const SH={natural:{i:"🌳",l:"Sombra natural",c:"tn",col:"#2e7d32"},sombrilla:{i:"⛱️",l:"Sombrilla",c:"ts",col:"#bf360c"},cubierta:{i:"🏠",l:"Cubierta",c:"tc",col:"#1565c0"}};
 const MUN="28007",BASE="https://opendata.aemet.es/opendata/api";
-const DEFAULT_KEY='eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ25hY2lvdG9ycmVzNjJAZ21haWwuY29tIiwianRpIjoiNzgwYjY0NDQtN2I4ZS00NDZhLWFiZTMtNDM4ZDIyYjhmZTBjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3Nzg1Nzk5MzksInVzZXJJZCI6Ijc4MGI2NDQ0LTdiOGUtNDQ2YS1hYmUzLTQzOGQyMmI4ZmUwYyIsInJvbGUiOiIifQ.EAJF0HEXpxkqgNDRaAXfQG6Dr3wrxJRPkmFCxoAeswg'; 
+const DEFAULT_KEY='eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ25hY2lvdG9ycmVzNjJAZ21haWwuY29tIiwianRpIjoiNzgwYjY0NDQtN2I4ZS00NDZhLWFiZTMtNDM4ZDIyYjhmZTBjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3Nzg1Nzk5MzksInVzZXJJZCI6Ijc4MGI2NDQ0LTdiOGUtNDQ2YS1hYmUzLTQzOGQyMmI4ZmUwYyIsInJvbGUiOiIifQ.EAJF0HEXpxkqgNDRaAXfQG6Dr3wrxJRPkmFCxoAeswg';
 let map,mkrs=[],vis=[...Array(BARS.length).keys()],af="all",q="",sel=null;
 let hForecast={},dForecast=[],selDay=0,selHour=null;
 let panelOpen=true;
 
-// ── MAPA ──────────────────────────────────────────────────────────────────────
 map=L.map('map',{zoomControl:true,tap:true,tapTolerance:15}).setView([40.347,-3.825],13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:19}).addTo(map);
 
 BARS.forEach((b,i)=>{
   const sh=SH[b.s];
-  const ic=L.divIcon({className:'',html:`<div style="background:${sh.col};color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid white;box-shadow:0 2px 5px rgba(0,0,0,.3);cursor:pointer">${sh.i}</div>`,iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-14]});
+  const col=b.trip?'#ff6f00':sh.col;
+  const icon=b.trip?'⭐':sh.i;
+  const ic=L.divIcon({className:'',html:`<div style="background:${col};color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid white;box-shadow:0 2px 5px rgba(0,0,0,.3);cursor:pointer">${icon}</div>`,iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-14]});
   const m=L.marker([b.lat,b.lng],{icon:ic}).addTo(map);
   m.on('click',()=>{pick(i);openPanel();});
   mkrs.push(m);
 });
 
-// Panel toggle móvil
 function togglePanel(){
   panelOpen=!panelOpen;
   const p=document.getElementById('panel');
@@ -336,7 +347,6 @@ function openPanel(){
   }
 }
 
-// ── AEMET ─────────────────────────────────────────────────────────────────────
 async function loadAEMET(key){
   if(!key) return;
   document.getElementById('met-st').textContent='Cargando tiempo...';
@@ -427,7 +437,6 @@ function fmtRange(hrs){
   return g.join(', ');
 }
 
-// ── PANEL ─────────────────────────────────────────────────────────────────────
 function pick(i){
   sel=i;
   document.querySelectorAll('.bi').forEach(e=>e.classList.toggle('sel',+e.dataset.i===i));
@@ -444,12 +453,12 @@ function pick(i){
   document.getElementById('pb').innerHTML=`
     <div class="bar-detail">
       <button class="back-btn" onclick="showList()">← Volver a la lista</button>
-      <div class="bn">${bar.n}</div>
+      <div class="bn">${bar.n}${bar.trip?' <span class="tag trip">⭐ TripAdvisor</span>':''}</div>
       <div class="br">${'★'.repeat(Math.round(bar.r))} ${bar.r} · ${bar.rv.toLocaleString()} reseñas · ${bar.pr}</div>
       <div class="ba">📍 ${bar.a}${bar.p?' · 📞 '+bar.p:''}</div>
       <div class="ba">🕐 ${bar.h}</div>
       <div class="bt" style="margin:6px 0">
-        <span class="tag ${sh.c}">${sh.i} ${sh.l}</span>
+        <span class="tag ${sh.c}">${sh.i} ${SH[bar.s].l}</span>
         <span class="tag tt">🪑 ${bar.t}</span>
       </div>
       ${evalH?`
@@ -462,19 +471,20 @@ function pick(i){
       `:`<div class="prec warn">Carga la API AEMET para ver recomendación meteorológica</div>`}
       ${df?`<div style="font-size:.7rem;color:#666;margin-top:5px">📊 ${df.tmin}°-${df.tmax}° · ${df.sky} · 🌧${df.rain}%</div>`:''}
       <a href="${gm}" target="_blank" class="gmaps-btn">📍 Ver en Google Maps</a>
+      ${bar.trip&&bar.tripUrl?`<a href="${bar.tripUrl}" target="_blank" class="trip-btn">⭐ Ver en TripAdvisor</a>`:''}
     </div>`;
 
-  // popup mapa
   const sh2=SH[bar.s];
   mkrs[i].bindPopup(`<div class="pw">
-    <div class="pn">${bar.n}</div>
+    <div class="pn">${bar.n}${bar.trip?' ⭐':''}</div>
     <div class="pr">${'★'.repeat(Math.round(bar.r))} ${bar.r} · ${bar.rv.toLocaleString()} · ${bar.pr}</div>
     <div class="pa">📍 ${bar.a}${bar.p?' · 📞 '+bar.p:''}</div>
-    <div class="ptg"><span class="tag ${sh2.c}">${sh2.i} ${sh2.l}</span><span class="tag tt">🪑 ${bar.t}</span></div>
+    <div class="ptg"><span class="tag ${sh2.c}">${sh2.i} ${sh2.l}</span><span class="tag tt">🪑 ${bar.t}</span>${bar.trip?'<span class="tag trip">⭐ TripAdvisor</span>':''}</div>
     ${evalH?`<div class="prec-sm prec ${sc.s}">${sc.msg}</div>`:''}
     ${goodH.length?`<div style="font-size:.68rem;color:#2e7d32">✅ ${fmtRange(goodH)}</div>`:''}
     <div style="font-size:.68rem;color:#555;margin-top:3px">🕐 ${bar.h}</div>
     <a class="pg" href="${gm}" target="_blank">📍 Ver en Google Maps</a>
+    ${bar.trip&&bar.tripUrl?`<a class="pg" style="background:#ff6f00;margin-top:4px" href="${bar.tripUrl}" target="_blank">⭐ TripAdvisor</a>`:''}
   </div>`,{maxWidth:240}).openPopup();
   map.setView([bar.lat,bar.lng],15);
   const el=document.querySelector(`.bi[data-i="${i}"]`);
@@ -496,7 +506,7 @@ function render(){
     const b=BARS[i],sh=SH[b.s],sc=score(evalH);
     const dot=sc.s==='good'?'🟢':sc.s==='warn'?'🟡':'🔴';
     return`<div class="bi${sel===i?' sel':''}" data-i="${i}" onclick="pick(${i});openPanel()">
-      <div class="bn">${b.n}</div>
+      <div class="bn">${b.n}${b.trip?' <span class="tag trip" style="font-size:.6rem">⭐ TA</span>':''}</div>
       <div class="br">${'★'.repeat(Math.round(b.r))} ${b.r} · ${b.rv.toLocaleString()} · ${b.pr}</div>
       <div class="ba">📍 ${b.a}</div>
       <div class="bt">
@@ -511,6 +521,7 @@ function render(){
 function filt(){
   vis=BARS.map((_,i)=>i).filter(i=>{
     const b=BARS[i];
+    if(af==='tripadvisor') return b.trip===true && (!q||[b.n,b.a,b.s,b.t].some(x=>x.toLowerCase().includes(q)));
     return(af==='all'||b.s===af)&&(!q||[b.n,b.a,b.s,b.t].some(x=>x.toLowerCase().includes(q)));
   });
   mkrs.forEach((m,i)=>{vis.includes(i)?m.addTo(map):map.removeLayer(m);});
@@ -526,7 +537,6 @@ document.getElementById('si').addEventListener('input',function(){
   sel=null;filt();
 });
 
-// Ajustar altura del panel según topbar real
 function adjustLayout(){
   const tb=document.getElementById('topbar').offsetHeight;
   const dt=document.getElementById('dtabs').offsetHeight;
@@ -538,7 +548,6 @@ function adjustLayout(){
 window.addEventListener('resize',adjustLayout);
 setTimeout(adjustLayout,100);
 
-// INIT
 filt();
 const savedKey=localStorage.getItem('aemet_key')||DEFAULT_KEY;
 if(savedKey){document.getElementById('akey').value=savedKey;loadAEMET(savedKey);}
