@@ -2,43 +2,41 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1b5e20">
 <title>🍺 Terrazas Alcorcón</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',sans-serif;background:#f5f5f5;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5}
 
 /* TOPBAR */
-#topbar{background:#1b5e20;color:white;padding:8px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#topbar{background:#1b5e20;color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:1000;-webkit-overflow-scrolling:touch}
 #topbar h1{font-size:.9rem;font-weight:700;white-space:nowrap}
-#sw{position:relative;flex:1;min-width:140px}
-#si{width:100%;padding:5px 26px 5px 9px;border-radius:20px;border:none;font-size:.76rem;outline:none}
-#cb{position:absolute;right:7px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#555;font-size:.8rem;display:none}
-.fb{padding:4px 9px;border-radius:14px;border:2px solid rgba(255,255,255,.4);background:transparent;color:white;cursor:pointer;font-size:.68rem;white-space:nowrap;transition:all .2s}
+#sw{position:relative;flex:1;min-width:120px}
+#si{width:100%;padding:8px 28px 8px 10px;border-radius:20px;border:none;font-size:16px;outline:none;-webkit-appearance:none}
+#cb{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#555;font-size:.9rem;display:none;padding:4px}
+.fb{padding:7px 12px;border-radius:16px;border:2px solid rgba(255,255,255,.4);background:transparent;color:white;cursor:pointer;font-size:.72rem;white-space:nowrap;transition:all .2s;-webkit-appearance:none;touch-action:manipulation}
 .fb.on{background:white;color:#1b5e20;border-color:white}
-#badge{background:rgba(255,255,255,.2);padding:2px 8px;border-radius:10px;font-size:.68rem;white-space:nowrap}
-
-/* AEMET BAR */
-#abar{background:#2e7d32;padding:6px 12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #1b5e20}
-#abar input{flex:1;min-width:160px;padding:5px 9px;border-radius:6px;border:none;font-size:.73rem;outline:none}
-#abar button{padding:5px 11px;background:#ffa000;border:none;border-radius:6px;color:white;cursor:pointer;font-size:.73rem;font-weight:600;white-space:nowrap}
-#abar button:hover{background:#ff8f00}
-#abar a{font-size:.68rem;color:#c8e6c9;white-space:nowrap}
-#met-status{font-size:.68rem;color:#c8e6c9}
+#badge{background:rgba(255,255,255,.2);padding:4px 9px;border-radius:12px;font-size:.7rem;white-space:nowrap}
+#met-st{font-size:.65rem;color:rgba(255,255,255,.7);width:100%;text-align:right}
 
 /* DAY TABS */
-#dtabs{display:flex;gap:4px;padding:5px 10px;background:#f1f8e9;border-bottom:1px solid #dcedc8;overflow-x:auto}
-.dt{padding:4px 11px;border-radius:14px;background:#dcedc8;border:1px solid #c5e1a5;color:#33691e;cursor:pointer;font-size:.72rem;white-space:nowrap;transition:all .2s}
+#dtabs{display:flex;gap:4px;padding:6px 10px;background:#f1f8e9;border-bottom:1px solid #dcedc8;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#dtabs::-webkit-scrollbar{display:none}
+.dt{padding:5px 12px;border-radius:14px;background:#dcedc8;border:1px solid #c5e1a5;color:#33691e;cursor:pointer;font-size:.72rem;white-space:nowrap;transition:all .2s;touch-action:manipulation}
 .dt.on{background:#1b5e20;border-color:#1b5e20;color:white}
 
 /* HOURLY */
 #hbar{padding:7px 10px;background:#f9fbe7;border-bottom:1px solid #dcedc8}
 #hbar h4{font-size:.7rem;color:#558b2f;margin-bottom:5px}
-#hgrid{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
-.hc{min-width:44px;background:white;border-radius:6px;padding:4px 2px;text-align:center;border:1px solid #ddd;cursor:pointer;transition:all .2s}
-.hc:hover,.hc.sel{background:#f1f8e9;border-color:#558b2f}
+#hgrid{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#hgrid::-webkit-scrollbar{display:none}
+.hc{min-width:46px;background:white;border-radius:6px;padding:5px 2px;text-align:center;border:1px solid #ddd;cursor:pointer;transition:all .2s;touch-action:manipulation;flex-shrink:0}
+.hc.sel{background:#f1f8e9;border-color:#558b2f}
 .hc.good{border-color:#4caf50;background:#f1f8e9}
 .hc.warn{border-color:#ffa726;background:#fffde7}
 .hc.bad{border-color:#ef5350;background:#ffebee}
@@ -47,22 +45,29 @@ body{font-family:'Segoe UI',sans-serif;background:#f5f5f5;height:100vh;display:f
 .hc .htp{font-size:.78rem;font-weight:700;color:#e65100}
 .hc .hw{font-size:.58rem;color:#999}
 
-/* MAIN */
-#main{display:flex;flex:1;overflow:hidden}
-#map{flex:1;min-height:0}
-#panel{width:275px;background:white;border-left:1px solid #ddd;display:flex;flex-direction:column;overflow:hidden}
-#ph{padding:7px 11px;background:#e8f5e9;border-bottom:1px solid #c8e6c9;font-size:.73rem;color:#1b5e20;font-weight:600}
-#pb{flex:1;overflow-y:auto}
+/* LAYOUT PRINCIPAL */
+#main{display:flex;flex-direction:column;height:calc(100vh - var(--topbar-h, 100px))}
+#map-wrap{flex:1;position:relative;min-height:0}
+#map{width:100%;height:100%}
+
+/* PANEL INFERIOR MÓVIL */
+#panel{background:white;border-top:3px solid #1b5e20;display:flex;flex-direction:column;transition:height .3s ease;overflow:hidden}
+#panel-handle{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;cursor:pointer;background:#e8f5e9;touch-action:manipulation}
+#panel-handle .drag-bar{width:40px;height:4px;background:#aaa;border-radius:2px;margin:0 auto}
+#panel-title-bar{display:flex;align-items:center;justify-content:space-between;width:100%}
+#ph{font-size:.78rem;color:#1b5e20;font-weight:600}
+#panel-toggle{background:none;border:none;color:#1b5e20;font-size:1.1rem;cursor:pointer;padding:0 4px}
+#pb{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}
 
 /* LISTA */
-.bi{padding:9px 11px;border-bottom:1px solid #eee;cursor:pointer;transition:background .15s}
-.bi:hover{background:#f1f8e9}
+.bi{padding:12px 14px;border-bottom:1px solid #eee;cursor:pointer;transition:background .15s;touch-action:manipulation}
+.bi:active{background:#f1f8e9}
 .bi.sel{background:#c8e6c9}
-.bn{font-weight:700;font-size:.8rem;color:#111;margin-bottom:2px}
-.br{font-size:.68rem;color:#f57c00;margin-bottom:2px}
-.ba{font-size:.68rem;color:#666;margin-bottom:3px}
+.bn{font-weight:700;font-size:.85rem;color:#111;margin-bottom:2px}
+.br{font-size:.72rem;color:#f57c00;margin-bottom:2px}
+.ba{font-size:.7rem;color:#666;margin-bottom:4px}
 .bt{display:flex;gap:3px;flex-wrap:wrap}
-.tag{padding:2px 6px;border-radius:7px;font-size:.62rem;font-weight:600}
+.tag{padding:3px 7px;border-radius:8px;font-size:.65rem;font-weight:600}
 .tn{background:#e8f5e9;color:#2e7d32}
 .ts{background:#fff3e0;color:#e65100}
 .tc{background:#e3f2fd;color:#1565c0}
@@ -71,26 +76,33 @@ body{font-family:'Segoe UI',sans-serif;background:#f5f5f5;height:100vh;display:f
 .tw-warn{background:#fffde7;color:#f57f17;border:1px solid #ffa726}
 .tw-bad{background:#ffebee;color:#c62828;border:1px solid #ef5350}
 
-/* POPUP */
-.pw{min-width:210px;max-width:245px}
-.pn{font-weight:700;font-size:.88rem;color:#1b5e20;margin-bottom:3px}
-.pr{font-size:.74rem;color:#f57c00;margin-bottom:3px}
-.pa{font-size:.71rem;color:#555;margin-bottom:5px}
-.ptg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:5px}
-.ph2{font-size:.68rem;color:#555;margin-bottom:5px;line-height:1.5}
-.prec{padding:5px 8px;border-radius:6px;font-size:.72rem;margin-bottom:5px}
+/* DETALLE BAR */
+.bar-detail{padding:12px 14px}
+.bar-detail .bn{font-size:.95rem;margin-bottom:4px}
+.prec{padding:8px 10px;border-radius:8px;font-size:.78rem;margin:8px 0}
 .prec.good{background:#e8f5e9;border:1px solid #4caf50;color:#2e7d32}
 .prec.warn{background:#fffde7;border:1px solid #ffa726;color:#f57f17}
 .prec.bad{background:#ffebee;border:1px solid #ef5350;color:#c62828}
-.pg{display:inline-block;margin-top:3px;padding:5px 11px;background:#1b5e20;color:white;border-radius:6px;font-size:.71rem;text-decoration:none}
-.pg:hover{background:#145214}
+.gmaps-btn{display:block;text-align:center;margin-top:10px;padding:10px;background:#1b5e20;color:white;border-radius:8px;font-size:.82rem;text-decoration:none;font-weight:600}
+.back-btn{display:flex;align-items:center;gap:6px;color:#1b5e20;font-size:.78rem;font-weight:600;cursor:pointer;margin-bottom:8px;touch-action:manipulation;border:none;background:none;padding:0}
 
-/* STATUS */
-#sbar{background:#f1f8e9;padding:2px 10px;font-size:.65rem;color:#558b2f;border-top:1px solid #dcedc8}
+/* POPUP */
+.leaflet-popup-content-wrapper{border-radius:10px!important;box-shadow:0 4px 15px rgba(0,0,0,.15)!important}
+.pw{min-width:180px;max-width:220px}
+.pn{font-weight:700;font-size:.88rem;color:#1b5e20;margin-bottom:3px}
+.pr{font-size:.74rem;color:#f57c00;margin-bottom:3px}
+.pa{font-size:.7rem;color:#555;margin-bottom:4px}
+.ptg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px}
+.prec-sm{padding:4px 7px;border-radius:5px;font-size:.72rem;margin-bottom:4px}
+.pg{display:block;text-align:center;padding:7px;background:#1b5e20;color:white;border-radius:6px;font-size:.72rem;text-decoration:none;font-weight:600;margin-top:4px}
 
-@media(max-width:600px){
-  #panel{width:100%;max-height:38vh;border-left:none;border-top:1px solid #ddd}
-  #main{flex-direction:column}
+/* DESKTOP */
+@media(min-width:640px){
+  #main{flex-direction:row}
+  #map-wrap{flex:1}
+  #panel{width:300px;border-top:none;border-left:3px solid #1b5e20;height:100%!important}
+  #panel-handle{display:none}
+  #pb{height:100%;overflow-y:auto}
 }
 </style>
 </head>
@@ -98,35 +110,35 @@ body{font-family:'Segoe UI',sans-serif;background:#f5f5f5;height:100vh;display:f
 
 <div id="topbar">
   <h1>🍺 Terrazas Alcorcón</h1>
-  <div id="sw"><input id="si" type="text" placeholder="🔍 Buscar..."><button id="cb" onclick="clr()">✕</button></div>
+  <div id="sw"><input id="si" type="search" placeholder="🔍 Buscar bar, zona..." autocomplete="off"><button id="cb" onclick="clr()">✕</button></div>
   <button class="fb on" onclick="sf(this,'all')">Todos</button>
   <button class="fb" onclick="sf(this,'natural')">🌳</button>
   <button class="fb" onclick="sf(this,'sombrilla')">⛱️</button>
   <button class="fb" onclick="sf(this,'cubierta')">🏠</button>
   <span id="badge">0</span>
+  <span id="met-st"></span>
 </div>
 
-<div id="abar">
-  <input id="akey" type="text" placeholder="🔑 API Key de AEMET (gratis en opendata.aemet.es)"/>
-  <button onclick="loadAEMET()">🌤 Ver el tiempo</button>
-  <span id="met-status">Sin datos de tiempo</span>
-</div>
-
-<div id="dtabs"><span style="font-size:.7rem;color:#689f38;padding:4px">Carga la API Key para ver predicción por días →</span></div>
-
+<div id="dtabs"></div>
 <div id="hbar">
-  <h4>🕐 Predicción horaria — haz clic en una hora para ver recomendación</h4>
-  <div id="hgrid"><span style="font-size:.7rem;color:#aaa">Pendiente de datos AEMET</span></div>
+  <h4>🕐 Toca una hora para ver la recomendación</h4>
+  <div id="hgrid"><span style="font-size:.7rem;color:#aaa">Cargando tiempo...</span></div>
 </div>
 
 <div id="main">
-  <div id="map"></div>
-  <div id="panel">
-    <div id="ph">📍 <span id="pt">Selecciona un bar</span></div>
+  <div id="map-wrap"><div id="map"></div></div>
+  <div id="panel" style="height:45vh">
+    <div id="panel-handle" onclick="togglePanel()">
+      <div id="panel-title-bar">
+        <span id="ph">📍 Selecciona un bar</span>
+        <button id="panel-toggle">▲</button>
+      </div>
+    </div>
     <div id="pb"></div>
   </div>
 </div>
-<div id="sbar"><span id="bc">0</span> terrazas · Tiempo: <span id="ms2">introduce API Key de AEMET arriba</span></div>
+
+<input id="akey" type="hidden"/>
 
 <script>
 const BARS=[
@@ -167,7 +179,7 @@ const BARS=[
   {n:"Mesón D Juan",lat:40.3532,lng:-3.8174,r:4.2,rv:172,a:"Pl. la Coruña",p:"+34 660 12 23 29",s:"sombrilla",t:"Terraza mesón",h:"Lun-Vie 9:00-21:00 · Sáb 9:00-17:00 · Dom cerrado",pr:"€"},
   {n:"Taberna La Mezquita",lat:40.354,lng:-3.8102,r:4.6,rv:475,a:"C. Urano, 3",p:"+34 916 10 74 75",s:"natural",t:"Terraza gastronómica",h:"Mar 11:00-17:00 · Mié-Dom 11:00-16:00 y 20:00-00:00 · Lun cerrado",pr:"€€"},
   {n:"Restaurante Rincón Castellano",lat:40.3603,lng:-3.813,r:4.5,rv:2092,a:"C. de la Canaleja",p:"+34 622 48 84 07",s:"sombrilla",t:"Gran terraza arenosa",h:"Lun-Vie 9:30-19:30 · Sáb 9:00-18:00 · Dom 9:00-17:00",pr:"€"},
-  {n:"Taberna Ventura",lat:40.3292,lng:-3.8284,r:4.3,rv:196,a:"C. Martín Luther King, 54",p:"+34 919 35 76 18",s:"sombrilla",t:"Terraza industrial",h:"Mar-Jue 10:30-00:00 · Vie 10:30-01:00 · Sáb-Dom 11:00-01:00 · Lun cerrado",pr:"€"},
+  {n:"Taberna Ventura",lat:40.3292,lng:-3.8284,r:4.3,rv:196,a:"C. Martín Luther King, 54",p:"+34 919 35 76 18",s:"sombrilla",t:"Terraza estilo industrial",h:"Mar-Jue 10:30-00:00 · Vie 10:30-01:00 · Sáb-Dom 11:00-01:00 · Lun cerrado",pr:"€"},
   {n:"Cafetería Bar Patico",lat:40.3441,lng:-3.8275,r:4.2,rv:111,a:"C. Mayor, 79",p:"+34 642 60 45 45",s:"sombrilla",t:"Terraza calle mayor",h:"Lun-Dom 7:30-00:00",pr:"€"},
   {n:"El Lagarto Verde",lat:40.3336,lng:-3.8183,r:4.6,rv:174,a:"C. Aeronáutica, 33",p:"+34 614 54 97 13",s:"natural",t:"Terraza con música en vivo",h:"Lun-Jue 9:00-17:00 · Vie 9:00-23:00 · Sáb 12:00-00:00 · Dom 12:00-17:00",pr:"€"},
   {n:"Bar Zahara Cafetería",lat:40.3507,lng:-3.8254,r:4.5,rv:149,a:"C. Buitrago",s:"sombrilla",t:"Terraza de barrio",h:"Lun-Mar 7:30-00:00 · Mié cerrado · Jue-Dom 7:30-00:00",pr:"€"},
@@ -196,36 +208,33 @@ const BARS=[
   {n:"Bar Plaza Cafe (desde 1974)",lat:40.3483,lng:-3.8279,r:4.6,rv:340,a:"C. Mayor, 8",p:"+34 630 22 79 04",s:"sombrilla",t:"Terraza calle mayor",h:"Lun-Vie 7:30-20:00 · Sáb 8:00-15:00 · Dom cerrado",pr:"€"},
   {n:"Cafetería New Gregory JC",lat:40.3444,lng:-3.8262,r:4.2,rv:503,a:"C. Fuenlabrada, 27",p:"+34 605 89 09 72",s:"sombrilla",t:"Terraza cafetería",h:"Lun y Mié-Dom 7:00-00:00 · Mar cerrado",pr:"€"},
   {n:"Restaurante Brasa y Leña Tres Aguas",lat:40.3586,lng:-3.8331,r:4.0,rv:4440,a:"Av. de América, 7-9",p:"+34 916 10 02 25",s:"cubierta",t:"Gran terraza restaurante",h:"Lun-Dom 13:00-23:30",pr:"€€"},
-  // ── AV. LAS RETAMAS Y NUEVOS ──
   {n:"La Tarada By Arturo's",lat:40.3374,lng:-3.8291,r:4.4,rv:352,a:"Av. las Retamas, 52",p:"+34 916 44 47 11",s:"sombrilla",t:"Terraza restaurante",h:"Lun-Dom 7:00-00:00 · Vie-Sáb hasta 01:00",pr:"€"},
   {n:"Los Cuatro Postes",lat:40.3375,lng:-3.8315,r:4.3,rv:688,a:"Av. las Retamas, 39",p:"+34 910 57 33 02",s:"sombrilla",t:"Terraza con tapas",h:"Mar-Jue 7:00-00:00 · Vie 7:00-02:00 · Sáb 9:00-02:00 · Dom 9:00-00:00 · Lun cerrado",pr:"€"},
   {n:"The Green Corner Pub",lat:40.3391,lng:-3.8364,r:4.4,rv:99,a:"Av. las Retamas, 10",p:"+34 685 69 46 66",s:"sombrilla",t:"Terraza pub cervezas",h:"Lun-Jue 17:00-02:00 · Vie 17:00-02:30 · Sáb-Dom 12:30-02:30",pr:"€"},
   {n:"Cervecería Villanueva de Ávila",lat:40.3389,lng:-3.8352,r:4.4,rv:509,a:"Av. las Retamas, 15",p:"+34 910 44 18 35",s:"sombrilla",t:"Gran terraza cervecería",h:"Lun-Dom 8:00-00:00 · Vie-Sáb hasta 01:00",pr:"€€"},
   {n:"Casa Garcia",lat:40.3379,lng:-3.8274,r:4.4,rv:241,a:"Av. las Retamas, 76",p:"+34 912 26 10 63",s:"sombrilla",t:"Terraza tapas con menú",h:"Consultar horario",pr:"€"},
   {n:"El Soho de las Retamas",lat:40.3377,lng:-3.8298,r:3.8,rv:833,a:"Av. las Retamas, 47",p:"+34 916 43 17 11",s:"sombrilla",t:"Terraza restaurante español",h:"Lun-Dom 9:00-01:00",pr:"€"},
-  {n:"NATIVO Alcorcón",lat:40.3376,lng:-3.8324,r:4.3,rv:419,a:"Av. las Retamas, 33",p:"+34 656 31 31 16",s:"sombrilla",t:"Terraza asador carnes",h:"Mié-Dom 11:30-00:00 · Vie-Sáb hasta 01:00 · Lun-Mar cerrado",pr:"€€"},
+  {n:"NATIVO Alcorcón",lat:40.3376,lng:-3.8324,r:4.3,rv:419,a:"Av. las Retamas, 33",p:"+34 656 31 31 16",s:"sombrilla",t:"Terraza asador carnes",h:"Mié-Dom 11:30-00:00 · Lun-Mar cerrado",pr:"€€"},
   {n:"Broadway Bar",lat:40.3381,lng:-3.8282,r:4.5,rv:317,a:"Av. las Retamas, 65",p:"+34 617 78 81 65",s:"sombrilla",t:"Terraza pub rock",h:"Mar-Dom 20:00-03:00 · Vie-Sáb hasta 03:30 · Lun cerrado",pr:"€"},
-  {n:"Restaurante Yucatán",lat:40.3381,lng:-3.8279,r:4.5,rv:684,a:"Av. las Retamas, 65",p:"+34 916 44 41 18",s:"sombrilla",t:"Terraza mexicana fusión",h:"Lun y Mié-Jue 19:30-23:30 · Vie 13:00-16:30 y 19:30-01:30 · Sáb 13:00-01:30 · Dom 13:00-23:30 · Mar cerrado",pr:"€"},
+  {n:"Restaurante Yucatán",lat:40.3381,lng:-3.8279,r:4.5,rv:684,a:"Av. las Retamas, 65",p:"+34 916 44 41 18",s:"sombrilla",t:"Terraza mexicana fusión",h:"Lun y Mié-Jue 19:30-23:30 · Vie 13:00-01:30 · Sáb 13:00-01:30 · Dom 13:00-23:30 · Mar cerrado",pr:"€"},
   {n:"GRUPO HOSTELERO DKS (Tres Aguas)",lat:40.3586,lng:-3.8328,r:4.6,rv:8,a:"Av. de América, C.C. Tres Aguas",p:"+34 669 87 05 03",s:"cubierta",t:"Terraza lounge cocktail",h:"Lun-Jue 18:00-01:00 · Vie-Sáb 12:00-03:00 · Dom 12:00-00:00",pr:"€€"},
   {n:"KIZÁS LOUNGE (Tres Aguas)",lat:40.3586,lng:-3.8328,r:4.5,rv:73,a:"Av. de América, 7-9 (Tres Aguas)",p:"+34 642 33 87 88",s:"cubierta",t:"Terraza lounge hookah",h:"Lun-Jue 18:00-00:00 · Vie-Sáb 18:00-03:00 · Dom 18:00-00:00",pr:"€€"},
   {n:"Pub Donde Ayer",lat:40.3541,lng:-3.8175,r:4.4,rv:286,a:"Pl. de Pontevedra, 2A",p:"+34 605 18 84 70",s:"sombrilla",t:"Terraza pub clásico",h:"Lun-Jue 21:30-03:00 · Vie-Sáb 21:30-03:30 · Dom cerrado",pr:"€"},
   {n:"Bar Cervecería La Esquina",lat:40.3496,lng:-3.8305,r:4.4,rv:45,a:"C. Navalcarnero, 1",p:"+34 910 28 15 92",s:"sombrilla",t:"Terraza con música en vivo",h:"Mar-Dom 16:00-02:00 · Lun cerrado",pr:"€"},
-  // ── NUEVOS BÚSQUEDA COMPLETA ──
   {n:"Viena Capellanes",lat:40.3476,lng:-3.828,r:4.6,rv:1641,a:"C. Mayor, 18",p:"+34 912 79 70 44",s:"sombrilla",t:"Terraza cafetería pastelería",h:"Lun-Dom 8:00-21:30",pr:"€"},
-  {n:"Bread & Co. Brunch",lat:40.3486,lng:-3.8276,r:4.4,rv:586,a:"C. Jabonería, 7",p:"+34 913 62 49 73",s:"sombrilla",t:"Terraza brunch café especialidad",h:"Lun-Vie 8:30-21:00 · Sáb-Dom 8:30-14:30 y 17:00-21:00",pr:"€"},
+  {n:"Bread & Co. Brunch",lat:40.3486,lng:-3.8276,r:4.4,rv:586,a:"C. Jabonería, 7",p:"+34 913 62 49 73",s:"sombrilla",t:"Terraza brunch",h:"Lun-Vie 8:30-21:00 · Sáb-Dom 8:30-14:30 y 17:00-21:00",pr:"€"},
   {n:"Nurcris",lat:40.3522,lng:-3.8253,r:4.3,rv:804,a:"Av. de Leganés, 3",s:"sombrilla",t:"Terraza cafetería bar",h:"Lun-Dom 7:00-00:30 · Jue-Vie hasta 02:00",pr:"€"},
   {n:"La Chata",lat:40.3466,lng:-3.8113,r:3.9,rv:1422,a:"Av. de la Libertad, 9",p:"+34 916 21 02 19",s:"sombrilla",t:"Gran terraza tapas",h:"Lun-Dom 11:00-00:00 · Vie-Sáb hasta 01:00",pr:"€"},
-  {n:"Restaurante El Quinto Cono",lat:40.352,lng:-3.8048,r:4.4,rv:422,a:"Av. de la Libertad, 87",p:"+34 622 24 68 92",s:"sombrilla",t:"Terraza tapas",h:"Mié-Jue 17:00-00:00 · Vie 13:00-00:00 · Sáb-Dom 12:00-00:00 · Lun-Mar cerrado",pr:"€"},
-  {n:"Exotic Pub",lat:40.3504,lng:-3.8198,r:4.3,rv:84,a:"Pl. Príncipes de España, 30",s:"sombrilla",t:"Terraza pub nocturno",h:"Mar-Dom 22:00-03:00 · Vie-Sáb hasta 04:00 · Lun cerrado",pr:"€"},
-  {n:"Calima Bar",lat:40.3446,lng:-3.812,r:3.7,rv:294,a:"C. Olímpico Francisco Fernández Ochoa, 18",s:"cubierta",t:"Terraza cubierta hookah",h:"Lun-Dom 17:30-00:30 · Vie-Sáb hasta 02:30",pr:"€"},
-  {n:"Cafetería Oslo Cervecería",lat:40.3441,lng:-3.8432,r:3.8,rv:248,a:"C. Oslo, 32-34",p:"+34 603 72 01 14",s:"sombrilla",t:"Terraza cafetería barrio",h:"Mar-Dom 8:30-00:00 · Lun cerrado",pr:"€"},
+  {n:"Restaurante El Quinto Cono",lat:40.352,lng:-3.8048,r:4.4,rv:422,a:"Av. de la Libertad, 87",p:"+34 622 24 68 92",s:"sombrilla",t:"Terraza tapas",h:"Mié-Jue 17:00-00:00 · Vie-Dom 12:00-00:00 · Lun-Mar cerrado",pr:"€"},
+  {n:"Exotic Pub",lat:40.3504,lng:-3.8198,r:4.3,rv:84,a:"Pl. Príncipes de España, 30",s:"sombrilla",t:"Terraza pub nocturno",h:"Mar-Dom 22:00-04:00 · Lun cerrado",pr:"€"},
+  {n:"Cafetería Oslo Cervecería",lat:40.3441,lng:-3.8432,r:3.8,rv:248,a:"C. Oslo, 32-34",p:"+34 603 72 01 14",s:"sombrilla",t:"Terraza cafetería",h:"Mar-Dom 8:30-00:00 · Lun cerrado",pr:"€"},
   {n:"Exento Restaurante",lat:40.346,lng:-3.8418,r:4.2,rv:1835,a:"C. Oslo, 14",p:"+34 911 99 89 81",s:"sombrilla",t:"Terraza moderna",h:"Lun-Dom 7:00-01:30 · Sáb-Dom hasta 02:00",pr:"€€"},
   {n:"D2 Bar Restaurante",lat:40.3462,lng:-3.8411,r:4.1,rv:150,a:"C. Oslo, 33",p:"+34 641 36 51 80",s:"sombrilla",t:"Terraza calle Oslo",h:"Mar-Jue 9:00-00:00 · Vie-Sáb 10:00-02:00 · Dom 10:00-00:00 · Lun cerrado",pr:"€"},
   {n:"Cerveceria La Haya",lat:40.3469,lng:-3.841,r:3.9,rv:508,a:"C. Oslo, 11",p:"+34 916 89 15 94",s:"sombrilla",t:"Terraza barrio",h:"Lun-Dom 7:00-00:00 · Vie-Sáb hasta 01:00",pr:"€"},
   {n:"El Galeón de Alcorcón",lat:40.3467,lng:-3.8397,r:4.1,rv:1406,a:"C. Milán, 2",p:"+34 916 41 93 64",s:"sombrilla",t:"Terraza restaurante clásico",h:"Lun-Mar y Jue-Dom 8:00-00:00 · Mié cerrado",pr:"€€"},
   {n:"La Boutique Trattoria Viajera (X-Madrid)",lat:40.3405,lng:-3.848,r:4.6,rv:3703,a:"C. Oslo, 53 (X-Madrid)",p:"+34 913 68 71 65",s:"cubierta",t:"Terraza italiana fusión",h:"Lun-Dom 13:00-23:00 · Vie-Sáb hasta 23:30",pr:"€€"},
   {n:"Restaurante Urbión",lat:40.354,lng:-3.8139,r:4.1,rv:2668,a:"Pl. la Constitución, 4",p:"+34 916 12 26 15",s:"sombrilla",t:"Gran terraza plaza",h:"Lun-Dom 7:00-00:00 · Sáb-Dom hasta 02:00",pr:"€"},
-  {n:"Restaurante Siempre Así",lat:40.3378,lng:-3.8142,r:4.6,rv:271,a:"C. Navales, 19 (Urtinsa)",p:"+34 912 79 81 29",s:"sombrilla",t:"Terraza zona industrial",h:"Lun-Vie 6:30-20:00 · Jue-Vie hasta 00:00 · Sáb-Dom cerrado",pr:"€"},
+  {n:"Restaurante Siempre Así",lat:40.3378,lng:-3.8142,r:4.6,rv:271,a:"C. Navales, 19 (Urtinsa)",p:"+34 912 79 81 29",s:"sombrilla",t:"Terraza zona industrial",h:"Lun-Vie 6:30-20:00 · Jue-Vie hasta 00:00",pr:"€"},
   {n:"Rte. La Voz de Asturias",lat:40.3406,lng:-3.8052,r:4.4,rv:322,a:"C. los Alfareros, 41",p:"+34 916 41 36 35",s:"sombrilla",t:"Terraza zona industrial",h:"Lun-Vie 5:30-18:30 · Sáb 7:00-12:00 · Dom cerrado",pr:"€"},
   {n:"Cocktail Room Restaurant",lat:40.339,lng:-3.8143,r:4.8,rv:27,a:"C. Polvoranca, 88",p:"+34 651 73 31 81",s:"sombrilla",t:"Terraza restaurante",h:"Lun-Jue 9:00-20:00 · Vie 9:00-01:30",pr:"€"},
   {n:"Artesanos del Café y Té",lat:40.3479,lng:-3.829,r:4.8,rv:266,a:"Pl. las Fraguas, 6",p:"+34 911 56 49 57",s:"sombrilla",t:"Terraza café artesanal",h:"Lun-Vie 7:00-13:30 y 16:30-20:30 · Sáb-Dom 8:30-13:30",pr:"€"},
@@ -243,25 +252,23 @@ const BARS=[
   {n:"Gastrobar Terelita",lat:40.3493,lng:-3.8277,r:4.4,rv:252,a:"C. Madrid, 8",p:"+34 722 48 48 67",s:"sombrilla",t:"Terraza gastrobar peruano",h:"Mar-Dom 10:00-23:00 · Vie-Sáb hasta 23:50 · Lun cerrado",pr:"€"},
   {n:"Gastrobar Brisas del Mar",lat:40.3485,lng:-3.8181,r:4.3,rv:47,a:"Pl. de Orense",p:"+34 602 58 83 72",s:"sombrilla",t:"Terraza gastrobar",h:"Lun-Vie 9:00-22:00 · Sáb 11:00-22:00 · Dom cerrado",pr:"€"},
   {n:"Toscana Bar",lat:40.3428,lng:-3.8266,r:3.9,rv:22,a:"Pl. del Sol, 10",s:"sombrilla",t:"Terraza plaza del Sol",h:"Lun y Mié-Dom 9:00-22:00 · Mar cerrado",pr:"€"},
-  {n:"Cafetería El Mirador Bar",lat:40.3485,lng:-3.8216,r:4.0,rv:44,a:"Pl. Sierra de Navacerrada, 2",p:"+34 695 15 72 28",s:"sombrilla",t:"Terraza plaza",h:"Lun-Mar y Jue-Vie 7:30-01:00 · Vie-Sáb hasta 01:30 · Mié cerrado",pr:"€"},
-  // ── NUEVOS BÚSQUEDA COMPLETA 2 ──
-  {n:"La Federala Alcorcón",lat:40.3382,lng:-3.8135,r:4.7,rv:6592,a:"C. Polvoranca, 108",p:"+34 918 32 00 42",s:"sombrilla",t:"Terraza mexicana",h:"Lun-Jue 13:00-17:00 y 20:00-00:00 · Vie-Sáb 13:00-01:30 · Dom 13:00-17:00 y 20:00-00:00",pr:"€"},
-  {n:"Bar Apolo (desde 1969)",lat:40.3559,lng:-3.8143,r:4.7,rv:262,a:"Pl. San Juan de Covas, 19",p:"+34 916 19 23 58",s:"sombrilla",t:"Terraza plaza barrio",h:"Lun-Vie 6:00-00:00 · Sáb-Dom cerrado",pr:"€"},
+  {n:"Cafetería El Mirador Bar",lat:40.3485,lng:-3.8216,r:4.0,rv:44,a:"Pl. Sierra de Navacerrada, 2",p:"+34 695 15 72 28",s:"sombrilla",t:"Terraza plaza",h:"Lun-Mar y Jue-Dom 7:30-01:00 · Mié cerrado",pr:"€"},
+  {n:"La Federala Alcorcón",lat:40.3382,lng:-3.8135,r:4.7,rv:6592,a:"C. Polvoranca, 108",p:"+34 918 32 00 42",s:"sombrilla",t:"Terraza mexicana",h:"Lun-Jue 13:00-17:00 y 20:00-00:00 · Vie-Sáb 13:00-01:30",pr:"€"},
+  {n:"Bar Apolo (desde 1969)",lat:40.3559,lng:-3.8143,r:4.7,rv:262,a:"Pl. San Juan de Covas, 19",p:"+34 916 19 23 58",s:"sombrilla",t:"Terraza plaza barrio",h:"Lun-Vie 6:00-00:00",pr:"€"},
   {n:"Kauna Lounge & Sushi Bar",lat:40.3531,lng:-3.8198,r:4.8,rv:290,a:"C. Porto Cristo, 1",p:"+34 913 07 58 31",s:"sombrilla",t:"Terraza lounge sushi fusión",h:"Mar-Sáb 12:00-00:00 · Dom 12:00-17:00 · Lun cerrado",pr:"€€"},
   {n:"La Paramera",lat:40.3505,lng:-3.817,r:4.4,rv:502,a:"C. Porto Cristo, 8",p:"+34 916 10 79 02",s:"sombrilla",t:"Terraza tapas y vinos",h:"Lun-Mar y Jue-Dom 9:00-00:00 · Vie hasta 01:00 · Mié cerrado",pr:"€"},
-  {n:"Rte. Polideportivo Parque Lisboa",lat:40.3531,lng:-3.8214,r:4.0,rv:112,a:"Av. de Lisboa, 15",p:"+34 910 88 94 60",s:"natural",t:"Terraza polideportivo",h:"Lun 12:30-16:00 · Mar-Dom 11:00-23:00",pr:"€"},
-  {n:"BaRRa de Pintxos ECI San José Valderas",lat:40.3576,lng:-3.8155,r:4.0,rv:176,a:"Ctra. Nacional V km 12,5 (El Corte Inglés)",p:"+34 916 49 65 00",s:"cubierta",t:"Terraza pintxos centro comercial",h:"Lun-Sáb 10:00-22:00 · Dom 11:00-21:00",pr:"€€"},
+  {n:"Rte. Polideportivo Parque Lisboa",lat:40.3531,lng:-3.8214,r:4.0,rv:112,a:"Av. de Lisboa, 15",p:"+34 910 88 94 60",s:"natural",t:"Terraza polideportivo",h:"Mar-Dom 11:00-23:00",pr:"€"},
+  {n:"BaRRa de Pintxos ECI San José Valderas",lat:40.3576,lng:-3.8155,r:4.0,rv:176,a:"Ctra. Nacional V km 12,5 (El Corte Inglés)",p:"+34 916 49 65 00",s:"cubierta",t:"Terraza pintxos",h:"Lun-Sáb 10:00-22:00 · Dom 11:00-21:00",pr:"€€"},
   {n:"Cafe Bar El Terrible",lat:40.3442,lng:-3.8233,r:4.1,rv:110,a:"C. Polvoranca",s:"sombrilla",t:"Terraza de barrio",h:"Mar-Dom 8:00-02:00 · Lun cerrado",pr:"€"},
   {n:"Bar El Capricho",lat:40.3489,lng:-3.8207,r:4.5,rv:17,a:"Pl. Torres Bellas, 4",p:"+34 911 38 90 16",s:"sombrilla",t:"Terraza plaza",h:"Lun-Dom 8:30-00:00",pr:"€"},
   {n:"Bar la Parada",lat:40.3487,lng:-3.8205,r:4.0,rv:187,a:"Av. Torres Bellas, 4",p:"+34 916 11 04 82",s:"sombrilla",t:"Terraza barrio",h:"Lun-Vie 17:00-23:00 · Sáb-Dom 12:00-23:00",pr:"€"},
   {n:"El Rincón de Cantarranas",lat:40.3506,lng:-3.8245,r:3.7,rv:33,a:"Av. Cantarranas, 9",s:"sombrilla",t:"Terraza de barrio",h:"Lun-Dom 8:00-00:00",pr:"€"},
   {n:"Taberna La Traicionera",lat:40.331,lng:-3.8394,r:4.2,rv:2109,a:"C. Pablo Picasso",p:"+34 914 21 76 06",s:"sombrilla",t:"Terraza taberna sur",h:"Lun-Jue 12:30-00:00 · Vie 12:30-01:30 · Sáb 12:00-01:30 · Dom 12:00-00:00",pr:"€€"},
-  // ── NUEVOS RONDA 3 ──
   {n:"Bar Don Pincho",lat:40.3456,lng:-3.8331,r:3.9,rv:73,a:"Tr.ª Cisneros, 5",s:"sombrilla",t:"Terraza barrio tapas",h:"Mar-Dom 12:30-01:00 · Lun cerrado",pr:"€"},
   {n:"Muver Plaza",lat:40.349,lng:-3.8286,r:4.3,rv:169,a:"C. Clavel, 1 (frente Ayuntamiento)",p:"+34 916 12 17 31",s:"sombrilla",t:"Terraza frente Ayuntamiento",h:"Lun-Vie 8:00-23:00 · Dom 9:30-23:00 · Sáb cerrado",pr:"€"},
   {n:"Cafetería Restaurante Salamanca",lat:40.3508,lng:-3.8195,r:3.8,rv:1120,a:"C. Príncipe Don Juan Carlos, 6",p:"+34 630 92 48 50",s:"sombrilla",t:"Gran terraza restaurante",h:"Lun-Dom 7:00-01:00",pr:"€"},
   {n:"Olympic Cafe Bar",lat:40.3414,lng:-3.8278,r:4.0,rv:350,a:"C. Mayor, 84",p:"+34 916 41 42 74",s:"sombrilla",t:"Terraza clásica barrio",h:"Lun 7:00-15:00 · Mar-Dom 7:00-00:00",pr:"€"},
-  {n:"EL KIOSKO (X-Madrid)",lat:40.3411,lng:-3.8478,r:4.4,rv:4038,a:"C. Oslo, 53 (X-Madrid)",p:"+34 912 12 87 19",s:"cubierta",t:"Terraza gastrobar X-Madrid",h:"Lun-Dom 12:00-00:00 · Vie-Sáb hasta 01:00",pr:"€€"},
+  {n:"EL KIOSKO (X-Madrid)",lat:40.3411,lng:-3.8478,r:4.4,rv:4038,a:"C. Oslo, 53 (X-Madrid)",p:"+34 912 12 87 19",s:"cubierta",t:"Terraza gastrobar",h:"Lun-Dom 12:00-00:00 · Vie-Sáb hasta 01:00",pr:"€€"},
   {n:"Cafe La Victoria",lat:40.3495,lng:-3.8263,r:4.3,rv:122,a:"C. Polvoranca, 22",s:"sombrilla",t:"Terraza cafetería",h:"Lun-Dom 7:00-00:00",pr:"€"},
   {n:"Blanco y Negro Bar",lat:40.3558,lng:-3.8136,r:4.2,rv:119,a:"C. Vicedo, 4",p:"+34 916 10 69 06",s:"sombrilla",t:"Terraza barrio vintage",h:"Lun-Dom 8:00-23:00 · Vie-Sáb hasta 00:00",pr:"€"},
   {n:"Bar Casa Collado",lat:40.3536,lng:-3.8114,r:4.8,rv:48,a:"C. Caldas de Reyes, 15",p:"+34 685 14 91 89",s:"sombrilla",t:"Terraza bar de barrio clásico",h:"Mar-Dom 6:30-00:00 · Lun cerrado",pr:"€"},
@@ -269,100 +276,106 @@ const BARS=[
 ];
 
 const SH={natural:{i:"🌳",l:"Sombra natural",c:"tn",col:"#2e7d32"},sombrilla:{i:"⛱️",l:"Sombrilla",c:"ts",col:"#bf360c"},cubierta:{i:"🏠",l:"Cubierta",c:"tc",col:"#1565c0"}};
-const MUN="28007", BASE="https://opendata.aemet.es/opendata/api";
+const MUN="28007",BASE="https://opendata.aemet.es/opendata/api";
+const DEFAULT_KEY='eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ25hY2lvdG9ycmVzNjJAZ21haWwuY29tIiwianRpIjoiNzgwYjY0NDQtN2I4ZS00NDZhLWFiZTMtNDM4ZDIyYjhmZTBjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3Nzg1Nzk5MzksInVzZXJJZCI6Ijc4MGI2NDQ0LTdiOGUtNDQ2YS1hYmUzLTQzOGQyMmI4ZmUwYyIsInJvbGUiOiIifQ.EAJF0HEXpxkqgNDRaAXfQG6Dr3wrxJRPkmFCxoAeswg';
 let map,mkrs=[],vis=[...Array(BARS.length).keys()],af="all",q="",sel=null;
 let hForecast={},dForecast=[],selDay=0,selHour=null;
+let panelOpen=true;
 
 // ── MAPA ──────────────────────────────────────────────────────────────────────
-map=L.map('map').setView([40.347,-3.825],13);
+map=L.map('map',{zoomControl:true,tap:true,tapTolerance:15}).setView([40.347,-3.825],13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:19}).addTo(map);
 
 BARS.forEach((b,i)=>{
   const sh=SH[b.s];
-  const ic=L.divIcon({className:'',html:`<div style="background:${sh.col};color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;border:2px solid white;box-shadow:0 2px 5px rgba(0,0,0,.3);cursor:pointer">${sh.i}</div>`,iconSize:[26,26],iconAnchor:[13,13],popupAnchor:[0,-13]});
+  const ic=L.divIcon({className:'',html:`<div style="background:${sh.col};color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid white;box-shadow:0 2px 5px rgba(0,0,0,.3);cursor:pointer">${sh.i}</div>`,iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-14]});
   const m=L.marker([b.lat,b.lng],{icon:ic}).addTo(map);
-  m.on('click',()=>pick(i));
+  m.on('click',()=>{pick(i);openPanel();});
   mkrs.push(m);
 });
 
-const lg=L.control({position:'bottomleft'});
-lg.onAdd=()=>{const d=L.DomUtil.create('div');d.style.cssText='background:white;padding:7px 11px;border-radius:7px;border:1px solid #ccc;font-size:.7rem;line-height:1.8;box-shadow:0 1px 4px rgba(0,0,0,.2)';d.innerHTML='<b style="color:#1b5e20">Sombra</b><br><span style="color:#2e7d32">●</span> Natural<br><span style="color:#bf360c">●</span> Sombrilla<br><span style="color:#1565c0">●</span> Cubierta';return d;};
-lg.addTo(map);
+// Panel toggle móvil
+function togglePanel(){
+  panelOpen=!panelOpen;
+  const p=document.getElementById('panel');
+  const btn=document.getElementById('panel-toggle');
+  if(window.innerWidth<640){
+    p.style.height=panelOpen?'45vh':'44px';
+    btn.textContent=panelOpen?'▼':'▲';
+  }
+}
+function openPanel(){
+  if(window.innerWidth<640){
+    panelOpen=true;
+    document.getElementById('panel').style.height='45vh';
+    document.getElementById('panel-toggle').textContent='▼';
+  }
+}
 
 // ── AEMET ─────────────────────────────────────────────────────────────────────
-async function loadAEMET(){
-  const key=document.getElementById('akey').value.trim();
-  if(!key){alert('Introduce tu API Key de AEMET\nGratis en: opendata.aemet.es → Obtención de API Key');return;}
-  localStorage.setItem('aemet_key',key);
-  setStatus('Cargando...');
+async function loadAEMET(key){
+  if(!key) return;
+  document.getElementById('met-st').textContent='Cargando tiempo...';
   try{
     const r1=await fetch(`${BASE}/prediccion/especifica/municipio/horaria/${MUN}?api_key=${key}`);
     const j1=await r1.json();
-    if(j1.estado!==200) throw new Error(j1.descripcion||'Error AEMET');
-    hForecast=parseH(await (await fetch(j1.datos)).json());
+    if(j1.estado!==200) throw new Error(j1.descripcion);
+    hForecast=parseH(await(await fetch(j1.datos)).json());
     const r2=await fetch(`${BASE}/prediccion/especifica/municipio/diaria/${MUN}?api_key=${key}`);
     const j2=await r2.json();
-    dForecast=parseD(await (await fetch(j2.datos)).json());
-    setStatus('✅ AEMET cargado');
-    buildTabs(); renderHours(); if(sel!==null) pick(sel);
-  }catch(e){setStatus('❌ '+e.message);}
+    dForecast=parseD(await(await fetch(j2.datos)).json());
+    document.getElementById('met-st').textContent='✅ Tiempo cargado';
+    localStorage.setItem('aemet_key',key);
+    buildTabs();renderHours();if(sel!==null)pick(sel);
+  }catch(e){document.getElementById('met-st').textContent='⚠️ Error tiempo';}
 }
-
-function setStatus(t){document.getElementById('met-status').textContent=t;document.getElementById('ms2').textContent=t;}
 
 function parseH(data){
   const r={};
   (data[0]?.prediccion?.dia||[]).forEach(dia=>{
-    const date=dia.fecha?.substring(0,10); if(!date) return; r[date]=[];
-    const T=dia.temperatura||[],S=dia.estadoCielo||[],W=dia.viento||[],P=dia.precipitacion||[];
+    const date=dia.fecha?.substring(0,10);if(!date)return;r[date]=[];
+    const T=dia.temperatura||[],S=dia.estadoCielo||[],W=dia.viento||[],P=dia.precipitacion||[],PR=dia.probPrecipitacion||[];
     for(let h=0;h<24;h++){
       const hs=String(h).padStart(2,'0');
-      const temp=T.find(t=>t.periodo===hs)?.value;
-      if(temp===undefined) continue;
-      const probRainVal=+(dia.probPrecipitacion?.find(p=>p.periodo===hs)?.value||dia.probPrecipitacion?.find(p=>+p.periodo<=h&&+(p.periodo||0)+6>h)?.value||0);
-      r[date].push({h,temp:+temp,sky:+(S.find(s=>s.periodo===hs)?.value||0),wind:+(W.find(w=>w.periodo===hs)?.velocidad||W.find(w=>w.periodo===hs)?.value||0),rain:+(P.find(p=>p.periodo===hs)?.value||0),probRain:probRainVal});
+      const temp=T.find(t=>t.periodo===hs)?.value;if(temp===undefined)continue;
+      const probRain=+(PR.find(p=>p.periodo===hs)?.value||PR.find(p=>+p.periodo<=h&&+(p.periodo||0)+6>h)?.value||0);
+      r[date].push({h,temp:+temp,sky:+(S.find(s=>s.periodo===hs)?.value||0),wind:+(W.find(w=>w.periodo===hs)?.velocidad||0),rain:+(P.find(p=>p.periodo===hs)?.value||0),probRain});
     }
-  }); return r;
+  });return r;
 }
 function parseD(data){return(data[0]?.prediccion?.dia||[]).map(d=>({date:d.fecha?.substring(0,10),tmax:d.temperatura?.maxima,tmin:d.temperatura?.minima,sky:d.estadoCielo?.[0]?.descripcion||'',skyCode:+(d.estadoCielo?.[0]?.value||0),rain:+(d.probPrecipitacion?.[0]?.value||0)}));}
-
 function skyI(c){if(!c)return'🌤';if(c<=11)return'☀️';if(c<=15)return'⛅';if(c<=17)return'🌥';if(c<=26)return'☁️';if(c<=35)return'🌧';if(c<=46)return'⛈';return'🌩';}
 
 function score(h){
-  if(!h) return{s:'warn',msg:'Sin datos'};
+  if(!h)return{s:'warn',msg:'Sin datos'};
   const{temp,wind,rain,probRain}=h;
-  // Lluvia segura o intensa → malo
-  if(rain>0.5 && probRain>=20) return{s:'bad', msg:`🌧 Lluvia probable (${probRain}%, ${rain}mm) — No recomendable`};
-  if(rain>2)  return{s:'bad', msg:`🌧 Lluvia (${rain}mm) — No recomendable`};
-  if(temp>37) return{s:'bad', msg:`🌡️ Demasiado calor (${temp}°C)`};
-  if(temp<9)  return{s:'bad', msg:`🥶 Demasiado frío (${temp}°C)`};
-  if(wind>40) return{s:'bad', msg:`💨 Viento fuerte (${wind}km/h)`};
-  // Lluvia posible pero leve → precaución
-  if(rain>0 || probRain>=20) return{s:'warn',msg:`🌦 Algo de lluvia posible (${probRain||0}%, ${rain}mm) — Con precaución`};
-  if(temp>33||temp<13) return{s:'warn',msg:`🌡️ Temperatura límite (${temp}°C)`};
-  if(wind>25) return{s:'warn',msg:`💨 Algo de viento (${wind}km/h)`};
+  if(rain>0.5&&probRain>=20)return{s:'bad',msg:`🌧 Lluvia probable (${probRain}%, ${rain}mm)`};
+  if(rain>2)return{s:'bad',msg:`🌧 Lluvia (${rain}mm)`};
+  if(temp>37)return{s:'bad',msg:`🌡️ Demasiado calor (${temp}°C)`};
+  if(temp<9)return{s:'bad',msg:`🥶 Demasiado frío (${temp}°C)`};
+  if(wind>40)return{s:'bad',msg:`💨 Viento fuerte (${wind}km/h)`};
+  if(rain>0||probRain>=20)return{s:'warn',msg:`🌦 Posible lluvia (${probRain}%, ${rain}mm)`};
+  if(temp>33||temp<13)return{s:'warn',msg:`🌡️ Temperatura límite (${temp}°C)`};
+  if(wind>25)return{s:'warn',msg:`💨 Algo de viento (${wind}km/h)`};
   return{s:'good',msg:`✅ Ideal — ${temp}°C, viento ${wind}km/h`};
 }
-
 function shadeNote(shade,s,temp){
-  if(shade==='cubierta'&&s==='bad'&&temp<37) return'🏠 Al ser cubierta puede ser viable';
-  if(shade==='natural'&&temp>30) return'🌳 Sombra natural ayuda con el calor';
-  if(shade==='sombrilla'&&temp>28) return'⛱️ Sombrilla protege del sol directo';
+  if(shade==='cubierta'&&s==='bad'&&temp<37)return'🏠 Al ser cubierta puede ser viable';
+  if(shade==='natural'&&temp>30)return'🌳 Sombra natural ayuda con el calor';
+  if(shade==='sombrilla'&&temp>28)return'⛱️ Sombrilla protege del sol';
   return'';
 }
-
 function allDays(){return[...new Set([...Object.keys(hForecast).sort(),...dForecast.map(d=>d.date)])].sort().slice(0,7);}
 function selDate(){return allDays()[selDay]||null;}
 
 function buildTabs(){
-  const el=document.getElementById('dtabs'); el.innerHTML='';
+  const el=document.getElementById('dtabs');el.innerHTML='';
   const days=allDays(),names=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
   days.forEach((date,i)=>{
     const d=new Date(date+'T12:00:00'),df=dForecast.find(x=>x.date===date);
     const btn=document.createElement('div');
     btn.className='dt'+(i===selDay?' on':'');
     btn.innerHTML=`${df?skyI(df.skyCode):'📅'} ${names[d.getDay()]} ${d.getDate()}`;
-    if(df) btn.title=`${df.tmin}°-${df.tmax}° · ${df.sky}`;
     btn.onclick=()=>{selDay=i;selHour=null;document.querySelectorAll('.dt').forEach((t,j)=>t.classList.toggle('on',j===i));renderHours();if(sel!==null)pick(sel);};
     el.appendChild(btn);
   });
@@ -370,7 +383,7 @@ function buildTabs(){
 
 function renderHours(){
   const grid=document.getElementById('hgrid'),date=selDate(),hours=hForecast[date];
-  if(!hours||!hours.length){grid.innerHTML='<span style="font-size:.7rem;color:#aaa">Sin predicción horaria para este día</span>';return;}
+  if(!hours||!hours.length){grid.innerHTML='<span style="font-size:.7rem;color:#aaa">Sin datos horarios</span>';return;}
   grid.innerHTML='';
   hours.forEach(h=>{
     const sc=score(h),card=document.createElement('div');
@@ -403,57 +416,62 @@ function pick(i){
   const warnH=hours.filter(h=>score(h).s==='warn');
   const gm=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+' '+bar.a+' Alcorcón')}`;
 
-  document.getElementById('pt').textContent=bar.n;
+  document.getElementById('ph').textContent=bar.n;
   document.getElementById('pb').innerHTML=`
-    <div style="padding:10px 11px">
-      <div style="font-weight:700;font-size:.88rem;margin-bottom:3px">${bar.n}</div>
-      <div style="font-size:.72rem;color:#f57c00;margin-bottom:3px">${'★'.repeat(Math.round(bar.r))} ${bar.r} · ${bar.rv.toLocaleString()} reseñas · ${bar.pr}</div>
-      <div style="font-size:.7rem;color:#555;margin-bottom:3px">📍 ${bar.a}${bar.p?' · 📞 '+bar.p:''}</div>
-      <div style="font-size:.68rem;color:#555;margin-bottom:7px">🕐 ${bar.h}</div>
-      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">
+    <div class="bar-detail">
+      <button class="back-btn" onclick="showList()">← Volver a la lista</button>
+      <div class="bn">${bar.n}</div>
+      <div class="br">${'★'.repeat(Math.round(bar.r))} ${bar.r} · ${bar.rv.toLocaleString()} reseñas · ${bar.pr}</div>
+      <div class="ba">📍 ${bar.a}${bar.p?' · 📞 '+bar.p:''}</div>
+      <div class="ba">🕐 ${bar.h}</div>
+      <div class="bt" style="margin:6px 0">
         <span class="tag ${sh.c}">${sh.i} ${sh.l}</span>
         <span class="tag tt">🪑 ${bar.t}</span>
       </div>
       ${evalH?`
       <div class="prec ${sc.s}">
         <strong>${selHour!==null?String(selHour).padStart(2,'0')+'h — ':''}${sc.msg}</strong>
-        ${sn?`<div style="font-size:.68rem;margin-top:2px">${sn}</div>`:''}
+        ${sn?`<div style="font-size:.72rem;margin-top:3px">${sn}</div>`:''}
       </div>
-      ${goodH.length?`<div style="font-size:.7rem;color:#2e7d32;margin-top:4px">✅ Mejor franja: ${fmtRange(goodH)}</div>`:''}
-      ${!goodH.length&&warnH.length?`<div style="font-size:.7rem;color:#f57f17;margin-top:4px">⚠️ Franja aceptable: ${fmtRange(warnH)}</div>`:''}
-      `:`<div class="prec warn" style="margin-top:4px">Introduce la API Key de AEMET para ver recomendación</div>`}
-      ${df?`<div style="font-size:.68rem;color:#666;margin-top:5px">📊 Día: ${df.tmin}°-${df.tmax}° · ${df.sky} · 🌧${df.rain}%</div>`:''}
-      <a href="${gm}" target="_blank" style="display:inline-block;margin-top:10px;padding:5px 12px;background:#1b5e20;color:white;border-radius:6px;font-size:.72rem;text-decoration:none">Ver en Google Maps →</a>
+      ${goodH.length?`<div style="font-size:.72rem;color:#2e7d32;margin-top:4px">✅ Mejor franja: ${fmtRange(goodH)}</div>`:''}
+      ${!goodH.length&&warnH.length?`<div style="font-size:.72rem;color:#f57f17;margin-top:4px">⚠️ Aceptable: ${fmtRange(warnH)}</div>`:''}
+      `:`<div class="prec warn">Carga la API AEMET para ver recomendación meteorológica</div>`}
+      ${df?`<div style="font-size:.7rem;color:#666;margin-top:5px">📊 ${df.tmin}°-${df.tmax}° · ${df.sky} · 🌧${df.rain}%</div>`:''}
+      <a href="${gm}" target="_blank" class="gmaps-btn">📍 Ver en Google Maps</a>
     </div>`;
 
   // popup mapa
-  const popHtml=`<div class="pw">
+  const sh2=SH[bar.s];
+  mkrs[i].bindPopup(`<div class="pw">
     <div class="pn">${bar.n}</div>
     <div class="pr">${'★'.repeat(Math.round(bar.r))} ${bar.r} · ${bar.rv.toLocaleString()} · ${bar.pr}</div>
     <div class="pa">📍 ${bar.a}${bar.p?' · 📞 '+bar.p:''}</div>
-    <div class="ptg"><span class="tag ${sh.c}">${sh.i} ${sh.l}</span><span class="tag tt">🪑 ${bar.t}</span></div>
-    ${evalH?`<div class="prec ${sc.s}" style="margin-bottom:4px">${sc.msg}${sn?'<br><small>'+sn+'</small>':''}</div>`:''}
+    <div class="ptg"><span class="tag ${sh2.c}">${sh2.i} ${sh2.l}</span><span class="tag tt">🪑 ${bar.t}</span></div>
+    ${evalH?`<div class="prec-sm prec ${sc.s}">${sc.msg}</div>`:''}
     ${goodH.length?`<div style="font-size:.68rem;color:#2e7d32">✅ ${fmtRange(goodH)}</div>`:''}
-    <div class="ph2">🕐 ${bar.h}</div>
-    <a class="pg" href="${gm}" target="_blank">Ver en Google Maps →</a>
-  </div>`;
-  mkrs[i].bindPopup(popHtml,{maxWidth:250}).openPopup();
-  map.setView([bar.lat,bar.lng],16);
+    <div style="font-size:.68rem;color:#555;margin-top:3px">🕐 ${bar.h}</div>
+    <a class="pg" href="${gm}" target="_blank">📍 Ver en Google Maps</a>
+  </div>`,{maxWidth:240}).openPopup();
+  map.setView([bar.lat,bar.lng],15);
   const el=document.querySelector(`.bi[data-i="${i}"]`);
   if(el) el.scrollIntoView({block:'nearest'});
 }
 
-// ── LISTA Y FILTROS ───────────────────────────────────────────────────────────
+function showList(){
+  sel=null;
+  render();
+  document.getElementById('ph').textContent=`${vis.length} terraza${vis.length!==1?'s':''}`;
+}
+
 function render(){
   const pb=document.getElementById('pb');
   if(sel!==null){pick(sel);return;}
-  if(!vis.length){pb.innerHTML='<div style="padding:16px;text-align:center;color:#999;font-size:.8rem">Sin resultados</div>';return;}
-  document.getElementById('pt').textContent=`${vis.length} terraza${vis.length!==1?'s':''}`;
+  document.getElementById('ph').textContent=`${vis.length} terraza${vis.length!==1?'s':''}`;
   const date=selDate(),hours=hForecast[date]||[],evalH=hours[Math.floor(hours.length/2)]||null;
   pb.innerHTML=vis.map(i=>{
     const b=BARS[i],sh=SH[b.s],sc=score(evalH);
     const dot=sc.s==='good'?'🟢':sc.s==='warn'?'🟡':'🔴';
-    return`<div class="bi${sel===i?' sel':''}" data-i="${i}" onclick="pick(${i})">
+    return`<div class="bi${sel===i?' sel':''}" data-i="${i}" onclick="pick(${i});openPanel()">
       <div class="bn">${b.n}</div>
       <div class="br">${'★'.repeat(Math.round(b.r))} ${b.r} · ${b.rv.toLocaleString()} · ${b.pr}</div>
       <div class="ba">📍 ${b.a}</div>
@@ -467,23 +485,43 @@ function render(){
 }
 
 function filt(){
-  vis=BARS.map((_,i)=>i).filter(i=>{const b=BARS[i];return(af==='all'||b.s===af)&&(!q||[b.n,b.a,b.s,b.t].some(x=>x.toLowerCase().includes(q)));});
+  vis=BARS.map((_,i)=>i).filter(i=>{
+    const b=BARS[i];
+    return(af==='all'||b.s===af)&&(!q||[b.n,b.a,b.s,b.t].some(x=>x.toLowerCase().includes(q)));
+  });
   mkrs.forEach((m,i)=>{vis.includes(i)?m.addTo(map):map.removeLayer(m);});
   document.getElementById('badge').textContent=`${vis.length}`;
-  document.getElementById('bc').textContent=vis.length;
-  if(sel===null) render();
+  if(sel===null)render();
 }
 
 function sf(btn,shade){document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');af=shade;sel=null;filt();}
-function clr(){document.getElementById('si').value='';q='';document.getElementById('cb').style.display='none';filt();}
-document.getElementById('si').addEventListener('input',function(){q=this.value.toLowerCase().trim();document.getElementById('cb').style.display=q?'inline':'none';sel=null;filt();});
+function clr(){document.getElementById('si').value='';q='';document.getElementById('cb').style.display='none';sel=null;filt();}
+document.getElementById('si').addEventListener('input',function(){
+  q=this.value.toLowerCase().trim();
+  document.getElementById('cb').style.display=q?'inline':'none';
+  sel=null;filt();
+});
 
+// Ajustar altura del panel según topbar real
+function adjustLayout(){
+  const tb=document.getElementById('topbar').offsetHeight;
+  const dt=document.getElementById('dtabs').offsetHeight;
+  const hb=document.getElementById('hbar').offsetHeight;
+  const used=tb+dt+hb;
+  document.getElementById('main').style.height=`calc(100vh - ${used}px)`;
+  map.invalidateSize();
+}
+window.addEventListener('resize',adjustLayout);
+setTimeout(adjustLayout,100);
+
+// INIT
 filt();
-
-// Cargar key — primero localStorage, si no la key por defecto
-const DEFAULT_KEY='eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ25hY2lvdG9ycmVzNjJAZ21haWwuY29tIiwianRpIjoiNzgwYjY0NDQtN2I4ZS00NDZhLWFiZTMtNDM4ZDIyYjhmZTBjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3Nzg1Nzk5MzksInVzZXJJZCI6Ijc4MGI2NDQ0LTdiOGUtNDQ2YS1hYmUzLTQzOGQyMmI4ZmUwYyIsInJvbGUiOiIifQ.EAJF0HEXpxkqgNDRaAXfQG6Dr3wrxJRPkmFCxoAeswg'; // <-- PON AQUÍ TU API KEY DE AEMET
 const savedKey=localStorage.getItem('aemet_key')||DEFAULT_KEY;
-if(savedKey){document.getElementById('akey').value=savedKey;loadAEMET();}
+if(savedKey){document.getElementById('akey').value=savedKey;loadAEMET(savedKey);}
+else{
+  document.getElementById('dtabs').innerHTML='<span style="font-size:.7rem;color:#689f38;padding:4px">Añade tu API Key de AEMET para ver el tiempo →</span>';
+  document.getElementById('hgrid').innerHTML='<span style="font-size:.7rem;color:#aaa">Sin API Key de AEMET</span>';
+}
 </script>
 </body>
 </html>
