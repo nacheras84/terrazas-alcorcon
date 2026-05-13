@@ -4,115 +4,281 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#1b5e20">
-<title>🍺 Terrazas Alcorcón</title>
+<meta name="theme-color" content="#0d1a12">
+<title>Terrazas Alcorcón</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
+:root{
+  --bg:#0d1a12;--bg2:#111f16;--bg3:#162318;--surface:#1a2d1e;--surface2:#1f3523;
+  --border:rgba(180,210,150,.1);--border2:rgba(180,210,150,.18);
+  --gold:#c8a96e;--gold2:#e8c98e;--green:#4caf50;--green2:#81c784;--green-dim:#2d5a2e;
+  --text:#e8f0e2;--text2:#a8bea0;--text3:#6a8a62;
+  --red:#e57373;--amber:#ffc107;--good:#4caf50;
+  --r:10px;--r2:14px;--r3:20px;
+  --sh:0 4px 24px rgba(0,0,0,.5);--sh2:0 8px 40px rgba(0,0,0,.7);
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5}
+html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text)}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--green-dim);border-radius:2px}
 
-/* TOPBAR */
-#topbar{background:#1b5e20;color:white;padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:1000;-webkit-overflow-scrolling:touch}
-#topbar h1{font-size:.9rem;font-weight:700;white-space:nowrap}
-#sw{position:relative;flex:1;min-width:120px}
-#si{width:100%;padding:8px 28px 8px 10px;border-radius:20px;border:none;font-size:16px;outline:none;-webkit-appearance:none}
-#cb{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#555;font-size:.9rem;display:none;padding:4px}
-.fb{padding:7px 12px;border-radius:16px;border:2px solid rgba(255,255,255,.4);background:transparent;color:white;cursor:pointer;font-size:.72rem;white-space:nowrap;transition:all .2s;-webkit-appearance:none;touch-action:manipulation}
-.fb.on{background:white;color:#1b5e20;border-color:white}
-#badge{background:rgba(255,255,255,.2);padding:4px 9px;border-radius:12px;font-size:.7rem;white-space:nowrap}
-#met-st{font-size:.65rem;color:rgba(255,255,255,.7);width:100%;text-align:right}
+/* ─── TOPBAR ─── */
+#topbar{
+  background:linear-gradient(135deg,var(--bg2) 0%,var(--bg3) 100%);
+  border-bottom:1px solid var(--border2);
+  padding:10px 14px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;
+  position:relative;z-index:1000;
+  box-shadow:0 2px 20px rgba(0,0,0,.4);
+}
+#topbar h1{
+  font-family:'Playfair Display',serif;
+  font-size:.95rem;font-weight:700;white-space:nowrap;
+  background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  letter-spacing:.02em;
+}
+#sw{position:relative;flex:1;min-width:110px}
+#si{
+  width:100%;padding:7px 28px 7px 12px;
+  border-radius:var(--r3);border:1px solid var(--border2);
+  background:rgba(255,255,255,.06);color:var(--text);
+  font-size:14px;outline:none;font-family:'DM Sans',sans-serif;
+  transition:border-color .2s,background .2s;
+}
+#si::placeholder{color:var(--text3)}
+#si:focus{border-color:var(--gold);background:rgba(255,255,255,.09)}
+#cb{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);font-size:.8rem;display:none;padding:3px}
+.fb{
+  padding:5px 11px;border-radius:var(--r3);
+  border:1px solid var(--border2);background:transparent;color:var(--text2);
+  cursor:pointer;font-size:.65rem;white-space:nowrap;
+  transition:all .2s;touch-action:manipulation;font-family:'DM Sans',sans-serif;font-weight:500;
+  letter-spacing:.03em;
+}
+.fb:hover{border-color:var(--gold);color:var(--gold)}
+.fb.on{
+  background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 100%);
+  color:#0d1a12;border-color:transparent;font-weight:600;
+  box-shadow:0 2px 12px rgba(200,169,110,.3);
+}
+#badge{
+  background:rgba(76,175,80,.15);border:1px solid rgba(76,175,80,.3);
+  padding:3px 9px;border-radius:var(--r3);font-size:.63rem;color:var(--green2);
+  font-weight:600;white-space:nowrap;
+}
+#met-st{font-size:.6rem;color:var(--text3);width:100%;text-align:right}
 
-/* DAY TABS */
-#dtabs{display:flex;gap:4px;padding:6px 10px;background:#f1f8e9;border-bottom:1px solid #dcedc8;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+/* ─── DAY TABS ─── */
+#dtabs{
+  display:flex;gap:5px;padding:7px 12px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  overflow-x:auto;scrollbar-width:none;
+}
 #dtabs::-webkit-scrollbar{display:none}
-.dt{padding:5px 12px;border-radius:14px;background:#dcedc8;border:1px solid #c5e1a5;color:#33691e;cursor:pointer;font-size:.72rem;white-space:nowrap;transition:all .2s;touch-action:manipulation}
-.dt.on{background:#1b5e20;border-color:#1b5e20;color:white}
+.dt{
+  padding:5px 12px;border-radius:var(--r);
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  color:var(--text2);cursor:pointer;font-size:.65rem;white-space:nowrap;
+  transition:all .2s;touch-action:manipulation;font-family:'DM Sans',sans-serif;font-weight:500;
+}
+.dt:hover{border-color:var(--border2);color:var(--text)}
+.dt.on{
+  background:var(--green-dim);border-color:var(--green);color:var(--green2);
+  box-shadow:0 0 12px rgba(76,175,80,.2);
+}
 
-/* HOURLY */
-#hbar{padding:7px 10px;background:#f9fbe7;border-bottom:1px solid #dcedc8}
-#hbar h4{font-size:.7rem;color:#558b2f;margin-bottom:5px}
-#hgrid{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+/* ─── HOUR BAR ─── */
+#hbar{
+  padding:7px 12px;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+}
+#hbar h4{font-size:.62rem;color:var(--text3);margin-bottom:5px;font-weight:400;letter-spacing:.02em}
+#hgrid{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
 #hgrid::-webkit-scrollbar{display:none}
-.hc{min-width:46px;background:white;border-radius:6px;padding:5px 2px;text-align:center;border:1px solid #ddd;cursor:pointer;transition:all .2s;touch-action:manipulation;flex-shrink:0}
-.hc.sel{background:#f1f8e9;border-color:#558b2f}
-.hc.good{border-color:#4caf50;background:#f1f8e9}
-.hc.warn{border-color:#ffa726;background:#fffde7}
-.hc.bad{border-color:#ef5350;background:#ffebee}
-.hc .ht{font-size:.6rem;color:#888}
-.hc .hi{font-size:.9rem}
-.hc .htp{font-size:.78rem;font-weight:700;color:#e65100}
-.hc .hw{font-size:.58rem;color:#999}
+.hc{
+  min-width:44px;background:rgba(255,255,255,.04);border-radius:8px;
+  padding:5px 2px;text-align:center;border:1px solid var(--border);
+  cursor:pointer;transition:all .2s;touch-action:manipulation;flex-shrink:0;
+}
+.hc:hover{border-color:var(--border2);transform:translateY(-1px)}
+.hc.sel{background:rgba(200,169,110,.12);border-color:var(--gold);box-shadow:0 0 10px rgba(200,169,110,.2)}
+.hc.good{border-color:rgba(76,175,80,.5);background:rgba(76,175,80,.08)}
+.hc.warn{border-color:rgba(255,193,7,.5);background:rgba(255,193,7,.07)}
+.hc.bad{border-color:rgba(229,115,115,.5);background:rgba(229,115,115,.07)}
+.hc .ht{font-size:.55rem;color:var(--text3)}.hc .hi{font-size:.85rem;line-height:1.2}
+.hc .htp{font-size:.72rem;font-weight:700;color:var(--gold)}.hc .hw{font-size:.52rem;color:var(--text3)}
 
-/* LAYOUT PRINCIPAL */
-#main{display:flex;flex-direction:column;height:calc(100vh - var(--topbar-h, 100px))}
+/* ─── LAYOUT ─── */
+#main{display:flex;flex-direction:column}
 #map-wrap{flex:1;position:relative;min-height:0}
 #map{width:100%;height:100%}
 
-/* PANEL INFERIOR MÓVIL */
-#panel{background:white;border-top:3px solid #1b5e20;display:flex;flex-direction:column;transition:height .3s ease;overflow:hidden}
-#panel-handle{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;cursor:pointer;background:#e8f5e9;touch-action:manipulation}
-#panel-handle .drag-bar{width:40px;height:4px;background:#aaa;border-radius:2px;margin:0 auto}
-#panel-title-bar{display:flex;align-items:center;justify-content:space-between;width:100%}
-#ph{font-size:.78rem;color:#1b5e20;font-weight:600}
-#panel-toggle{background:none;border:none;color:#1b5e20;font-size:1.1rem;cursor:pointer;padding:0 4px}
+/* ─── PANEL ─── */
+#panel{
+  background:var(--surface);
+  border-top:1px solid var(--border2);
+  display:flex;flex-direction:column;
+  transition:height .3s cubic-bezier(.4,0,.2,1);overflow:hidden;
+}
+#panel-handle{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 14px;cursor:pointer;
+  background:linear-gradient(90deg,var(--surface) 0%,var(--surface2) 100%);
+  border-bottom:1px solid var(--border);
+  touch-action:manipulation;
+}
+#ph{
+  font-family:'Playfair Display',serif;
+  font-size:.78rem;color:var(--gold);font-weight:600;
+}
+#panel-toggle{background:none;border:none;color:var(--text3);font-size:.9rem;cursor:pointer;padding:0 3px;transition:transform .3s}
 #pb{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1}
 
-/* LISTA */
-.bi{padding:12px 14px;border-bottom:1px solid #eee;cursor:pointer;transition:background .15s;touch-action:manipulation}
-.bi:active{background:#f1f8e9}
-.bi.sel{background:#c8e6c9}
-.bn{font-weight:700;font-size:.85rem;color:#111;margin-bottom:2px}
-.br{font-size:.72rem;color:#f57c00;margin-bottom:2px}
-.ba{font-size:.7rem;color:#666;margin-bottom:4px}
+/* ─── LIST ITEMS ─── */
+.bi{
+  padding:12px 14px;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:background .15s;touch-action:manipulation;
+  position:relative;
+}
+.bi::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
+  background:linear-gradient(180deg,var(--gold) 0%,var(--gold2) 100%);
+  transition:width .2s;
+}
+.bi:hover{background:rgba(255,255,255,.03)}
+.bi:hover::before{width:2px}
+.bi:active{background:rgba(255,255,255,.05)}
+.bi.sel{background:rgba(200,169,110,.07)}
+.bi.sel::before{width:3px}
+.bn{font-weight:600;font-size:.82rem;color:var(--text);margin-bottom:2px;font-family:'DM Sans',sans-serif}
+.br{font-size:.67rem;color:var(--gold);margin-bottom:2px;opacity:.85}
+.ba{font-size:.65rem;color:var(--text3);margin-bottom:4px}
 .bt{display:flex;gap:3px;flex-wrap:wrap}
-.tag{padding:3px 7px;border-radius:8px;font-size:.65rem;font-weight:600}
-.tn{background:#e8f5e9;color:#2e7d32}
-.ts{background:#fff3e0;color:#e65100}
-.tc{background:#e3f2fd;color:#1565c0}
-.tt{background:#f3e5f5;color:#6a1b9a}
-.trip{background:#fff8e1;color:#ff6f00;border:1px solid #ffcc02}
-.tw-good{background:#e8f5e9;color:#2e7d32;border:1px solid #4caf50}
-.tw-warn{background:#fffde7;color:#f57f17;border:1px solid #ffa726}
-.tw-bad{background:#ffebee;color:#c62828;border:1px solid #ef5350}
+.tag{padding:2px 7px;border-radius:20px;font-size:.58rem;font-weight:600;letter-spacing:.02em}
+.tn{background:rgba(76,175,80,.15);color:#81c784;border:1px solid rgba(76,175,80,.25)}
+.ts{background:rgba(255,138,76,.12);color:#ffb74d;border:1px solid rgba(255,138,76,.25)}
+.tc{background:rgba(66,165,245,.12);color:#90caf9;border:1px solid rgba(66,165,245,.25)}
+.tt{background:rgba(200,169,110,.1);color:var(--gold);border:1px solid rgba(200,169,110,.2)}
+.trip{background:rgba(255,193,7,.1);color:#ffd54f;border:1px solid rgba(255,193,7,.3)}
+.tv-p{background:rgba(144,202,249,.1);color:#90caf9;border:1px solid rgba(144,202,249,.2)}
+.tv-a{background:rgba(240,98,146,.1);color:#f48fb1;border:1px solid rgba(240,98,146,.2)}
+.tv-c{background:rgba(206,147,216,.1);color:#ce93d8;border:1px solid rgba(206,147,216,.2)}
+.tv-b{background:rgba(128,203,196,.1);color:#80cbc4;border:1px solid rgba(128,203,196,.2)}
+.tv-pl{background:rgba(255,213,79,.1);color:#ffd54f;border:1px solid rgba(255,213,79,.2)}
+.park-good{background:rgba(76,175,80,.1);color:#81c784;border:1px solid rgba(76,175,80,.25)}
+.park-med{background:rgba(255,193,7,.1);color:#ffd54f;border:1px solid rgba(255,193,7,.3)}
+.park-bad{background:rgba(229,115,115,.1);color:#ef9a9a;border:1px solid rgba(229,115,115,.25)}
+.tw-good{background:rgba(76,175,80,.1);color:#81c784;border:1px solid rgba(76,175,80,.25)}
+.tw-warn{background:rgba(255,193,7,.1);color:#ffd54f;border:1px solid rgba(255,193,7,.3)}
+.tw-bad{background:rgba(229,115,115,.1);color:#ef9a9a;border:1px solid rgba(229,115,115,.25)}
 
-/* DETALLE BAR */
-.bar-detail{padding:12px 14px}
-.bar-detail .bn{font-size:.95rem;margin-bottom:4px}
-.prec{padding:8px 10px;border-radius:8px;font-size:.78rem;margin:8px 0}
-.prec.good{background:#e8f5e9;border:1px solid #4caf50;color:#2e7d32}
-.prec.warn{background:#fffde7;border:1px solid #ffa726;color:#f57f17}
-.prec.bad{background:#ffebee;border:1px solid #ef5350;color:#c62828}
-.gmaps-btn{display:block;text-align:center;margin-top:10px;padding:10px;background:#1b5e20;color:white;border-radius:8px;font-size:.82rem;text-decoration:none;font-weight:600}
-.trip-btn{display:block;text-align:center;margin-top:6px;padding:10px;background:#ff6f00;color:white;border-radius:8px;font-size:.82rem;text-decoration:none;font-weight:600}
-.back-btn{display:flex;align-items:center;gap:6px;color:#1b5e20;font-size:.78rem;font-weight:600;cursor:pointer;margin-bottom:8px;touch-action:manipulation;border:none;background:none;padding:0}
+/* ─── DETAIL ─── */
+.bar-detail{padding:14px}
+.bar-detail .bn{
+  font-family:'Playfair Display',serif;
+  font-size:1.05rem;margin-bottom:5px;color:var(--text);font-weight:700;
+}
+.prec{padding:8px 10px;border-radius:var(--r);font-size:.72rem;margin:8px 0;border-left:3px solid}
+.prec.good{background:rgba(76,175,80,.08);border-color:var(--green);color:#a5d6a7}
+.prec.warn{background:rgba(255,193,7,.08);border-color:var(--amber);color:#ffe082}
+.prec.bad{background:rgba(229,115,115,.08);border-color:var(--red);color:#ef9a9a}
+.park-box{padding:8px 10px;border-radius:var(--r);font-size:.72rem;margin:5px 0}
+.gmaps-btn{
+  display:block;text-align:center;margin-top:10px;padding:10px;
+  background:linear-gradient(135deg,var(--green-dim),#1a4020);
+  color:var(--green2);border-radius:var(--r2);font-size:.78rem;
+  text-decoration:none;font-weight:600;
+  border:1px solid rgba(76,175,80,.3);
+  transition:all .2s;font-family:'DM Sans',sans-serif;
+}
+.gmaps-btn:hover{background:linear-gradient(135deg,#1a4020,#1f4a26);border-color:var(--green)}
+.trip-btn{
+  display:block;text-align:center;margin-top:5px;padding:10px;
+  background:rgba(255,193,7,.08);color:#ffd54f;border-radius:var(--r2);
+  font-size:.78rem;text-decoration:none;font-weight:600;
+  border:1px solid rgba(255,193,7,.3);
+  transition:all .2s;font-family:'DM Sans',sans-serif;
+}
+.trip-btn:hover{background:rgba(255,193,7,.13)}
+.back-btn{
+  display:flex;align-items:center;gap:5px;color:var(--gold);
+  font-size:.73rem;font-weight:600;cursor:pointer;margin-bottom:10px;
+  border:none;background:none;padding:0;touch-action:manipulation;
+  font-family:'DM Sans',sans-serif;opacity:.8;
+  transition:opacity .2s;
+}
+.back-btn:hover{opacity:1}
 
-/* POPUP */
-.leaflet-popup-content-wrapper{border-radius:10px!important;box-shadow:0 4px 15px rgba(0,0,0,.15)!important}
-.pw{min-width:180px;max-width:220px}
-.pn{font-weight:700;font-size:.88rem;color:#1b5e20;margin-bottom:3px}
-.pr{font-size:.74rem;color:#f57c00;margin-bottom:3px}
-.pa{font-size:.7rem;color:#555;margin-bottom:4px}
+/* ─── SECTION HEADERS ─── */
+.section-header{
+  padding:7px 14px;
+  background:var(--bg2);
+  font-size:.6rem;font-weight:700;color:var(--text3);
+  border-bottom:1px solid var(--border);
+  letter-spacing:.1em;text-transform:uppercase;
+  font-family:'DM Sans',sans-serif;
+}
+
+/* ─── MAP POPUPS ─── */
+.leaflet-popup-content-wrapper{
+  background:var(--surface)!important;
+  border:1px solid var(--border2)!important;
+  border-radius:var(--r2)!important;
+  box-shadow:var(--sh2)!important;
+  color:var(--text)!important;
+}
+.leaflet-popup-tip{background:var(--surface)!important}
+.leaflet-popup-close-button{color:var(--text3)!important;font-size:16px!important}
+.pw{min-width:175px;max-width:220px}
+.pn{font-family:'Playfair Display',serif;font-weight:700;font-size:.88rem;color:var(--text);margin-bottom:3px}
+.pr{font-size:.68rem;color:var(--gold);margin-bottom:3px}
+.pa{font-size:.65rem;color:var(--text3);margin-bottom:4px}
 .ptg{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px}
-.prec-sm{padding:4px 7px;border-radius:5px;font-size:.72rem;margin-bottom:4px}
-.pg{display:block;text-align:center;padding:7px;background:#1b5e20;color:white;border-radius:6px;font-size:.72rem;text-decoration:none;font-weight:600;margin-top:4px}
+.prec-sm{padding:5px 8px;border-radius:8px;font-size:.68rem;margin-bottom:3px;border-left:2px solid}
+.prec-sm.prec.good{border-color:var(--green)}
+.prec-sm.prec.warn{border-color:var(--amber)}
+.prec-sm.prec.bad{border-color:var(--red)}
+.pg{
+  display:block;text-align:center;padding:7px;
+  background:var(--green-dim);color:var(--green2);
+  border-radius:8px;font-size:.68rem;text-decoration:none;font-weight:600;
+  margin-top:4px;border:1px solid rgba(76,175,80,.25);
+  font-family:'DM Sans',sans-serif;
+}
 
-/* DESKTOP */
+/* ─── MAP ZOOM CONTROLS ─── */
+.leaflet-control-zoom a{background:var(--surface)!important;color:var(--text2)!important;border-color:var(--border2)!important}
+.leaflet-control-zoom a:hover{background:var(--surface2)!important;color:var(--gold)!important}
+
+/* ─── DESKTOP ─── */
 @media(min-width:640px){
   #main{flex-direction:row}
   #map-wrap{flex:1}
-  #panel{width:300px;border-top:none;border-left:3px solid #1b5e20;height:100%!important}
+  #panel{
+    width:320px;border-top:none;
+    border-left:1px solid var(--border2);
+    height:100%!important;
+    background:var(--surface);
+  }
   #panel-handle{display:none}
   #pb{height:100%;overflow-y:auto}
 }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.bi{animation:fadeSlideIn .2s ease both}
+.bar-detail{animation:fadeSlideIn .25s ease both}
 </style>
 </head>
 <body>
-
 <div id="topbar">
-  <h1>🍺 Terrazas Alcorcón</h1>
-  <div id="sw"><input id="si" type="search" placeholder="🔍 Buscar bar, zona..." autocomplete="off"><button id="cb" onclick="clr()">✕</button></div>
+  <h1>✦ Terrazas Alcorcón</h1>
+  <div id="sw"><input id="si" type="search" placeholder="Buscar local, barrio..." autocomplete="off"><button id="cb" onclick="clr()">✕</button></div>
   <button class="fb on" onclick="sf(this,'all')">Todos</button>
   <button class="fb" onclick="sf(this,'natural')">🌳</button>
   <button class="fb" onclick="sf(this,'sombrilla')">⛱️</button>
@@ -121,440 +287,376 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFo
   <span id="badge">0</span>
   <span id="met-st"></span>
 </div>
-
 <div id="dtabs"></div>
 <div id="hbar">
-  <h4>🕐 Toca una hora para ver la recomendación</h4>
-  <div id="hgrid"><span style="font-size:.7rem;color:#aaa">Cargando tiempo...</span></div>
+  <h4>Selecciona una hora para ver meteorología y aparcamiento en tiempo real</h4>
+  <div id="hgrid"><span style="font-size:.68rem;color:var(--text3)">Cargando...</span></div>
 </div>
-
 <div id="main">
   <div id="map-wrap"><div id="map"></div></div>
   <div id="panel" style="height:45vh">
     <div id="panel-handle" onclick="togglePanel()">
-      <div id="panel-title-bar">
-        <span id="ph">📍 Selecciona un bar</span>
-        <button id="panel-toggle">▲</button>
-      </div>
+      <span id="ph">Selecciona un local</span>
+      <button id="panel-toggle">▲</button>
     </div>
     <div id="pb"></div>
   </div>
 </div>
-
 <input id="akey" type="hidden"/>
-
 <script>
-const BARS=[
-  // ── ORIGINALES ──
-  {n:"Restaurante Terraza Amphora",lat:40.3447,lng:-3.8119,r:4.4,rv:4372,a:"Av. de Leganés, 54",p:"+34 916 44 39 17",s:"sombrilla",t:"Gran terraza exterior",h:"Mar-Vie 9:30-00:00 · Sáb-Dom 12:00-01:30 · Lun cerrado",pr:"€"},
-  {n:"Bar Restaurante La Paloma",lat:40.3471,lng:-3.821,r:4.6,rv:1093,a:"Av. Torres Bellas, 12",p:"+34 910 70 98 64",s:"cubierta",t:"Terraza con jets de agua",h:"Mar-Jue 9:00-23:30 · Vie 9:00-00:00 · Sáb 10:00-01:30 · Lun cerrado",pr:"€"},
-  {n:"Antigua Taberna La Marcela",lat:40.346,lng:-3.8411,r:4.2,rv:2024,a:"C. Oslo, 31",p:"+34 916 89 17 82",s:"natural",t:"Exterior arbolado",h:"Lun-Dom 12:00-00:00",pr:"€"},
-  {n:"Bar Cisneros",lat:40.3466,lng:-3.8299,r:4.7,rv:215,a:"C. Cisneros, 19",s:"sombrilla",t:"Terraza de barrio",h:"Mar-Dom 11:00-21:00 · Lun cerrado",pr:"€"},
-  {n:"Apolo",lat:40.3444,lng:-3.8282,r:4.8,rv:68,a:"C/ Ávila, 3",p:"+34 914 86 00 49",s:"sombrilla",t:"Terraza calle peatonal",h:"Lun-Sáb 9:00-22:30 · Dom 9:00-15:30",pr:"€"},
-  {n:"La Casona",lat:40.3462,lng:-3.8316,r:4.5,rv:687,a:"C. Badajoz, 11",p:"+34 916 44 43 39",s:"sombrilla",t:"Terraza brasserie",h:"Lun-Vie 6:30-22:00 · Vie-Sáb hasta 00:00 · Dom cerrado",pr:"€"},
-  {n:"Los Caracoles",lat:40.3447,lng:-3.8277,r:4.4,rv:468,a:"C. Mayor, 68",s:"sombrilla",t:"Terraza calle mayor",h:"Lun-Vie 8:00-22:00 · Sáb 9:00-23:00 · Dom cerrado",pr:"€"},
-  {n:"Bar Gerla",lat:40.3472,lng:-3.8257,r:4.1,rv:543,a:"Pl. de la Hispanidad, 7",p:"+34 911 52 93 34",s:"sombrilla",t:"Terraza plaza",h:"Lun-Dom 7:00-00:00",pr:"€"},
-  {n:"QMG El Prado de Santo Domingo",lat:40.3363,lng:-3.8443,r:4.0,rv:260,a:"Av. de Esteban Márquez",p:"+34 673 41 39 21",s:"natural",t:"Entorno natural",h:"Lun-Dom 11:00-00:00",pr:"€"},
-  {n:"Restaurante El Acebo",lat:40.3428,lng:-3.826,r:4.3,rv:3606,a:"Pl. del Sol, 7",p:"+34 914 86 02 32",s:"sombrilla",t:"Gran terraza familiar",h:"Mar-Jue 8:00-00:00 · Vie 8:00-01:00 · Sáb-Dom 9:00-01:00 · Lun cerrado",pr:"€€"},
-  {n:"Kiosko Kaura",lat:40.3479,lng:-3.8165,r:3.9,rv:2191,a:"C. la Paz, 4",p:"+34 917 65 06 65",s:"sombrilla",t:"Terraza quiosco",h:"Lun-Dom 12:00-00:00",pr:"€€"},
-  {n:"Casa Pepe Alcorcón",lat:40.3498,lng:-3.8204,r:4.2,rv:925,a:"Pl. Príncipes de España, 2",p:"+34 916 42 64 65",s:"sombrilla",t:"Terraza plaza",h:"Mar-Dom 8:00-00:00 · Lun cerrado",pr:"€"},
-  {n:"Ingazu Restaurante",lat:40.3493,lng:-3.8296,r:4.3,rv:2286,a:"P.º Castilla, 7",p:"+34 910 22 44 89",s:"sombrilla",t:"Terraza paseo",h:"Mié-Dom 9:00-00:00 · Lun-Mar cerrado",pr:"€"},
-  {n:"Restaurante El Granero",lat:40.3473,lng:-3.8064,r:4.6,rv:1224,a:"C. Tablas de Daimiel, 6",p:"+34 912 88 33 94",s:"cubierta",t:"Terraza cubierta mediterránea",h:"Mié-Sáb 13:00-01:00 · Dom 13:00-18:00 · Lun-Mar cerrado",pr:"€€"},
-  {n:"Pirata's",lat:40.3378,lng:-3.8137,r:4.5,rv:25221,a:"C. Navales, 33",p:"+34 916 43 69 28",s:"cubierta",t:"Terraza acristalada temática",h:"Lun-Dom 12:00-02:00 · Vie-Sáb hasta 03:00",pr:"€"},
-  {n:"Haddock Bar",lat:40.3456,lng:-3.8186,r:4.0,rv:610,a:"C. Japón, 1",p:"+34 677 53 00 40",s:"sombrilla",t:"Terraza pub",h:"Lun-Dom 11:00-01:00 · Vie-Sáb hasta 03:00",pr:"€"},
-  {n:"Bar Mi Candela",lat:40.3377,lng:-3.828,r:4.2,rv:506,a:"Av. las Retamas, 76",p:"+34 916 43 60 56",s:"sombrilla",t:"Terraza amplia",h:"Lun-Dom 12:00-02:00",pr:"€"},
-  {n:"Bar La Galería",lat:40.3454,lng:-3.8419,r:4.2,rv:766,a:"C. Oslo, 18",p:"+34 610 73 80 83",s:"natural",t:"Terraza con música en vivo",h:"Mar-Sáb 11:00-02:00 · Dom 11:00-20:00 · Lun cerrado",pr:"€"},
-  {n:"Restaurante La Pizarra",lat:40.3466,lng:-3.8326,r:4.1,rv:728,a:"C. Infantas, 4",p:"+34 913 08 58 03",s:"cubierta",t:"Terraza acristalada",h:"Lun-Dom 7:00-00:30",pr:"€"},
-  {n:"Cervecería Don Pincho",lat:40.3492,lng:-3.8319,r:4.2,rv:489,a:"P.º Extremadura, 19",p:"+34 910 18 47 16",s:"sombrilla",t:"Terraza paseo",h:"Lun-Dom 9:00-00:00",pr:"€"},
-  {n:"Bar Restaurante Vagalume",lat:40.3472,lng:-3.8106,r:4.1,rv:1729,a:"Av. de la Libertad, 15",p:"+34 608 71 67 55",s:"sombrilla",t:"Terraza exterior",h:"Mar-Sáb 11:00-01:00 · Dom 11:00-18:00 · Lun cerrado",pr:"€"},
-  {n:"El Flor Taberna Gaditana",lat:40.3384,lng:-3.8291,r:4.3,rv:889,a:"Los Pinos, 48",p:"+34 910 24 05 77",s:"sombrilla",t:"Terraza taberna andaluza",h:"Mar-Sáb 12:00-00:00 · Dom 12:00-17:00 · Lun cerrado",pr:"€"},
-  {n:"Bar Avenida",lat:40.3445,lng:-3.8331,r:3.9,rv:1318,a:"C. Cisneros, 45",p:"+34 916 43 00 13",s:"sombrilla",t:"Terraza avenida",h:"Lun-Dom 7:00-00:00 · Vie-Sáb hasta 01:30",pr:"€"},
-  {n:"Cervecería El Tejar",lat:40.3508,lng:-3.829,r:4.6,rv:208,a:"Pl. el Tejar, 2",p:"+34 916 12 38 12",s:"sombrilla",t:"Terraza en plaza",h:"Mar-Vie 9:00-02:00 · Sáb 12:00-02:00 · Dom 12:00-18:00 · Lun cerrado",pr:"€"},
-  {n:"Cerveceria Beerseker",lat:40.3421,lng:-3.82,r:4.7,rv:219,a:"C. Polvoranca, 66",s:"natural",t:"Terraza craft beer",h:"Lun-Dom 19:00-02:00",pr:"€"},
-  {n:"Anomalia Bar",lat:40.3383,lng:-3.8328,r:4.4,rv:20,a:"C. Los Pinos, 32",p:"+34 919 47 51 55",s:"natural",t:"Terraza con brisa",h:"Lun-Jue 7:30-23:00 · Vie-Sáb 7:30-02:00 · Dom 9:30-23:00",pr:"€"},
-  {n:"La Cervecería de Valderas",lat:40.3538,lng:-3.8097,r:4.7,rv:42,a:"C. Urano, 10",p:"+34 656 50 46 11",s:"sombrilla",t:"Terraza cervecería",h:"Lun-Vie 8:00-23:30 · Sáb 10:00-00:30 · Dom cerrado",pr:"€"},
-  {n:"Cervecería El Trag@",lat:40.3463,lng:-3.8253,r:4.0,rv:837,a:"C. Matadero, 16",p:"+34 910 07 41 09",s:"cubierta",t:"Terraza acristalada",h:"Lun-Dom 7:00-00:00 · Vie-Sáb hasta 01:00",pr:"€€"},
-  {n:"Dublín 98",lat:40.3495,lng:-3.8237,r:4.8,rv:867,a:"C. Jabonería, 59",p:"+34 631 75 96 87",s:"sombrilla",t:"Terraza pub irlandés",h:"Mar-Jue 20:00-01:00 · Vie-Sáb 20:00-02:00 · Dom 20:00-01:00 · Lun cerrado",pr:"€"},
-  {n:"Cervecería Bodegas Sanz",lat:40.3476,lng:-3.8223,r:4.4,rv:99,a:"Pl. Sierra de Gredos, 2",p:"+34 641 76 61 06",s:"natural",t:"Terraza clásica",h:"Mar-Dom 11:30-00:00 · Lun cerrado",pr:"€"},
-  {n:"Cervecería El Puerto II",lat:40.3514,lng:-3.8326,r:4.3,rv:263,a:"Av. Villaviciosa, 5",s:"sombrilla",t:"Terraza de barrio",h:"Lun-Sáb 8:00-23:00 · Dom cerrado",pr:"€"},
-  {n:"Mesón Río",lat:40.35,lng:-3.8262,r:4.7,rv:15,a:"Av. Cantarranas",p:"+34 688 13 96 01",s:"sombrilla",t:"Terraza bar-grill",h:"Lun-Dom 8:30-00:00 · Vie-Sáb hasta 01:30",pr:"€"},
-  {n:"La Taberna Catering",lat:40.3506,lng:-3.8217,r:4.6,rv:328,a:"Pl. de Lugo",p:"+34 654 10 74 84",s:"sombrilla",t:"Terraza gastrobar vinos",h:"Lun-Vie 11:00-23:00 · Sáb 11:00-00:00 · Dom cerrado",pr:"€"},
-  {n:"Mesón O'Galego",lat:40.3434,lng:-3.8265,r:4.5,rv:364,a:"Pl. del Sol, 3",p:"+34 914 37 33 51",s:"sombrilla",t:"Terraza gallega en plaza",h:"Mar-Sáb 11:00-00:00 · Dom 11:00-16:00 · Lun cerrado",pr:"€"},
-  {n:"Mesón D Juan",lat:40.3532,lng:-3.8174,r:4.2,rv:172,a:"Pl. la Coruña",p:"+34 660 12 23 29",s:"sombrilla",t:"Terraza mesón",h:"Lun-Vie 9:00-21:00 · Sáb 9:00-17:00 · Dom cerrado",pr:"€"},
-  {n:"Taberna La Mezquita",lat:40.354,lng:-3.8102,r:4.6,rv:475,a:"C. Urano, 3",p:"+34 916 10 74 75",s:"natural",t:"Terraza gastronómica",h:"Mar 11:00-17:00 · Mié-Dom 11:00-16:00 y 20:00-00:00 · Lun cerrado",pr:"€€"},
-  {n:"Restaurante Rincón Castellano",lat:40.3603,lng:-3.813,r:4.5,rv:2092,a:"C. de la Canaleja",p:"+34 622 48 84 07",s:"sombrilla",t:"Gran terraza arenosa",h:"Lun-Vie 9:30-19:30 · Sáb 9:00-18:00 · Dom 9:00-17:00",pr:"€"},
-  {n:"Taberna Ventura",lat:40.3292,lng:-3.8284,r:4.3,rv:196,a:"C. Martín Luther King, 54",p:"+34 919 35 76 18",s:"sombrilla",t:"Terraza estilo industrial",h:"Mar-Jue 10:30-00:00 · Vie 10:30-01:00 · Sáb-Dom 11:00-01:00 · Lun cerrado",pr:"€"},
-  {n:"Cafetería Bar Patico",lat:40.3441,lng:-3.8275,r:4.2,rv:111,a:"C. Mayor, 79",p:"+34 642 60 45 45",s:"sombrilla",t:"Terraza calle mayor",h:"Lun-Dom 7:30-00:00",pr:"€"},
-  {n:"El Lagarto Verde",lat:40.3336,lng:-3.8183,r:4.6,rv:174,a:"C. Aeronáutica, 33",p:"+34 614 54 97 13",s:"natural",t:"Terraza con música en vivo",h:"Lun-Jue 9:00-17:00 · Vie 9:00-23:00 · Sáb 12:00-00:00 · Dom 12:00-17:00",pr:"€"},
-  {n:"Bar Zahara Cafetería",lat:40.3507,lng:-3.8254,r:4.5,rv:149,a:"C. Buitrago",s:"sombrilla",t:"Terraza de barrio",h:"Lun-Mar 7:30-00:00 · Mié cerrado · Jue-Dom 7:30-00:00",pr:"€"},
-  {n:"Cafetería Bar La Plazuela",lat:40.3508,lng:-3.8154,r:4.8,rv:14,a:"Av. Alcalde José Aranda, 53",p:"+34 919 48 45 73",s:"sombrilla",t:"Terraza tranquila",h:"Lun-Vie 8:30-00:00 · Sáb 10:00-00:00 · Dom cerrado",pr:"€"},
-  {n:"Café Bar La Plaza",lat:40.3474,lng:-3.8189,r:4.6,rv:28,a:"Plaza del Peñón, 9",p:"+34 913 62 06 75",s:"sombrilla",t:"Terraza acogedora",h:"Lun-Sáb 8:30-23:00 · Dom 8:00-16:00",pr:"€"},
-  {n:"Café Bar Chuleta",lat:40.3493,lng:-3.8279,r:4.7,rv:104,a:"C. Madrid, 4",s:"sombrilla",t:"Terraza con karaoke",h:"Mar-Dom 12:00-00:00 · Lun cerrado",pr:"€"},
-  {n:"Aurum Fusion",lat:40.355,lng:-3.8076,r:4.3,rv:1507,a:"C. los Lirios, 3",p:"+34 910 74 43 48",s:"natural",t:"Terraza en parque",h:"Lun-Jue 12:00-18:30 · Vie-Sáb 12:00-01:30 · Dom 12:00-18:00",pr:"€€"},
-  {n:"Bar Mayo",lat:40.3288,lng:-3.8346,r:4.1,rv:713,a:"C. Martín Luther King",p:"+34 910 00 00 26",s:"sombrilla",t:"Terraza exterior",h:"Lun-Dom 10:00-00:00",pr:"€"},
-  {n:"Carpe Diem Restaurant",lat:40.3522,lng:-3.8044,r:4.1,rv:1530,a:"C. las Gardenias, 11",p:"+34 911 56 46 98",s:"cubierta",t:"Terraza cubierta",h:"Mié-Dom 9:00-01:00",pr:"€€"},
-  {n:"Xiringuito Beach (X-Madrid)",lat:40.3388,lng:-3.8481,r:3.7,rv:1837,a:"C. Oslo, 53 Local 061",s:"cubierta",t:"Chiringuito playa interior",h:"Lun-Dom 18:00-00:00 · Vie-Sáb hasta 02:00",pr:"€€"},
-  {n:"Anubis Cocteleríad (X-Madrid)",lat:40.3404,lng:-3.848,r:4.0,rv:2402,a:"C. Oslo, 53 (C.C. X-Madrid)",p:"+34 677 53 21 11",s:"cubierta",t:"Terraza cocktail bar",h:"Lun-Dom 12:00-01:00 · Vie-Sáb hasta 02:00",pr:"€€"},
-  {n:"Cerveceria Seven",lat:40.3509,lng:-3.809,r:4.6,rv:632,a:"C. Carballino, 23",p:"+34 658 26 04 81",s:"cubierta",t:"Terraza abierta + cubierta",h:"Mar-Jue 8:00-00:00 · Vie 8:00-01:00 · Sáb 12:30-01:00 · Dom 12:00-00:00 · Lun cerrado",pr:"€"},
-  {n:"Coconut Coffee",lat:40.3474,lng:-3.8203,r:4.4,rv:256,a:"C. Sierra de la Estrella, 24A",p:"+34 655 63 21 29",s:"sombrilla",t:"Café especialidad",h:"Mié-Dom 9:00-14:00 y 17:00-21:00",pr:"€"},
-  {n:"Mesón La Vieja Castilla",lat:40.3438,lng:-3.8152,r:4.3,rv:442,a:"C. Río Duero",p:"+34 916 42 82 38",s:"sombrilla",t:"Terraza castellana",h:"Mar-Dom 7:30-17:00 y 19:00-00:00 · Lun cerrado",pr:"€"},
-  {n:"Mesón Las Tejas (desde 1978)",lat:40.3495,lng:-3.8169,r:4.4,rv:2286,a:"Av. Alcalde José Aranda, 49",p:"+34 916 10 80 07",s:"sombrilla",t:"Terraza clásica",h:"Mar-Dom 7:00-00:00 · Lun cerrado",pr:"€€"},
-  {n:"Restaurante El Fermín",lat:40.3478,lng:-3.8207,r:4.4,rv:6052,a:"C. Sierra de la Estrella, 8",p:"+34 916 10 31 03",s:"sombrilla",t:"Gran terraza española",h:"Lun y Mié-Dom 12:00-01:00 · Mar cerrado",pr:"€"},
-  {n:"Restaurante El Rececho",lat:40.3433,lng:-3.8064,r:4.7,rv:1033,a:"C. del Mazo, 1",p:"+34 669 64 87 69",s:"natural",t:"Terraza con jardín",h:"Lun-Jue 9:00-17:00 · Vie-Sáb 9:00-01:00 · Dom 10:00-17:00",pr:"€"},
-  {n:"Restaurante Mala mía",lat:40.3402,lng:-3.8281,r:4.4,rv:167,a:"Av. del Oeste, 19",p:"+34 641 41 04 89",s:"sombrilla",t:"Terraza con cocktails",h:"Mié-Dom 17:00-02:00 · Lun-Mar cerrado",pr:"€"},
-  {n:"Taberna El Puntazo",lat:40.3378,lng:-3.833,r:4.5,rv:95,a:"Av. las Retamas, 29",p:"+34 910 26 53 59",s:"sombrilla",t:"Terraza taberna",h:"Mar-Dom 12:00-01:00 · Lun cerrado",pr:"€"},
-  {n:"Meigas e Pulpos",lat:40.3479,lng:-3.822,r:5.0,rv:4,a:"Pl. Sierra de Gredos, 3",p:"+34 627 46 44 57",s:"sombrilla",t:"Terraza pulpería",h:"Mié-Dom 12:00-23:30 · Lun-Mar cerrado",pr:"€"},
-  {n:"Entre Tapas y Tiempos",lat:40.3382,lng:-3.8278,r:4.6,rv:18,a:"Av. las Retamas, 67",p:"+34 915 73 06 77",s:"sombrilla",t:"Terraza fusión",h:"Lun y Mié-Dom 12:30-01:30 · Mar cerrado",pr:"€"},
-  {n:"Bar El Aperitivo",lat:40.3448,lng:-3.8167,r:4.6,rv:110,a:"C. Olimpiada",p:"+34 660 56 02 02",s:"sombrilla",t:"Terraza de barrio",h:"Lun-Mié y Vie-Dom 7:00-00:00 · Jue cerrado",pr:"€"},
-  {n:"Manhattan Bar",lat:40.352,lng:-3.8272,r:4.5,rv:203,a:"C. Retablo, 7",p:"+34 653 61 70 45",s:"sombrilla",t:"Terraza vermut",h:"Lun-Vie 7:00-23:00 · Sáb hasta 05:00 · Dom cerrado",pr:"€"},
-  {n:"Bar Canapes VICO'S (desde 1982)",lat:40.3431,lng:-3.8316,r:4.5,rv:386,a:"C. Zamora, 7",p:"+34 916 41 17 31",s:"sombrilla",t:"Terraza tapas clásicas",h:"Lun-Dom 7:30-15:30 y 18:00-23:00",pr:"€"},
-  {n:"El Mercadito Bar-Restaurante",lat:40.3526,lng:-3.8176,r:4.2,rv:227,a:"Av. de los Derechos Humanos, 1",p:"+34 913 08 68 56",s:"sombrilla",t:"Terraza moderna",h:"Mar-Vie 9:00-17:00 · Sáb-Dom 12:00-00:00 · Lun cerrado",pr:"€"},
-  {n:"Bar Plaza Cafe (desde 1974)",lat:40.3483,lng:-3.8279,r:4.6,rv:340,a:"C. Mayor, 8",p:"+34 630 22 79 04",s:"sombrilla",t:"Terraza calle mayor",h:"Lun-Vie 7:30-20:00 · Sáb 8:00-15:00 · Dom cerrado",pr:"€"},
-  {n:"Cafetería New Gregory JC",lat:40.3444,lng:-3.8262,r:4.2,rv:503,a:"C. Fuenlabrada, 27",p:"+34 605 89 09 72",s:"sombrilla",t:"Terraza cafetería",h:"Lun y Mié-Dom 7:00-00:00 · Mar cerrado",pr:"€"},
-  {n:"Restaurante Brasa y Leña Tres Aguas",lat:40.3586,lng:-3.8331,r:4.0,rv:4440,a:"Av. de América, 7-9",p:"+34 916 10 02 25",s:"cubierta",t:"Gran terraza restaurante",h:"Lun-Dom 13:00-23:30",pr:"€€"},
-  {n:"La Tarada By Arturo's",lat:40.3374,lng:-3.8291,r:4.4,rv:352,a:"Av. las Retamas, 52",p:"+34 916 44 47 11",s:"sombrilla",t:"Terraza restaurante",h:"Lun-Dom 7:00-00:00 · Vie-Sáb hasta 01:00",pr:"€"},
-  {n:"Los Cuatro Postes",lat:40.3375,lng:-3.8315,r:4.3,rv:688,a:"Av. las Retamas, 39",p:"+34 910 57 33 02",s:"sombrilla",t:"Terraza con tapas",h:"Mar-Jue 7:00-00:00 · Vie 7:00-02:00 · Sáb 9:00-02:00 · Dom 9:00-00:00 · Lun cerrado",pr:"€"},
-  {n:"The Green Corner Pub",lat:40.3391,lng:-3.8364,r:4.4,rv:99,a:"Av. las Retamas, 10",p:"+34 685 69 46 66",s:"sombrilla",t:"Terraza pub cervezas",h:"Lun-Jue 17:00-02:00 · Vie 17:00-02:30 · Sáb-Dom 12:30-02:30",pr:"€"},
-  {n:"Cervecería Villanueva de Ávila",lat:40.3389,lng:-3.8352,r:4.4,rv:509,a:"Av. las Retamas, 15",p:"+34 910 44 18 35",s:"sombrilla",t:"Gran terraza cervecería",h:"Lun-Dom 8:00-00:00 · Vie-Sáb hasta 01:00",pr:"€€"},
-  {n:"Casa Garcia",lat:40.3379,lng:-3.8274,r:4.4,rv:241,a:"Av. las Retamas, 76",p:"+34 912 26 10 63",s:"sombrilla",t:"Terraza tapas con menú",h:"Consultar horario",pr:"€"},
-  {n:"El Soho de las Retamas",lat:40.3377,lng:-3.8298,r:3.8,rv:833,a:"Av. las Retamas, 47",p:"+34 916 43 17 11",s:"sombrilla",t:"Terraza restaurante español",h:"Lun-Dom 9:00-01:00",pr:"€"},
-  {n:"NATIVO Alcorcón",lat:40.3376,lng:-3.8324,r:4.3,rv:419,a:"Av. las Retamas, 33",p:"+34 656 31 31 16",s:"sombrilla",t:"Terraza asador carnes",h:"Mié-Dom 11:30-00:00 · Lun-Mar cerrado",pr:"€€"},
-  {n:"Broadway Bar",lat:40.3381,lng:-3.8282,r:4.5,rv:317,a:"Av. las Retamas, 65",p:"+34 617 78 81 65",s:"sombrilla",t:"Terraza pub rock",h:"Mar-Dom 20:00-03:00 · Vie-Sáb hasta 03:30 · Lun cerrado",pr:"€"},
-  {n:"Restaurante Yucatán",lat:40.3381,lng:-3.8279,r:4.5,rv:684,a:"Av. las Retamas, 65",p:"+34 916 44 41 18",s:"sombrilla",t:"Terraza mexicana fusión",h:"Lun y Mié-Jue 19:30-23:30 · Vie 13:00-01:30 · Sáb 13:00-01:30 · Dom 13:00-23:30 · Mar cerrado",pr:"€"},
-  {n:"GRUPO HOSTELERO DKS (Tres Aguas)",lat:40.3586,lng:-3.8328,r:4.6,rv:8,a:"Av. de América, C.C. Tres Aguas",p:"+34 669 87 05 03",s:"cubierta",t:"Terraza lounge cocktail",h:"Lun-Jue 18:00-01:00 · Vie-Sáb 12:00-03:00 · Dom 12:00-00:00",pr:"€€"},
-  {n:"KIZÁS LOUNGE (Tres Aguas)",lat:40.3586,lng:-3.8328,r:4.5,rv:73,a:"Av. de América, 7-9 (Tres Aguas)",p:"+34 642 33 87 88",s:"cubierta",t:"Terraza lounge hookah",h:"Lun-Jue 18:00-00:00 · Vie-Sáb 18:00-03:00 · Dom 18:00-00:00",pr:"€€"},
-  {n:"Pub Donde Ayer",lat:40.3541,lng:-3.8175,r:4.4,rv:286,a:"Pl. de Pontevedra, 2A",p:"+34 605 18 84 70",s:"sombrilla",t:"Terraza pub clásico",h:"Lun-Jue 21:30-03:00 · Vie-Sáb 21:30-03:30 · Dom cerrado",pr:"€"},
-  {n:"Bar Cervecería La Esquina",lat:40.3496,lng:-3.8305,r:4.4,rv:45,a:"C. Navalcarnero, 1",p:"+34 910 28 15 92",s:"sombrilla",t:"Terraza con música en vivo",h:"Mar-Dom 16:00-02:00 · Lun cerrado",pr:"€"},
-  {n:"Viena Capellanes",lat:40.3476,lng:-3.828,r:4.6,rv:1641,a:"C. Mayor, 18",p:"+34 912 79 70 44",s:"sombrilla",t:"Terraza cafetería pastelería",h:"Lun-Dom 8:00-21:30",pr:"€"},
-  {n:"Bread & Co. Brunch",lat:40.3486,lng:-3.8276,r:4.4,rv:586,a:"C. Jabonería, 7",p:"+34 913 62 49 73",s:"sombrilla",t:"Terraza brunch",h:"Lun-Vie 8:30-21:00 · Sáb-Dom 8:30-14:30 y 17:00-21:00",pr:"€"},
-  {n:"Nurcris",lat:40.3522,lng:-3.8253,r:4.3,rv:804,a:"Av. de Leganés, 3",s:"sombrilla",t:"Terraza cafetería bar",h:"Lun-Dom 7:00-00:30 · Jue-Vie hasta 02:00",pr:"€"},
-  {n:"La Chata",lat:40.3466,lng:-3.8113,r:3.9,rv:1422,a:"Av. de la Libertad, 9",p:"+34 916 21 02 19",s:"sombrilla",t:"Gran terraza tapas",h:"Lun-Dom 11:00-00:00 · Vie-Sáb hasta 01:00",pr:"€"},
-  {n:"Restaurante El Quinto Cono",lat:40.352,lng:-3.8048,r:4.4,rv:422,a:"Av. de la Libertad, 87",p:"+34 622 24 68 92",s:"sombrilla",t:"Terraza tapas",h:"Mié-Jue 17:00-00:00 · Vie-Dom 12:00-00:00 · Lun-Mar cerrado",pr:"€"},
-  {n:"Exotic Pub",lat:40.3504,lng:-3.8198,r:4.3,rv:84,a:"Pl. Príncipes de España, 30",s:"sombrilla",t:"Terraza pub nocturno",h:"Mar-Dom 22:00-04:00 · Lun cerrado",pr:"€"},
-  {n:"Cafetería Oslo Cervecería",lat:40.3441,lng:-3.8432,r:3.8,rv:248,a:"C. Oslo, 32-34",p:"+34 603 72 01 14",s:"sombrilla",t:"Terraza cafetería",h:"Mar-Dom 8:30-00:00 · Lun cerrado",pr:"€"},
-  {n:"Exento Restaurante",lat:40.346,lng:-3.8418,r:4.2,rv:1835,a:"C. Oslo, 14",p:"+34 911 99 89 81",s:"sombrilla",t:"Terraza moderna",h:"Lun-Dom 7:00-01:30 · Sáb-Dom hasta 02:00",pr:"€€"},
-  {n:"D2 Bar Restaurante",lat:40.3462,lng:-3.8411,r:4.1,rv:150,a:"C. Oslo, 33",p:"+34 641 36 51 80",s:"sombrilla",t:"Terraza calle Oslo",h:"Mar-Jue 9:00-00:00 · Vie-Sáb 10:00-02:00 · Dom 10:00-00:00 · Lun cerrado",pr:"€"},
-  {n:"Cerveceria La Haya",lat:40.3469,lng:-3.841,r:3.9,rv:508,a:"C. Oslo, 11",p:"+34 916 89 15 94",s:"sombrilla",t:"Terraza barrio",h:"Lun-Dom 7:00-00:00 · Vie-Sáb hasta 01:00",pr:"€"},
-  {n:"El Galeón de Alcorcón",lat:40.3467,lng:-3.8397,r:4.1,rv:1406,a:"C. Milán, 2",p:"+34 916 41 93 64",s:"sombrilla",t:"Terraza restaurante clásico",h:"Lun-Mar y Jue-Dom 8:00-00:00 · Mié cerrado",pr:"€€"},
-  {n:"La Boutique Trattoria Viajera (X-Madrid)",lat:40.3405,lng:-3.848,r:4.6,rv:3703,a:"C. Oslo, 53 (X-Madrid)",p:"+34 913 68 71 65",s:"cubierta",t:"Terraza italiana fusión",h:"Lun-Dom 13:00-23:00 · Vie-Sáb hasta 23:30",pr:"€€"},
-  {n:"Restaurante Urbión",lat:40.354,lng:-3.8139,r:4.1,rv:2668,a:"Pl. la Constitución, 4",p:"+34 916 12 26 15",s:"sombrilla",t:"Gran terraza plaza",h:"Lun-Dom 7:00-00:00 · Sáb-Dom hasta 02:00",pr:"€"},
-  {n:"Restaurante Siempre Así",lat:40.3378,lng:-3.8142,r:4.6,rv:271,a:"C. Navales, 19 (Urtinsa)",p:"+34 912 79 81 29",s:"sombrilla",t:"Terraza zona industrial",h:"Lun-Vie 6:30-20:00 · Jue-Vie hasta 00:00",pr:"€"},
-  {n:"Rte. La Voz de Asturias",lat:40.3406,lng:-3.8052,r:4.4,rv:322,a:"C. los Alfareros, 41",p:"+34 916 41 36 35",s:"sombrilla",t:"Terraza zona industrial",h:"Lun-Vie 5:30-18:30 · Sáb 7:00-12:00 · Dom cerrado",pr:"€"},
-  {n:"Cocktail Room Restaurant",lat:40.339,lng:-3.8143,r:4.8,rv:27,a:"C. Polvoranca, 88",p:"+34 651 73 31 81",s:"sombrilla",t:"Terraza restaurante",h:"Lun-Jue 9:00-20:00 · Vie 9:00-01:30",pr:"€"},
-  {n:"Artesanos del Café y Té",lat:40.3479,lng:-3.829,r:4.8,rv:266,a:"Pl. las Fraguas, 6",p:"+34 911 56 49 57",s:"sombrilla",t:"Terraza café artesanal",h:"Lun-Vie 7:00-13:30 y 16:30-20:30 · Sáb-Dom 8:30-13:30",pr:"€"},
-  {n:"Café JF",lat:40.3456,lng:-3.8281,r:4.3,rv:420,a:"C. Vizcaya, 4",p:"+34 914 27 74 07",s:"sombrilla",t:"Terraza cafetería",h:"Lun-Dom 7:00-00:00",pr:"€"},
-  {n:"Panadería La Piruleta",lat:40.331,lng:-3.8357,r:4.5,rv:560,a:"C. Pablo Picasso",p:"+34 912 00 20 24",s:"natural",t:"Terraza panadería-café",h:"Mar-Vie 8:30-20:00 · Sáb 9:30-14:00 · Dom 10:00-14:00 · Lun cerrado",pr:"€"},
-  {n:"Panettone Café",lat:40.3381,lng:-3.8281,r:4.7,rv:155,a:"Av. las Retamas, 65",p:"+34 914 94 48 35",s:"sombrilla",t:"Terraza café pastelería",h:"Lun-Dom 8:30-21:30",pr:"€"},
-  {n:"Bar Café Cáceres 48",lat:40.3431,lng:-3.8335,r:4.3,rv:176,a:"C. Cáceres, 48",s:"sombrilla",t:"Terraza de barrio",h:"Mar-Dom 7:30-00:00 · Lun cerrado",pr:"€"},
-  {n:"Weekend Bar de Copas",lat:40.3497,lng:-3.8205,r:4.9,rv:16,a:"Pl. Príncipes de España",s:"sombrilla",t:"Terraza bar de copas",h:"Mar-Dom 21:00-03:00 · Lun cerrado",pr:"€"},
-  {n:"Kiriki Bar Shishas & Cócteles",lat:40.3428,lng:-3.8283,r:4.9,rv:107,a:"C. Málaga esq. C. Sevilla",p:"+34 653 87 82 03",s:"sombrilla",t:"Terraza cocktail hookah",h:"Mar-Sáb 19:00-01:30 · Dom-Lun cerrado",pr:"€"},
-  {n:"As de Copas Indie Rock",lat:40.3508,lng:-3.8155,r:4.4,rv:291,a:"Av. Alcalde José Aranda, 53",p:"+34 637 42 36 37",s:"sombrilla",t:"Terraza bar indie rock",h:"Lun-Dom 20:00-03:00",pr:"€"},
-  {n:"La Chica de Ayer",lat:40.3512,lng:-3.815,r:4.5,rv:190,a:"Av. Alcalde José Aranda, 55",p:"+34 657 02 65 38",s:"sombrilla",t:"Terraza pub retro",h:"Vie-Sáb 21:00-03:00",pr:"€"},
-  {n:"La Bahía Alcorcón",lat:40.3512,lng:-3.815,r:4.7,rv:49,a:"Av. Alcalde José Aranda, 55",p:"+34 627 33 48 26",s:"sombrilla",t:"Terraza pub clásico dardos",h:"Lun-Dom 19:30-03:00 · Vie-Sáb hasta 03:30",pr:"€"},
-  {n:"El Tardeo by Moyano",lat:40.3455,lng:-3.8179,r:4.8,rv:44,a:"C. Japón, 17",p:"+34 669 86 43 48",s:"sombrilla",t:"Terraza tardeo cocktail",h:"Lun-Jue 17:00-23:00 · Vie-Sáb 17:00-02:00 · Dom 17:00-00:00",pr:"€"},
-  {n:"El Makaneo Music Bar",lat:40.352,lng:-3.8214,r:4.3,rv:21,a:"Av. de Lisboa, 4",p:"+34 622 59 65 99",s:"sombrilla",t:"Terraza bar música en vivo",h:"Lun-Mar y Jue-Dom 19:00-03:00 · Mié cerrado",pr:"€"},
-  {n:"Gastrobar Terelita",lat:40.3493,lng:-3.8277,r:4.4,rv:252,a:"C. Madrid, 8",p:"+34 722 48 48 67",s:"sombrilla",t:"Terraza gastrobar peruano",h:"Mar-Dom 10:00-23:00 · Vie-Sáb hasta 23:50 · Lun cerrado",pr:"€"},
-  {n:"Gastrobar Brisas del Mar",lat:40.3485,lng:-3.8181,r:4.3,rv:47,a:"Pl. de Orense",p:"+34 602 58 83 72",s:"sombrilla",t:"Terraza gastrobar",h:"Lun-Vie 9:00-22:00 · Sáb 11:00-22:00 · Dom cerrado",pr:"€"},
-  {n:"Toscana Bar",lat:40.3428,lng:-3.8266,r:3.9,rv:22,a:"Pl. del Sol, 10",s:"sombrilla",t:"Terraza plaza del Sol",h:"Lun y Mié-Dom 9:00-22:00 · Mar cerrado",pr:"€"},
-  {n:"Cafetería El Mirador Bar",lat:40.3485,lng:-3.8216,r:4.0,rv:44,a:"Pl. Sierra de Navacerrada, 2",p:"+34 695 15 72 28",s:"sombrilla",t:"Terraza plaza",h:"Lun-Mar y Jue-Dom 7:30-01:00 · Mié cerrado",pr:"€"},
-  {n:"La Federala Alcorcón",lat:40.3382,lng:-3.8135,r:4.7,rv:6592,a:"C. Polvoranca, 108",p:"+34 918 32 00 42",s:"sombrilla",t:"Terraza mexicana",h:"Lun-Jue 13:00-17:00 y 20:00-00:00 · Vie-Sáb 13:00-01:30",pr:"€"},
-  {n:"Bar Apolo (desde 1969)",lat:40.3559,lng:-3.8143,r:4.7,rv:262,a:"Pl. San Juan de Covas, 19",p:"+34 916 19 23 58",s:"sombrilla",t:"Terraza plaza barrio",h:"Lun-Vie 6:00-00:00",pr:"€"},
-  {n:"Kauna Lounge & Sushi Bar",lat:40.3531,lng:-3.8198,r:4.8,rv:290,a:"C. Porto Cristo, 1",p:"+34 913 07 58 31",s:"sombrilla",t:"Terraza lounge sushi fusión",h:"Mar-Sáb 12:00-00:00 · Dom 12:00-17:00 · Lun cerrado",pr:"€€"},
-  {n:"La Paramera",lat:40.3505,lng:-3.817,r:4.4,rv:502,a:"C. Porto Cristo, 8",p:"+34 916 10 79 02",s:"sombrilla",t:"Terraza tapas y vinos",h:"Lun-Mar y Jue-Dom 9:00-00:00 · Vie hasta 01:00 · Mié cerrado",pr:"€"},
-  {n:"Rte. Polideportivo Parque Lisboa",lat:40.3531,lng:-3.8214,r:4.0,rv:112,a:"Av. de Lisboa, 15",p:"+34 910 88 94 60",s:"natural",t:"Terraza polideportivo",h:"Mar-Dom 11:00-23:00",pr:"€"},
-  {n:"BaRRa de Pintxos ECI San José Valderas",lat:40.3576,lng:-3.8155,r:4.0,rv:176,a:"Ctra. Nacional V km 12,5 (El Corte Inglés)",p:"+34 916 49 65 00",s:"cubierta",t:"Terraza pintxos",h:"Lun-Sáb 10:00-22:00 · Dom 11:00-21:00",pr:"€€"},
-  {n:"Cafe Bar El Terrible",lat:40.3442,lng:-3.8233,r:4.1,rv:110,a:"C. Polvoranca",s:"sombrilla",t:"Terraza de barrio",h:"Mar-Dom 8:00-02:00 · Lun cerrado",pr:"€"},
-  {n:"Bar El Capricho",lat:40.3489,lng:-3.8207,r:4.5,rv:17,a:"Pl. Torres Bellas, 4",p:"+34 911 38 90 16",s:"sombrilla",t:"Terraza plaza",h:"Lun-Dom 8:30-00:00",pr:"€"},
-  {n:"Bar la Parada",lat:40.3487,lng:-3.8205,r:4.0,rv:187,a:"Av. Torres Bellas, 4",p:"+34 916 11 04 82",s:"sombrilla",t:"Terraza barrio",h:"Lun-Vie 17:00-23:00 · Sáb-Dom 12:00-23:00",pr:"€"},
-  {n:"El Rincón de Cantarranas",lat:40.3506,lng:-3.8245,r:3.7,rv:33,a:"Av. Cantarranas, 9",s:"sombrilla",t:"Terraza de barrio",h:"Lun-Dom 8:00-00:00",pr:"€"},
-  {n:"Taberna La Traicionera",lat:40.331,lng:-3.8394,r:4.2,rv:2109,a:"C. Pablo Picasso",p:"+34 914 21 76 06",s:"sombrilla",t:"Terraza taberna sur",h:"Lun-Jue 12:30-00:00 · Vie 12:30-01:30 · Sáb 12:00-01:30 · Dom 12:00-00:00",pr:"€€"},
-  {n:"Bar Don Pincho",lat:40.3456,lng:-3.8331,r:3.9,rv:73,a:"Tr.ª Cisneros, 5",s:"sombrilla",t:"Terraza barrio tapas",h:"Mar-Dom 12:30-01:00 · Lun cerrado",pr:"€"},
-  {n:"Muver Plaza",lat:40.349,lng:-3.8286,r:4.3,rv:169,a:"C. Clavel, 1 (frente Ayuntamiento)",p:"+34 916 12 17 31",s:"sombrilla",t:"Terraza frente Ayuntamiento",h:"Lun-Vie 8:00-23:00 · Dom 9:30-23:00 · Sáb cerrado",pr:"€"},
-  {n:"Cafetería Restaurante Salamanca",lat:40.3508,lng:-3.8195,r:3.8,rv:1120,a:"C. Príncipe Don Juan Carlos, 6",p:"+34 630 92 48 50",s:"sombrilla",t:"Gran terraza restaurante",h:"Lun-Dom 7:00-01:00",pr:"€"},
-  {n:"Olympic Cafe Bar",lat:40.3414,lng:-3.8278,r:4.0,rv:350,a:"C. Mayor, 84",p:"+34 916 41 42 74",s:"sombrilla",t:"Terraza clásica barrio",h:"Lun 7:00-15:00 · Mar-Dom 7:00-00:00",pr:"€"},
-  {n:"EL KIOSKO (X-Madrid)",lat:40.3411,lng:-3.8478,r:4.4,rv:4038,a:"C. Oslo, 53 (X-Madrid)",p:"+34 912 12 87 19",s:"cubierta",t:"Terraza gastrobar",h:"Lun-Dom 12:00-00:00 · Vie-Sáb hasta 01:00",pr:"€€"},
-  {n:"Cafe La Victoria",lat:40.3495,lng:-3.8263,r:4.3,rv:122,a:"C. Polvoranca, 22",s:"sombrilla",t:"Terraza cafetería",h:"Lun-Dom 7:00-00:00",pr:"€"},
-  {n:"Blanco y Negro Bar",lat:40.3558,lng:-3.8136,r:4.2,rv:119,a:"C. Vicedo, 4",p:"+34 916 10 69 06",s:"sombrilla",t:"Terraza barrio vintage",h:"Lun-Dom 8:00-23:00 · Vie-Sáb hasta 00:00",pr:"€"},
-  {n:"Bar Casa Collado",lat:40.3536,lng:-3.8114,r:4.8,rv:48,a:"C. Caldas de Reyes, 15",p:"+34 685 14 91 89",s:"sombrilla",t:"Terraza bar de barrio clásico",h:"Mar-Dom 6:30-00:00 · Lun cerrado",pr:"€"},
-  {n:"Bar 5ª Avenida",lat:40.3473,lng:-3.8265,r:3.9,rv:69,a:"C. Espada, 9",p:"+34 642 05 42 86",s:"sombrilla",t:"Terraza exterior",h:"Lun-Dom 7:30-00:00 · Vie-Sáb hasta 01:00",pr:"€"},
-  {n:"Algarabía",lat:40.3396,lng:-3.8312,r:3.8,rv:82,a:"C. Juan Ramón Jiménez, 4",p:"+34 914 55 02 79",s:"sombrilla",t:"Terraza restaurante asador",h:"Lun-Dom 12:30-00:00 · Sáb hasta 00:30",pr:"€€"},
-  {n:"Restaurante Marisquería Casa Valadouro",lat:40.351,lng:-3.8101,r:4.1,rv:1728,a:"C. Carballino, 21",p:"+34 915 42 50 70",s:"sombrilla",t:"Terraza marisquería gallega",h:"Mar-Jue 10:00-17:00 · Vie-Sáb 10:00-00:00 · Dom 11:30-18:00 · Lun cerrado",pr:"€"},
-  {n:"Muriel Bar Restaurante",lat:40.3509,lng:-3.8077,r:4.2,rv:146,a:"C. Carballino, 29",p:"+34 603 11 54 75",s:"sombrilla",t:"Terraza restaurante",h:"Mar-Jue 12:00-01:00 · Vie-Sáb 12:00-02:00 · Dom 12:00-01:00 · Lun cerrado",pr:"€"},
-  {n:"La Tubería",lat:40.3518,lng:-3.8105,r:3.7,rv:252,a:"C. Carballino, 19",p:"+34 917 95 87 10",s:"cubierta",t:"Terraza acristalada",h:"Lun-Sáb 7:00-01:30 · Dom 7:00-00:00",pr:"€"},
-  {n:"Bar Barra 21",lat:40.3512,lng:-3.8095,r:4.4,rv:194,a:"C. Carballino, 21",p:"+34 919 47 22 22",s:"sombrilla",t:"Terraza 24h",h:"Abierto 24 horas todos los días",pr:"€"},
-  {n:"Las Sombras",lat:40.3519,lng:-3.8108,r:4.3,rv:10,a:"C. Carballino, 19",s:"natural",t:"Terraza con sombra natural",h:"Mar 6:00-00:00 · Mié-Jue 11:00-00:00 · Vie-Sáb 11:00-01:00 · Dom 11:00-00:00 · Lun 9:00-00:00",pr:"€"},
-  {n:"Cafetería Mengbar",lat:40.351,lng:-3.8091,r:5.0,rv:16,a:"C. Carballino, 23 local 2",p:"+34 662 13 64 68",s:"sombrilla",t:"Terraza cervecería",h:"Lun 9:00-22:30 · Mar 9:00-17:00 · Mié-Jue 9:00-22:30 · Vie-Sáb 9:00-01:00 · Dom 10:00-21:00",pr:"€"},
-  {n:"Pub La Abadía",lat:40.351,lng:-3.8093,r:4.3,rv:1028,a:"C. Carballino, 23",p:"+34 919 47 74 16",s:"sombrilla",t:"Terraza pub cervezas importadas",h:"Lun-Jue 19:00-03:00 · Vie-Sáb 19:00-03:30 · Dom 19:00-03:00",pr:"€€"},
-  {n:"O'Pulpiño",lat:40.35,lng:-3.8077,r:4.0,rv:2200,a:"C. Carballino, 29",p:"+34 916 11 02 51",s:"sombrilla",t:"Terraza restaurante gallego",h:"Lun-Dom 9:30-00:00 · Sáb hasta 00:30",pr:"€€"},
-  {n:"Mesón A Lareira",lat:40.3501,lng:-3.8211,r:4.5,rv:5670,a:"C. Príncipe Don Juan Carlos, 7",p:"+34 916 12 12 04",s:"sombrilla",t:"Gran terraza marisquería",h:"Lun-Mar y Jue-Dom 9:00-00:00 · Mié cerrado",pr:"€€"},
-  {n:"Cafetería Acuario",lat:40.3526,lng:-3.8176,r:4.1,rv:15,a:"Av. de los Derechos Humanos, 3-5",p:"+34 642 02 84 04",s:"natural",t:"Terraza junto a parque infantil",h:"Lun-Dom 9:30-23:00",pr:"€"},
-  {n:"Sidrería El Trasgu",lat:40.3523,lng:-3.81,r:4.4,rv:244,a:"C. Venus, 1",p:"+34 692 79 35 46",s:"sombrilla",t:"Terraza sidrería tapas",h:"Lun 7:00-16:30 · Mar-Vie 7:00-00:00 · Sáb 9:00-00:00 · Dom 10:00-00:00",pr:"€"},
-  {n:"Restaurante La Casona de Luis",lat:40.3527,lng:-3.809,r:4.1,rv:546,a:"C. Venus, 18",p:"+34 919 35 26 33",s:"sombrilla",t:"Terraza restaurante mediterráneo",h:"Mar-Mié 9:00-18:00 · Jue-Sáb 9:00-00:00 · Dom 9:00-18:00 · Lun cerrado",pr:"€"},
-  {n:"Bar El Majuelo",lat:40.3479,lng:-3.8073,r:4.1,rv:70,a:"C. Parque Bujaruelo, 10",p:"+34 916 11 09 76",s:"sombrilla",t:"Terraza Parque Bujaruelo",h:"Lun-Dom 11:00-23:00",pr:"€"},
-  {n:"Cafetería Tres Rosas",lat:40.3486,lng:-3.8098,r:4.8,rv:6,a:"C. Timanfaya, 34",s:"sombrilla",t:"Terraza barrio tranquila",h:"Consultar horario",pr:"€"},
-  {n:"Cervecería el Castillo",lat:40.3537,lng:-3.8118,r:3.9,rv:17,a:"C. Caldas de Reyes",s:"sombrilla",t:"Terraza Valderas",h:"Lun 8:00-22:00 · Mar-Dom 9:00-22:30",pr:"€"},
-  {n:"El Toke Castillo Restaurante",lat:40.3494,lng:-3.8026,r:3.8,rv:1891,a:"Av. los Castillos, 1022",p:"+34 916 12 02 92",s:"sombrilla",t:"Terraza zona Castillos",h:"Lun-Dom 6:30-01:30",pr:"€"},
-  {n:"Sushisom Parque Oeste",lat:40.3502,lng:-3.8481,r:4.0,rv:3078,a:"Av. de Europa, 4",p:"+34 917 27 02 74",s:"cubierta",t:"Terraza restaurante japonés",h:"Lun-Dom 13:00-16:30 y 20:00-23:30",pr:"€€"},
-  {n:"Bar La Prórroga",lat:40.353,lng:-3.8215,r:3.1,rv:15,a:"Av. de Lisboa (Piscinas Parque Lisboa)",p:"+34 678 58 91 29",s:"natural",t:"Terraza piscinas verano",h:"Lun-Mié-Jue 9:30-22:00 · Vie-Sáb 9:30-02:00 · Dom 9:30-00:00",pr:"€"},
-  {n:"Chez Michel Sabores del Líbano",lat:40.357,lng:-3.813,r:4.8,rv:1222,a:"Av. de Lisboa, 24",p:"+34 916 84 57 58",s:"sombrilla",t:"Terraza restaurante libanés",h:"Mar-Sáb 13:00-16:00 y 20:00-23:00 · Dom 13:00-16:00 · Lun cerrado",pr:"€€"},
-  {n:"Trabuco Bar",lat:40.3529,lng:-3.8197,r:4.9,rv:8,a:"C. Porto Cristo, 1 local 6/7",s:"sombrilla",t:"Terraza bar de barrio",h:"Consultar horario",pr:"€"},
+// ── APARCAMIENTO POR ZONA Y HORA ──────────────────────────────────────────────
+function parkInfo(zona,hora){
+  const h=hora??new Date().getHours();
+  const m=h>=8&&h<14,t=h>=14&&h<21,n=h>=21||h<8;
+  const D={
+    centro:{m:{c:'bad',txt:'🔴 Muy difícil — zona ORA activa, semáforos rotativos'},t:{c:'bad',txt:'🔴 Muy difícil — máxima afluencia comercial y oficinas'},n:{c:'med',txt:'🟡 Moderado — libera tras 21h, zonas azules gratis'}},
+    retamas:{m:{c:'med',txt:'🟡 Moderado — calles laterales (Pinos, Robles) disponibles'},t:{c:'bad',txt:'🔴 Difícil — horas punta Av. Retamas, llena de tarde'},n:{c:'good',txt:'🟢 Fácil — muchas plazas libres tras 21h'}},
+    oslo:{m:{c:'good',txt:'🟢 Fácil — zona residencial, plazas libres'},t:{c:'med',txt:'🟡 Moderado — aumenta actividad tarde en Oslo/Bruselas'},n:{c:'good',txt:'🟢 Fácil — aparcamiento libre sin restricciones'}},
+    carballino:{m:{c:'good',txt:'🟢 Fácil — zona industrial, amplias plazas'},t:{c:'good',txt:'🟢 Fácil — sin restricciones'},n:{c:'good',txt:'🟢 Fácil'}},
+    valderas:{m:{c:'good',txt:'🟢 Fácil — barrio tranquilo, plazas libres'},t:{c:'good',txt:'🟢 Fácil'},n:{c:'good',txt:'🟢 Fácil'}},
+    tres_aguas:{m:{c:'good',txt:'🟢 Fácil — parking CC Tres Aguas gratuito 1ª hora'},t:{c:'med',txt:'🟡 Moderado — CC concurrido, parking de pago'},n:{c:'good',txt:'🟢 Fácil — parking libre por la noche'}},
+    urtinsa:{m:{c:'good',txt:'🟢 Fácil — polígono con amplias plazas libres'},t:{c:'good',txt:'🟢 Fácil'},n:{c:'good',txt:'🟢 Fácil'}},
+    parque_oeste:{m:{c:'good',txt:'🟢 Fácil — parking CC Parque Oeste gratuito'},t:{c:'med',txt:'🟡 Moderado — más concurrido en horas de compras'},n:{c:'good',txt:'🟢 Fácil — parking libre noche'}},
+    parque_lisboa:{m:{c:'good',txt:'🟢 Fácil — zona residencial amplia, fácil aparcar'},t:{c:'good',txt:'🟢 Fácil'},n:{c:'good',txt:'🟢 Fácil'}},
+    libre:{m:{c:'good',txt:'🟢 Fácil — zona con aparcamiento libre'},t:{c:'good',txt:'🟢 Fácil'},n:{c:'good',txt:'🟢 Fácil'}},
+  };
+  const z=D[zona]||D.libre;return m?z.m:t?z.t:z.n;
+}
 
-  // ── NUEVOS DE TRIPADVISOR ──
-  {n:"Sibuya Urban Sushi Bar X-Madrid",lat:40.3405,lng:-3.8477,r:4.6,rv:396,a:"C. Oslo, 53 (X-Madrid)",s:"cubierta",t:"Sushi fusión japonesa — TripAdvisor Top 7",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d19488194-Reviews-Sibuya_Urban_Sushi_Bar_X_Madrid-Alcorcon.html"},
-  {n:"Kamado Asian Food X-Madrid",lat:40.3408,lng:-3.8479,r:4.4,rv:258,a:"C. Oslo, 53 (X-Madrid)",s:"cubierta",t:"Cocina asiática fusión — TripAdvisor Top 8",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d19526813-Reviews-Kamado_Asian_Food_X_Madrid-Alcorcon.html"},
-  {n:"Bálamo Restaurante",lat:40.349,lng:-3.8302,r:3.4,rv:961,a:"Av. de Leganés (Alcorcón)",s:"sombrilla",t:"Pescado y marisco — TripAdvisor Top 4",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d15635942-Reviews-Balamo_Restaurante-Alcorcon.html"},
-  {n:"Sidrería Camino",lat:40.3478,lng:-3.8195,r:4.3,rv:324,a:"Alcorcón",s:"sombrilla",t:"Mediterránea y española — TripAdvisor Top 5",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d13344759-Reviews-Sidreria_Camino-Alcorcon.html"},
-  {n:"La Boscaiola",lat:40.3465,lng:-3.822,r:4.4,rv:97,a:"Alcorcón",s:"sombrilla",t:"Restaurante italiano — TripAdvisor destacado",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d12879453-Reviews-La_Boscaiola-Alcorcon.html"},
-  {n:"Amphora Madrid",lat:40.3447,lng:-3.8122,r:4.2,rv:133,a:"Av. de Leganés (Alcorcón)",s:"sombrilla",t:"Mediterránea y española — TripAdvisor Top 10",h:"Consultar horario",pr:"€€€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d23209976-Reviews-Amphora_Madrid-Alcorcon.html"},
-  {n:"Nativo Urban Grill",lat:40.3376,lng:-3.8321,r:4.2,rv:13,a:"Av. las Retamas (Alcorcón)",s:"sombrilla",t:"Grill urbano — TripAdvisor elegante",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d23406228-Reviews-Nativo_Urban_Grill-Alcorcon.html"},
-  {n:"Restaurante Chino Dragón Oriental",lat:40.347,lng:-3.8248,r:4.4,rv:152,a:"Alcorcón",s:"sombrilla",t:"Cocina china e internacional — TripAdvisor destacado",h:"Consultar horario",pr:"€€",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d990417-Reviews-Dragon_Oriental-Alcorcon.html"},
+// ── TIPO DE VÍA ───────────────────────────────────────────────────────────────
+const VIA={p:{i:"🚶",l:"Peatonal",c:"tv-p"},a:{i:"🛣️",l:"Avenida",c:"tv-a"},c:{i:"🏙️",l:"Calle",c:"tv-c"},b:{i:"🌿",l:"Bulevar/Paseo",c:"tv-b"},pl:{i:"🏛️",l:"Plaza",c:"tv-pl"}};
+const SH={natural:{i:"🌳",l:"Sombra natural",c:"tn",col:"#2d6a2e"},sombrilla:{i:"⛱️",l:"Sombrilla",c:"ts",col:"#8d4e20"},cubierta:{i:"🏠",l:"Cubierta",c:"tc",col:"#1a3a5c"}};
+
+// ── BARES ─────────────────────────────────────────────────────────────────────
+const BARS=[
+  // CENTRO / CASCO ANTIGUO
+  {n:"Bar Cisneros",lat:40.3466,lng:-3.8299,r:4.7,rv:215,a:"C. Cisneros, 19",s:"sombrilla",t:"Terraza de barrio",h:"Mar-Dom 11-21",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Apolo",lat:40.3444,lng:-3.8282,r:4.8,rv:68,a:"C/ Ávila, 3",p:"+34 914 86 00 49",s:"sombrilla",t:"Terraza peatonal",h:"Lun-Sáb 9-22:30",pr:"€",via:"p",zp:"centro",b:"Centro"},
+  {n:"La Casona",lat:40.3462,lng:-3.8316,r:4.5,rv:687,a:"C. Badajoz, 11",p:"+34 916 44 43 39",s:"sombrilla",t:"Terraza brasserie",h:"Lun-Sáb 6:30-22",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Los Caracoles",lat:40.3447,lng:-3.8277,r:4.4,rv:468,a:"C. Mayor, 68",s:"sombrilla",t:"Terraza calle mayor",h:"Lun-Vie 8-22 · Sáb 9-23",pr:"€",via:"c",zp:"centro",b:"Casco Antiguo"},
+  {n:"Bar Avenida",lat:40.3445,lng:-3.8331,r:3.9,rv:1318,a:"C. Cisneros, 45",p:"+34 916 43 00 13",s:"sombrilla",t:"Terraza amplia",h:"Lun-Dom 7-00",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Bar Gerla",lat:40.3472,lng:-3.8257,r:4.1,rv:543,a:"Pl. de la Hispanidad, 7",p:"+34 911 52 93 34",s:"sombrilla",t:"Terraza plaza",h:"Lun-Dom 7-00",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Mesón O'Galego",lat:40.3434,lng:-3.8265,r:4.5,rv:364,a:"Pl. del Sol, 3",p:"+34 914 37 33 51",s:"sombrilla",t:"Terraza gallega en plaza",h:"Mar-Sáb 11-00 · Dom 11-16",pr:"€",via:"pl",zp:"centro",b:"Casco Antiguo"},
+  {n:"Restaurante El Acebo",lat:40.3428,lng:-3.826,r:4.3,rv:3606,a:"Pl. del Sol, 7",p:"+34 914 86 02 32",s:"sombrilla",t:"Gran terraza familiar",h:"Mar-Dom 8-1",pr:"€€",via:"pl",zp:"centro",b:"Casco Antiguo"},
+  {n:"Toscana Bar",lat:40.3428,lng:-3.8266,r:3.9,rv:22,a:"Pl. del Sol, 10",s:"sombrilla",t:"Terraza plaza del Sol",h:"Lun y Mié-Dom 9-22",pr:"€",via:"pl",zp:"centro",b:"Casco Antiguo"},
+  {n:"Bar Canapes VICO'S",lat:40.3431,lng:-3.8316,r:4.5,rv:386,a:"C. Zamora, 7",p:"+34 916 41 17 31",s:"sombrilla",t:"Terraza tapas clásicas",h:"Lun-Dom 7:30-23",pr:"€",via:"c",zp:"centro",b:"Casco Antiguo"},
+  {n:"Cafetería Bar Patico",lat:40.3441,lng:-3.8275,r:4.2,rv:111,a:"C. Mayor, 79",p:"+34 642 60 45 45",s:"sombrilla",t:"Terraza calle mayor",h:"Lun-Dom 7:30-00",pr:"€",via:"c",zp:"centro",b:"Casco Antiguo"},
+  {n:"Café JF",lat:40.3456,lng:-3.8281,r:4.3,rv:420,a:"C. Vizcaya, 4",p:"+34 914 27 74 07",s:"sombrilla",t:"Terraza cafetería",h:"Lun-Dom 7-00",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Olympic Cafe Bar",lat:40.3414,lng:-3.8278,r:4.0,rv:350,a:"C. Mayor, 84",p:"+34 916 41 42 74",s:"sombrilla",t:"Terraza clásica",h:"Lun 7-15 · Mar-Dom 7-00",pr:"€",via:"c",zp:"centro",b:"Casco Antiguo"},
+  {n:"Bar Plaza Cafe (1974)",lat:40.3483,lng:-3.8279,r:4.6,rv:340,a:"C. Mayor, 8",p:"+34 630 22 79 04",s:"sombrilla",t:"Terraza calle mayor",h:"Lun-Sáb 7:30-20",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Muver Plaza",lat:40.349,lng:-3.8286,r:4.3,rv:169,a:"C. Clavel, 1",p:"+34 916 12 17 31",s:"sombrilla",t:"Frente Ayuntamiento",h:"Lun-Vie 8-23",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Artesanos del Café y Té",lat:40.3479,lng:-3.829,r:4.8,rv:266,a:"Pl. las Fraguas, 6",p:"+34 911 56 49 57",s:"sombrilla",t:"Café artesanal",h:"Lun-Vie 7-20:30 · Sáb-Dom 8:30-13:30",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Viena Capellanes",lat:40.3476,lng:-3.828,r:4.6,rv:1641,a:"C. Mayor, 18",p:"+34 912 79 70 44",s:"sombrilla",t:"Cafetería pastelería",h:"Lun-Dom 8-21:30",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Bread & Co. Brunch",lat:40.3486,lng:-3.8276,r:4.4,rv:586,a:"C. Jabonería, 7",p:"+34 913 62 49 73",s:"sombrilla",t:"Terraza brunch",h:"Lun-Vie 8:30-21",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Dublín 98",lat:40.3495,lng:-3.8237,r:4.8,rv:867,a:"C. Jabonería, 59",p:"+34 631 75 96 87",s:"sombrilla",t:"Pub irlandés",h:"Mar-Dom 20-2",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Café Bar Chuleta",lat:40.3493,lng:-3.8279,r:4.7,rv:104,a:"C. Madrid, 4",s:"sombrilla",t:"Terraza con karaoke",h:"Mar-Dom 12-00",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Gastrobar Terelita",lat:40.3493,lng:-3.8277,r:4.4,rv:252,a:"C. Madrid, 8",p:"+34 722 48 48 67",s:"sombrilla",t:"Gastrobar peruano",h:"Mar-Dom 10-23",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Cervecería Don Pincho",lat:40.3492,lng:-3.8319,r:4.2,rv:489,a:"P.º Extremadura, 19",p:"+34 910 18 47 16",s:"sombrilla",t:"Terraza paseo",h:"Lun-Dom 9-00",pr:"€",via:"b",zp:"centro",b:"Centro"},
+  {n:"Ingazu Restaurante",lat:40.3493,lng:-3.8296,r:4.3,rv:2286,a:"P.º Castilla, 7",p:"+34 910 22 44 89",s:"sombrilla",t:"Terraza paseo",h:"Mié-Dom 9-00",pr:"€",via:"b",zp:"centro",b:"Zona Renfe"},
+  {n:"Cervecería El Puerto II",lat:40.3514,lng:-3.8326,r:4.3,rv:263,a:"Av. Villaviciosa, 5",s:"sombrilla",t:"Terraza barrio",h:"Lun-Sáb 8-23",pr:"€",via:"a",zp:"centro",b:"Zona Renfe"},
+  {n:"Cervecería El Trag@",lat:40.3463,lng:-3.8253,r:4.0,rv:837,a:"C. Matadero, 16",p:"+34 910 07 41 09",s:"cubierta",t:"Terraza acristalada",h:"Lun-Dom 7-00",pr:"€€",via:"c",zp:"centro",b:"Casco Antiguo"},
+  {n:"Nurcris",lat:40.3522,lng:-3.8253,r:4.3,rv:804,a:"Av. de Leganés, 3",s:"sombrilla",t:"Cafetería bar",h:"Lun-Dom 7-00:30",pr:"€",via:"a",zp:"centro",b:"Zona Renfe"},
+  {n:"Cafetería Restaurante Salamanca",lat:40.3508,lng:-3.8195,r:3.8,rv:1120,a:"C. Príncipe Don Juan Carlos, 6",p:"+34 630 92 48 50",s:"sombrilla",t:"Gran terraza",h:"Lun-Dom 7-1",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Cafetería New Gregory JC",lat:40.3444,lng:-3.8262,r:4.2,rv:503,a:"C. Fuenlabrada, 27",p:"+34 605 89 09 72",s:"sombrilla",t:"Terraza cafetería",h:"Lun y Mié-Dom 7-00",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Bar Don Pincho",lat:40.3456,lng:-3.8331,r:3.9,rv:73,a:"Tr.ª Cisneros, 5",s:"sombrilla",t:"Terraza tapas",h:"Mar-Dom 12:30-1",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Café La Victoria",lat:40.3495,lng:-3.8263,r:4.3,rv:122,a:"C. Polvoranca, 22",s:"sombrilla",t:"Terraza cafetería",h:"Lun-Dom 7-00",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Haddock Bar",lat:40.3456,lng:-3.8186,r:4.0,rv:610,a:"C. Japón, 1",p:"+34 677 53 00 40",s:"sombrilla",t:"Terraza pub",h:"Lun-Dom 11-1",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"El Tardeo by Moyano",lat:40.3455,lng:-3.8179,r:4.8,rv:44,a:"C. Japón, 17",p:"+34 669 86 43 48",s:"sombrilla",t:"Tardeo cocktail",h:"Lun-Jue 17-23 · Vie-Sáb 17-2",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Kiosko Kaura",lat:40.3479,lng:-3.8165,r:3.9,rv:2191,a:"C. la Paz, 4",p:"+34 917 65 06 65",s:"sombrilla",t:"Terraza quiosco",h:"Lun-Dom 12-00",pr:"€€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Kiriki Bar Shishas & Cócteles",lat:40.3428,lng:-3.8283,r:4.9,rv:107,a:"C. Málaga esq. C. Sevilla",p:"+34 653 87 82 03",s:"sombrilla",t:"Cocktail hookah",h:"Mar-Sáb 19-1:30",pr:"€",via:"c",zp:"centro",b:"Casco Antiguo"},
+  {n:"Gastrobar Brisas del Mar",lat:40.3485,lng:-3.8181,r:4.3,rv:47,a:"Pl. de Orense",p:"+34 602 58 83 72",s:"sombrilla",t:"Gastrobar terraza",h:"Lun-Vie 9-22",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Coconut Coffee",lat:40.3474,lng:-3.8203,r:4.4,rv:256,a:"C. Sierra de la Estrella, 24A",p:"+34 655 63 21 29",s:"sombrilla",t:"Café especialidad",h:"Mié-Dom 9-14 y 17-21",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Restaurante El Fermín",lat:40.3478,lng:-3.8207,r:4.4,rv:6052,a:"C. Sierra de la Estrella, 8",p:"+34 916 10 31 03",s:"sombrilla",t:"Gran terraza española",h:"Lun y Mié-Dom 12-1",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Mesón Las Tejas (1978)",lat:40.3495,lng:-3.8169,r:4.4,rv:2286,a:"Av. Alcalde José Aranda, 49",p:"+34 916 10 80 07",s:"sombrilla",t:"Terraza clásica",h:"Mar-Dom 7-00",pr:"€€",via:"a",zp:"centro",b:"Centro"},
+  {n:"Cafetería Bar La Plazuela",lat:40.3508,lng:-3.8154,r:4.8,rv:14,a:"Av. Alcalde José Aranda, 53",p:"+34 919 48 45 73",s:"sombrilla",t:"Terraza tranquila",h:"Lun-Vie 8:30-00",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"As de Copas Indie Rock",lat:40.3508,lng:-3.8155,r:4.4,rv:291,a:"Av. Alcalde José Aranda, 53",p:"+34 637 42 36 37",s:"sombrilla",t:"Bar indie rock",h:"Lun-Dom 20-3",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"La Chica de Ayer",lat:40.3512,lng:-3.815,r:4.5,rv:190,a:"Av. Alcalde José Aranda, 55",p:"+34 657 02 65 38",s:"sombrilla",t:"Pub retro",h:"Vie-Sáb 21-3",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"La Bahía Alcorcón",lat:40.3512,lng:-3.815,r:4.7,rv:49,a:"Av. Alcalde José Aranda, 55",p:"+34 627 33 48 26",s:"sombrilla",t:"Pub dardos",h:"Lun-Dom 19:30-3",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"Exotic Pub",lat:40.3504,lng:-3.8198,r:4.3,rv:84,a:"Pl. Príncipes de España, 30",s:"sombrilla",t:"Pub nocturno",h:"Mar-Dom 22-4",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Weekend Bar de Copas",lat:40.3497,lng:-3.8205,r:4.9,rv:16,a:"Pl. Príncipes de España",s:"sombrilla",t:"Bar de copas",h:"Mar-Dom 21-3",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Casa Pepe Alcorcón",lat:40.3498,lng:-3.8204,r:4.2,rv:925,a:"Pl. Príncipes de España, 2",p:"+34 916 42 64 65",s:"sombrilla",t:"Terraza plaza",h:"Mar-Dom 8-00",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Mesón Río",lat:40.35,lng:-3.8262,r:4.7,rv:15,a:"Av. Cantarranas",p:"+34 688 13 96 01",s:"sombrilla",t:"Bar-grill",h:"Lun-Dom 8:30-00",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"La Taberna Catering",lat:40.3506,lng:-3.8217,r:4.6,rv:328,a:"Pl. de Lugo",p:"+34 654 10 74 84",s:"sombrilla",t:"Gastrobar vinos",h:"Lun-Vie 11-23",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Mesón D Juan",lat:40.3532,lng:-3.8174,r:4.2,rv:172,a:"Pl. la Coruña",p:"+34 660 12 23 29",s:"sombrilla",t:"Terraza mesón",h:"Lun-Vie 9-21",pr:"€",via:"pl",zp:"centro",b:"Zona Renfe"},
+  {n:"Bar Zahara Cafetería",lat:40.3507,lng:-3.8254,r:4.5,rv:149,a:"C. Buitrago",s:"sombrilla",t:"Terraza barrio",h:"Lun-Mar 7:30-00 · Jue-Dom 7:30-00",pr:"€",via:"c",zp:"centro",b:"Zona Renfe"},
+  {n:"El Mercadito",lat:40.3526,lng:-3.8176,r:4.2,rv:227,a:"Av. de los Derechos Humanos, 1",p:"+34 913 08 68 56",s:"sombrilla",t:"Terraza moderna",h:"Mar-Vie 9-17 · Sáb-Dom 12-00",pr:"€",via:"a",zp:"centro",b:"Zona Renfe"},
+  {n:"Manhattan Bar",lat:40.352,lng:-3.8272,r:4.5,rv:203,a:"C. Retablo, 7",p:"+34 653 61 70 45",s:"sombrilla",t:"Terraza vermut",h:"Lun-Vie 7-23",pr:"€",via:"c",zp:"centro",b:"Zona Renfe"},
+  {n:"Bar Cervecería La Esquina",lat:40.3496,lng:-3.8305,r:4.4,rv:45,a:"C. Navalcarnero, 1",p:"+34 910 28 15 92",s:"sombrilla",t:"Música en vivo",h:"Mar-Dom 16-2",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Pub Donde Ayer",lat:40.3541,lng:-3.8175,r:4.4,rv:286,a:"Pl. de Pontevedra, 2A",p:"+34 605 18 84 70",s:"sombrilla",t:"Pub clásico",h:"Lun-Jue 21:30-3",pr:"€",via:"pl",zp:"centro",b:"Zona Renfe"},
+  {n:"Blanco y Negro Bar",lat:40.3558,lng:-3.8136,r:4.2,rv:119,a:"C. Vicedo, 4",p:"+34 916 10 69 06",s:"sombrilla",t:"Terraza vintage",h:"Lun-Dom 8-23",pr:"€",via:"c",zp:"centro",b:"Zona Renfe"},
+  {n:"Bar Apolo (1969)",lat:40.3559,lng:-3.8143,r:4.7,rv:262,a:"Pl. San Juan de Covas, 19",p:"+34 916 19 23 58",s:"sombrilla",t:"Terraza plaza barrio",h:"Lun-Vie 6-00",pr:"€",via:"pl",zp:"centro",b:"Zona Renfe"},
+  {n:"Bar Casa Collado",lat:40.3536,lng:-3.8114,r:4.8,rv:48,a:"C. Caldas de Reyes, 15",p:"+34 685 14 91 89",s:"sombrilla",t:"Bar clásico",h:"Mar-Dom 6:30-00",pr:"€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  {n:"Restaurante Terraza Amphora",lat:40.3447,lng:-3.8119,r:4.4,rv:4372,a:"Av. de Leganés, 54",p:"+34 916 44 39 17",s:"sombrilla",t:"Gran terraza exterior",h:"Mar-Vie 9:30-00 · Sáb-Dom 12-1:30",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"La Chata",lat:40.3466,lng:-3.8113,r:3.9,rv:1422,a:"Av. de la Libertad, 9",p:"+34 916 21 02 19",s:"sombrilla",t:"Gran terraza tapas",h:"Lun-Dom 11-00",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"Cafetería El Mirador Bar",lat:40.3485,lng:-3.8216,r:4.0,rv:44,a:"Pl. Sierra de Navacerrada, 2",p:"+34 695 15 72 28",s:"sombrilla",t:"Terraza plaza",h:"Lun-Mar y Jue-Dom 7:30-1",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Café Bar La Plaza",lat:40.3474,lng:-3.8189,r:4.6,rv:28,a:"Plaza del Peñón, 9",p:"+34 913 62 06 75",s:"sombrilla",t:"Terraza acogedora",h:"Lun-Sáb 8:30-23",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Bar El Capricho",lat:40.3489,lng:-3.8207,r:4.5,rv:17,a:"Pl. Torres Bellas, 4",p:"+34 911 38 90 16",s:"sombrilla",t:"Terraza plaza",h:"Lun-Dom 8:30-00",pr:"€",via:"pl",zp:"centro",b:"Centro"},
+  {n:"Bar la Parada",lat:40.3487,lng:-3.8205,r:4.0,rv:187,a:"Av. Torres Bellas, 4",p:"+34 916 11 04 82",s:"sombrilla",t:"Terraza barrio",h:"Lun-Vie 17-23 · Sáb-Dom 12-23",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"Bar Restaurante La Paloma",lat:40.3471,lng:-3.821,r:4.6,rv:1093,a:"Av. Torres Bellas, 12",p:"+34 910 70 98 64",s:"cubierta",t:"Jets de agua en terraza",h:"Mar-Jue 9-23:30 · Vie 9-00",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"Bar 5ª Avenida",lat:40.3473,lng:-3.8265,r:3.9,rv:69,a:"C. Espada, 9",p:"+34 642 05 42 86",s:"sombrilla",t:"Terraza exterior",h:"Lun-Dom 7:30-00",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Cafe Bar El Terrible",lat:40.3442,lng:-3.8233,r:4.1,rv:110,a:"C. Polvoranca",s:"sombrilla",t:"Terraza de barrio",h:"Mar-Dom 8-2",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"El Rincón de Cantarranas",lat:40.3506,lng:-3.8245,r:3.7,rv:33,a:"Av. Cantarranas, 9",s:"sombrilla",t:"Terraza de barrio",h:"Lun-Dom 8-00",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"Bar El Pisco",lat:40.3488,lng:-3.826,r:4.3,rv:421,a:"C. Príncipe Don Juan Carlos, 15",p:"+34 916 10 88 04",s:"sombrilla",t:"Terraza amplia con menú",h:"Lun-Dom 7-23:30",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Bar La Viña",lat:40.3455,lng:-3.8312,r:4.0,rv:203,a:"C. Toledo, 5",s:"sombrilla",t:"Terraza calle Toledo",h:"Mar-Dom 9-23",pr:"€",via:"c",zp:"centro",b:"Casco Antiguo"},
+  {n:"Taberna El Rincón",lat:40.3440,lng:-3.8295,r:4.2,rv:178,a:"C. Extremadura, 22",s:"sombrilla",t:"Taberna clásica",h:"Mar-Dom 11-00",pr:"€",via:"c",zp:"centro",b:"Casco Antiguo"},
+  {n:"Cafetería La Fuente",lat:40.3468,lng:-3.829,r:4.3,rv:156,a:"C. Fuente de Cisneros, 8",s:"sombrilla",t:"Terraza barrio clásico",h:"Lun-Sáb 7-23",pr:"€",via:"c",zp:"centro",b:"Parque Oeste - Fuente Cisneros"},
+  {n:"El Makaneo Music Bar",lat:40.352,lng:-3.8214,r:4.3,rv:21,a:"Av. de Lisboa, 4",p:"+34 622 59 65 99",s:"sombrilla",t:"Bar música en vivo",h:"Lun-Mar y Jue-Dom 19-3",pr:"€",via:"a",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  // AV. LAS RETAMAS / PARQUE MAYOR
+  {n:"🦐 Marisquería Charrito",lat:40.3379,lng:-3.8283,r:3.8,rv:256,a:"Av. las Retamas, 72",p:"+34 916 44 03 24",s:"sombrilla",t:"Marisquería tapas — mariscadas, parrillada, arroces",h:"Lun-Dom 7-00",pr:"€€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Bar Mi Candela",lat:40.3377,lng:-3.828,r:4.2,rv:506,a:"Av. las Retamas, 76",p:"+34 916 43 60 56",s:"sombrilla",t:"Terraza amplia",h:"Lun-Dom 12-2",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Casa Garcia",lat:40.3379,lng:-3.8274,r:4.4,rv:241,a:"Av. las Retamas, 76",p:"+34 912 26 10 63",s:"sombrilla",t:"Tapas con menú",h:"Consultar",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"El Soho de las Retamas",lat:40.3377,lng:-3.8298,r:3.8,rv:833,a:"Av. las Retamas, 47",p:"+34 916 43 17 11",s:"sombrilla",t:"Restaurante español",h:"Lun-Dom 9-1",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"NATIVO Alcorcón",lat:40.3376,lng:-3.8324,r:4.3,rv:419,a:"Av. las Retamas, 33",p:"+34 656 31 31 16",s:"sombrilla",t:"Asador carnes",h:"Mié-Dom 11:30-00",pr:"€€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Los Cuatro Postes",lat:40.3375,lng:-3.8315,r:4.3,rv:688,a:"Av. las Retamas, 39",p:"+34 910 57 33 02",s:"sombrilla",t:"Terraza con tapas",h:"Mar-Dom variable",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Broadway Bar",lat:40.3381,lng:-3.8282,r:4.5,rv:317,a:"Av. las Retamas, 65",p:"+34 617 78 81 65",s:"sombrilla",t:"Pub rock",h:"Mar-Dom 20-3",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Restaurante Yucatán",lat:40.3381,lng:-3.8279,r:4.5,rv:684,a:"Av. las Retamas, 65",p:"+34 916 44 41 18",s:"sombrilla",t:"Cocina mexicana fusión",h:"Lun y Mié-Dom variable",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Panettone Café",lat:40.3381,lng:-3.8281,r:4.7,rv:155,a:"Av. las Retamas, 65",p:"+34 914 94 48 35",s:"sombrilla",t:"Café pastelería",h:"Lun-Dom 8:30-21:30",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"La Tarada By Arturo's",lat:40.3374,lng:-3.8291,r:4.4,rv:352,a:"Av. las Retamas, 52",p:"+34 916 44 47 11",s:"sombrilla",t:"Terraza restaurante",h:"Lun-Dom 7-00",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Taberna El Puntazo",lat:40.3378,lng:-3.833,r:4.5,rv:95,a:"Av. las Retamas, 29",p:"+34 910 26 53 59",s:"sombrilla",t:"Terraza taberna",h:"Mar-Dom 12-1",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Cervecería Villanueva de Ávila",lat:40.3389,lng:-3.8352,r:4.4,rv:509,a:"Av. las Retamas, 15",p:"+34 910 44 18 35",s:"sombrilla",t:"Gran terraza cervecería",h:"Lun-Dom 8-00",pr:"€€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"The Green Corner Pub",lat:40.3391,lng:-3.8364,r:4.4,rv:99,a:"Av. las Retamas, 10",p:"+34 685 69 46 66",s:"sombrilla",t:"Pub cervezas artesanales",h:"Lun-Jue 17-2 · Sáb-Dom 12:30-2:30",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Entre Tapas y Tiempos",lat:40.3382,lng:-3.8278,r:4.6,rv:18,a:"Av. las Retamas, 67",p:"+34 915 73 06 77",s:"sombrilla",t:"Fusión de tapas",h:"Lun y Mié-Dom 12:30-1:30",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Anomalia Bar",lat:40.3383,lng:-3.8328,r:4.4,rv:20,a:"C. Los Pinos, 32",p:"+34 919 47 51 55",s:"natural",t:"Terraza con brisa",h:"Lun-Jue 7:30-23 · Vie-Sáb 7:30-2",pr:"€",via:"c",zp:"retamas",b:"Parque Mayor"},
+  {n:"Restaurante Mala Mía",lat:40.3402,lng:-3.8281,r:4.4,rv:167,a:"Av. del Oeste, 19",p:"+34 641 41 04 89",s:"sombrilla",t:"Terraza con cocktails",h:"Mié-Dom 17-2",pr:"€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Algarabía",lat:40.3396,lng:-3.8312,r:3.8,rv:82,a:"C. Juan Ramón Jiménez, 4",p:"+34 914 55 02 79",s:"sombrilla",t:"Asador restaurante",h:"Lun-Dom 12:30-00",pr:"€€",via:"c",zp:"retamas",b:"Parque Mayor"},
+  {n:"Bar Café Cáceres 48",lat:40.3431,lng:-3.8335,r:4.3,rv:176,a:"C. Cáceres, 48",s:"sombrilla",t:"Terraza de barrio",h:"Mar-Dom 7:30-00",pr:"€",via:"c",zp:"retamas",b:"Parque Mayor"},
+  {n:"El Flor Taberna Gaditana",lat:40.3384,lng:-3.8291,r:4.3,rv:889,a:"Los Pinos, 48",p:"+34 910 24 05 77",s:"sombrilla",t:"Taberna andaluza",h:"Mar-Sáb 12-00 · Dom 12-17",pr:"€",via:"c",zp:"retamas",b:"Parque Mayor"},
+  // OSLO / PARQUE ONDARRETA
+  {n:"Antigua Taberna La Marcela",lat:40.346,lng:-3.8411,r:4.2,rv:2024,a:"C. Oslo, 31",p:"+34 916 89 17 82",s:"natural",t:"Exterior arbolado",h:"Lun-Dom 12-00",pr:"€",via:"c",zp:"oslo",b:"Parque Ondarreta - Urtinsa"},
+  {n:"Bar La Galería",lat:40.3454,lng:-3.8419,r:4.2,rv:766,a:"C. Oslo, 18",p:"+34 610 73 80 83",s:"natural",t:"Música en vivo",h:"Mar-Sáb 11-2 · Dom 11-20",pr:"€",via:"c",zp:"oslo",b:"Parque Ondarreta - Urtinsa"},
+  {n:"Exento Restaurante",lat:40.346,lng:-3.8418,r:4.2,rv:1835,a:"C. Oslo, 14",p:"+34 911 99 89 81",s:"sombrilla",t:"Terraza moderna",h:"Lun-Dom 7-1:30",pr:"€€",via:"c",zp:"oslo",b:"Parque Ondarreta - Urtinsa"},
+  {n:"D2 Bar Restaurante",lat:40.3462,lng:-3.8411,r:4.1,rv:150,a:"C. Oslo, 33",p:"+34 641 36 51 80",s:"sombrilla",t:"Terraza calle Oslo",h:"Mar-Jue 9-00 · Vie-Sáb 10-2",pr:"€",via:"c",zp:"oslo",b:"Parque Ondarreta - Urtinsa"},
+  {n:"Cerveceria La Haya",lat:40.3469,lng:-3.841,r:3.9,rv:508,a:"C. Oslo, 11",p:"+34 916 89 15 94",s:"sombrilla",t:"Terraza barrio",h:"Lun-Dom 7-00",pr:"€",via:"c",zp:"oslo",b:"Parque Ondarreta - Urtinsa"},
+  {n:"Cafetería Oslo Cervecería",lat:40.3441,lng:-3.8432,r:3.8,rv:248,a:"C. Oslo, 32-34",p:"+34 603 72 01 14",s:"sombrilla",t:"Terraza cafetería",h:"Mar-Dom 8:30-00",pr:"€",via:"c",zp:"oslo",b:"Parque Ondarreta - Urtinsa"},
+  {n:"El Galeón de Alcorcón",lat:40.3467,lng:-3.8397,r:4.1,rv:1406,a:"C. Milán, 2",p:"+34 916 41 93 64",s:"sombrilla",t:"Restaurante clásico",h:"Lun-Mar y Jue-Dom 8-00",pr:"€€",via:"c",zp:"oslo",b:"Parque Ondarreta - Urtinsa"},
+  {n:"QMG El Prado de Santo Domingo",lat:40.3363,lng:-3.8443,r:4.0,rv:260,a:"Av. de Esteban Márquez",p:"+34 673 41 39 21",s:"natural",t:"Entorno natural",h:"Lun-Dom 11-00",pr:"€",via:"a",zp:"oslo",b:"Prado de Santo Domingo"},
+  {n:"Xiringuito Beach (X-Madrid)",lat:40.3388,lng:-3.8481,r:3.7,rv:1837,a:"C. Oslo, 53",s:"cubierta",t:"Chiringuito playa interior",h:"Lun-Dom 18-00 · Vie-Sáb hasta 2",pr:"€€",via:"c",zp:"oslo",b:"Prado de Santo Domingo"},
+  {n:"Anubis Coctelería (X-Madrid)",lat:40.3404,lng:-3.848,r:4.0,rv:2402,a:"C. Oslo, 53 (X-Madrid)",p:"+34 677 53 21 11",s:"cubierta",t:"Cocktail bar",h:"Lun-Dom 12-1 · Vie-Sáb hasta 2",pr:"€€",via:"c",zp:"oslo",b:"Prado de Santo Domingo"},
+  {n:"EL KIOSKO (X-Madrid)",lat:40.3411,lng:-3.8478,r:4.4,rv:4038,a:"C. Oslo, 53 (X-Madrid)",p:"+34 912 12 87 19",s:"cubierta",t:"Gastrobar terraza",h:"Lun-Dom 12-00 · Vie-Sáb hasta 1",pr:"€€",via:"c",zp:"oslo",b:"Prado de Santo Domingo"},
+  {n:"La Boutique Trattoria Viajera (X-Madrid)",lat:40.3405,lng:-3.848,r:4.6,rv:3703,a:"C. Oslo, 53 (X-Madrid)",p:"+34 913 68 71 65",s:"cubierta",t:"Italiana fusión",h:"Lun-Dom 13-23",pr:"€€",via:"c",zp:"oslo",b:"Prado de Santo Domingo"},
+  // CARBALLINO / VALDERAS
+  {n:"Taberna La Mezquita",lat:40.354,lng:-3.8102,r:4.6,rv:475,a:"C. Urano, 3",p:"+34 916 10 74 75",s:"natural",t:"Gastronómica",h:"Mar 11-17 · Mié-Dom 11-16 y 20-00",pr:"€€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  {n:"La Cervecería de Valderas",lat:40.3538,lng:-3.8097,r:4.7,rv:42,a:"C. Urano, 10",p:"+34 656 50 46 11",s:"sombrilla",t:"Terraza cervecería",h:"Lun-Vie 8-23:30",pr:"€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  {n:"Cerveceria Seven",lat:40.3509,lng:-3.809,r:4.6,rv:632,a:"C. Carballino, 23",p:"+34 658 26 04 81",s:"cubierta",t:"Terraza abierta + cubierta",h:"Mar-Dom variable",pr:"€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"Pub La Abadía",lat:40.351,lng:-3.8093,r:4.3,rv:1028,a:"C. Carballino, 23",p:"+34 919 47 74 16",s:"sombrilla",t:"Cervezas importadas",h:"Lun-Jue 19-3 · Vie-Sáb 19-3:30",pr:"€€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"Bar Barra 21",lat:40.3512,lng:-3.8095,r:4.4,rv:194,a:"C. Carballino, 21",p:"+34 919 47 22 22",s:"sombrilla",t:"Terraza 24h",h:"Abierto 24h",pr:"€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"Cafetería Mengbar",lat:40.351,lng:-3.8091,r:5.0,rv:16,a:"C. Carballino, 23 local 2",p:"+34 662 13 64 68",s:"sombrilla",t:"Terraza cervecería",h:"Variable",pr:"€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"O'Pulpiño",lat:40.35,lng:-3.8077,r:4.0,rv:2200,a:"C. Carballino, 29",p:"+34 916 11 02 51",s:"sombrilla",t:"Restaurante gallego",h:"Lun-Dom 9:30-00",pr:"€€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"Muriel Bar Restaurante",lat:40.3509,lng:-3.8077,r:4.2,rv:146,a:"C. Carballino, 29",p:"+34 603 11 54 75",s:"sombrilla",t:"Terraza restaurante",h:"Mar-Dom variable",pr:"€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"La Tubería",lat:40.3518,lng:-3.8105,r:3.7,rv:252,a:"C. Carballino, 19",p:"+34 917 95 87 10",s:"cubierta",t:"Terraza acristalada",h:"Lun-Dom variable",pr:"€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"Las Sombras",lat:40.3519,lng:-3.8108,r:4.3,rv:10,a:"C. Carballino, 19",s:"natural",t:"Sombra natural",h:"Variable",pr:"€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"Restaurante Marisquería Casa Valadouro",lat:40.351,lng:-3.8101,r:4.1,rv:1728,a:"C. Carballino, 21",p:"+34 915 42 50 70",s:"sombrilla",t:"Marisquería gallega",h:"Mar-Dom variable",pr:"€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"Sidrería El Trasgu",lat:40.3523,lng:-3.81,r:4.4,rv:244,a:"C. Venus, 1",p:"+34 692 79 35 46",s:"sombrilla",t:"Sidrería tapas",h:"Lun-Dom variable",pr:"€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  {n:"Restaurante La Casona de Luis",lat:40.3527,lng:-3.809,r:4.1,rv:546,a:"C. Venus, 18",p:"+34 919 35 26 33",s:"sombrilla",t:"Mediterráneo",h:"Mar-Dom variable",pr:"€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  {n:"Cervecería el Castillo",lat:40.3537,lng:-3.8118,r:3.9,rv:17,a:"C. Caldas de Reyes",s:"sombrilla",t:"Terraza Valderas",h:"Lun-Dom variable",pr:"€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  {n:"Restaurante El Granero",lat:40.3473,lng:-3.8064,r:4.6,rv:1224,a:"C. Tablas de Daimiel, 6",p:"+34 912 88 33 94",s:"cubierta",t:"Terraza cubierta mediterránea",h:"Mié-Sáb 13-1 · Dom 13-18",pr:"€€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  {n:"Aurum Fusion",lat:40.355,lng:-3.8076,r:4.3,rv:1507,a:"C. los Lirios, 3",p:"+34 910 74 43 48",s:"natural",t:"Terraza en parque",h:"Lun-Jue 12-18:30 · Vie-Sáb 12-1:30",pr:"€€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  {n:"Bar El Majuelo",lat:40.3479,lng:-3.8073,r:4.1,rv:70,a:"C. Parque Bujaruelo, 10",p:"+34 916 11 09 76",s:"sombrilla",t:"Terraza Parque Bujaruelo",h:"Lun-Dom 11-23",pr:"€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  {n:"Cafetería Tres Rosas",lat:40.3486,lng:-3.8098,r:4.8,rv:6,a:"C. Timanfaya, 34",s:"sombrilla",t:"Terraza tranquila",h:"Consultar",pr:"€",via:"c",zp:"valderas",b:"Valderas - Los Castillos"},
+  // PARQUE LISBOA / LA PAZ
+  {n:"Mesón A Lareira",lat:40.3501,lng:-3.8211,r:4.5,rv:5670,a:"C. Príncipe Don Juan Carlos, 7",p:"+34 916 12 12 04",s:"sombrilla",t:"Gran terraza marisquería",h:"Lun-Mar y Jue-Dom 9-00",pr:"€€",via:"c",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  {n:"Kauna Lounge & Sushi Bar",lat:40.3531,lng:-3.8198,r:4.8,rv:290,a:"C. Porto Cristo, 1",p:"+34 913 07 58 31",s:"sombrilla",t:"Lounge sushi fusión",h:"Mar-Sáb 12-00 · Dom 12-17",pr:"€€",via:"c",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  {n:"La Paramera",lat:40.3505,lng:-3.817,r:4.4,rv:502,a:"C. Porto Cristo, 8",p:"+34 916 10 79 02",s:"sombrilla",t:"Tapas y vinos",h:"Lun-Mar y Jue-Dom 9-00",pr:"€",via:"c",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  {n:"Rte. Polideportivo Parque Lisboa",lat:40.3531,lng:-3.8214,r:4.0,rv:112,a:"Av. de Lisboa, 15",p:"+34 910 88 94 60",s:"natural",t:"Terraza polideportivo",h:"Mar-Dom 11-23",pr:"€",via:"a",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  {n:"Bar La Prórroga",lat:40.353,lng:-3.8215,r:3.1,rv:15,a:"Av. de Lisboa (Piscinas)",p:"+34 678 58 91 29",s:"natural",t:"Piscinas verano",h:"Variable verano",pr:"€",via:"a",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  {n:"Trabuco Bar",lat:40.3529,lng:-3.8197,r:4.9,rv:8,a:"C. Porto Cristo, 1 local 6/7",s:"sombrilla",t:"Bar de barrio",h:"Consultar",pr:"€",via:"c",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  {n:"Cafetería Acuario",lat:40.3526,lng:-3.8176,r:4.1,rv:15,a:"Av. de los Derechos Humanos, 3-5",p:"+34 642 02 84 04",s:"natural",t:"Junto a parque infantil",h:"Lun-Dom 9:30-23",pr:"€",via:"a",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  {n:"Cervecería Bodegas Sanz",lat:40.3476,lng:-3.8223,r:4.4,rv:99,a:"Pl. Sierra de Gredos, 2",p:"+34 641 76 61 06",s:"natural",t:"Terraza clásica",h:"Mar-Dom 11:30-00",pr:"€",via:"pl",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  {n:"Meigas e Pulpos",lat:40.3479,lng:-3.822,r:5.0,rv:4,a:"Pl. Sierra de Gredos, 3",p:"+34 627 46 44 57",s:"sombrilla",t:"Pulpería terraza",h:"Mié-Dom 12-23:30",pr:"€",via:"pl",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  {n:"Chez Michel Sabores del Líbano",lat:40.357,lng:-3.813,r:4.8,rv:1222,a:"Av. de Lisboa, 24",p:"+34 916 84 57 58",s:"sombrilla",t:"Restaurante libanés",h:"Mar-Sáb 13-16 y 20-23",pr:"€€",via:"a",zp:"parque_lisboa",b:"Parque Lisboa - La Paz"},
+  // URTINSA / PARQUE MAYOR / SUR
+  {n:"La Federala Alcorcón",lat:40.3382,lng:-3.8135,r:4.7,rv:6592,a:"C. Polvoranca, 108",p:"+34 918 32 00 42",s:"sombrilla",t:"Terraza mexicana",h:"Lun-Dom variable",pr:"€",via:"c",zp:"urtinsa",b:"Parque Ondarreta - Urtinsa"},
+  {n:"Pirata's",lat:40.3378,lng:-3.8137,r:4.5,rv:25221,a:"C. Navales, 33",p:"+34 916 43 69 28",s:"cubierta",t:"Terraza temática acristalada",h:"Lun-Dom 12-2",pr:"€",via:"c",zp:"urtinsa",b:"Parque Ondarreta - Urtinsa"},
+  {n:"Restaurante Siempre Así",lat:40.3378,lng:-3.8142,r:4.6,rv:271,a:"C. Navales, 19",p:"+34 912 79 81 29",s:"sombrilla",t:"Terraza zona industrial",h:"Lun-Vie 6:30-20",pr:"€",via:"c",zp:"urtinsa",b:"Parque Ondarreta - Urtinsa"},
+  {n:"Cerveceria Beerseker",lat:40.3421,lng:-3.82,r:4.7,rv:219,a:"C. Polvoranca, 66",s:"natural",t:"Craft beer terraza",h:"Lun-Dom 19-2",pr:"€",via:"c",zp:"urtinsa",b:"Parque Ondarreta - Urtinsa"},
+  {n:"Cocktail Room Restaurant",lat:40.339,lng:-3.8143,r:4.8,rv:27,a:"C. Polvoranca, 88",p:"+34 651 73 31 81",s:"sombrilla",t:"Terraza restaurante",h:"Lun-Jue 9-20 · Vie 9-1:30",pr:"€",via:"c",zp:"urtinsa",b:"Parque Ondarreta - Urtinsa"},
+  {n:"El Lagarto Verde",lat:40.3336,lng:-3.8183,r:4.6,rv:174,a:"C. Aeronáutica, 33",p:"+34 614 54 97 13",s:"natural",t:"Música en vivo",h:"Lun-Dom variable",pr:"€",via:"c",zp:"urtinsa",b:"Parque Ondarreta - Urtinsa"},
+  {n:"Restaurante El Rececho",lat:40.3433,lng:-3.8064,r:4.7,rv:1033,a:"C. del Mazo, 1",p:"+34 669 64 87 69",s:"natural",t:"Terraza con jardín",h:"Lun-Jue 9-17 · Vie-Sáb 9-1",pr:"€",via:"c",zp:"libre",b:"Campodón - Ventorro del Cano"},
+  {n:"El Quinto Cono",lat:40.352,lng:-3.8048,r:4.4,rv:422,a:"Av. de la Libertad, 87",p:"+34 622 24 68 92",s:"sombrilla",t:"Terraza tapas",h:"Mié-Dom variable",pr:"€",via:"a",zp:"libre",b:"Campodón - Ventorro del Cano"},
+  {n:"Carpe Diem Restaurant",lat:40.3522,lng:-3.8044,r:4.1,rv:1530,a:"C. las Gardenias, 11",p:"+34 911 56 46 98",s:"cubierta",t:"Terraza cubierta",h:"Mié-Dom 9-1",pr:"€€",via:"c",zp:"libre",b:"Campodón - Ventorro del Cano"},
+  {n:"El Toke Castillo",lat:40.3494,lng:-3.8026,r:3.8,rv:1891,a:"Av. los Castillos, 1022",p:"+34 916 12 02 92",s:"sombrilla",t:"Terraza zona Castillos",h:"Lun-Dom 6:30-1:30",pr:"€",via:"a",zp:"libre",b:"Valderas - Los Castillos"},
+  {n:"Taberna Ventura",lat:40.3292,lng:-3.8284,r:4.3,rv:196,a:"C. Martín Luther King, 54",p:"+34 919 35 76 18",s:"sombrilla",t:"Terraza industrial",h:"Mar-Dom variable",pr:"€",via:"c",zp:"libre",b:"Bellasvistas - Hipercor"},
+  {n:"Bar Mayo",lat:40.3288,lng:-3.8346,r:4.1,rv:713,a:"C. Martín Luther King",p:"+34 910 00 00 26",s:"sombrilla",t:"Terraza exterior",h:"Lun-Dom 10-00",pr:"€",via:"c",zp:"libre",b:"Bellasvistas - Hipercor"},
+  {n:"Taberna La Traicionera",lat:40.331,lng:-3.8394,r:4.2,rv:2109,a:"C. Pablo Picasso",p:"+34 914 21 76 06",s:"sombrilla",t:"Taberna sur",h:"Lun-Dom variable",pr:"€€",via:"c",zp:"libre",b:"Bellasvistas - Hipercor"},
+  {n:"Panadería La Piruleta",lat:40.331,lng:-3.8357,r:4.5,rv:560,a:"C. Pablo Picasso",p:"+34 912 00 20 24",s:"natural",t:"Panadería-café",h:"Mar-Dom variable",pr:"€",via:"c",zp:"libre",b:"Bellasvistas - Hipercor"},
+  {n:"Rte. La Voz de Asturias",lat:40.3406,lng:-3.8052,r:4.4,rv:322,a:"C. los Alfareros, 41",p:"+34 916 41 36 35",s:"sombrilla",t:"Terraza industrial",h:"Lun-Vie 5:30-18:30",pr:"€",via:"c",zp:"libre",b:"Campodón - Ventorro del Cano"},
+  // TRES AGUAS / PARQUE OESTE
+  {n:"Restaurante Brasa y Leña Tres Aguas",lat:40.3586,lng:-3.8331,r:4.0,rv:4440,a:"Av. de América, 7-9",p:"+34 916 10 02 25",s:"cubierta",t:"Gran terraza restaurante",h:"Lun-Dom 13-23:30",pr:"€€",via:"a",zp:"tres_aguas",b:"Campodón - Ventorro del Cano"},
+  {n:"KIZÁS LOUNGE (Tres Aguas)",lat:40.3586,lng:-3.8328,r:4.5,rv:73,a:"Av. de América, 7-9",p:"+34 642 33 87 88",s:"cubierta",t:"Lounge hookah",h:"Lun-Sáb variable",pr:"€€",via:"a",zp:"tres_aguas",b:"Campodón - Ventorro del Cano"},
+  {n:"Sushisom Parque Oeste",lat:40.3502,lng:-3.8481,r:4.0,rv:3078,a:"Av. de Europa, 4",p:"+34 917 27 02 74",s:"cubierta",t:"Restaurante japonés",h:"Lun-Dom 13-16:30 y 20-23:30",pr:"€€",via:"a",zp:"parque_oeste",b:"Parque Oeste - Fuente Cisneros"},
+  // NORTE
+  {n:"Restaurante Rincón Castellano",lat:40.3603,lng:-3.813,r:4.5,rv:2092,a:"C. de la Canaleja",p:"+34 622 48 84 07",s:"sombrilla",t:"Gran terraza arenosa",h:"Lun-Dom variable",pr:"€",via:"c",zp:"libre",b:"Campodón - Ventorro del Cano"},
+  {n:"BaRRa de Pintxos ECI Valderas",lat:40.3576,lng:-3.8155,r:4.0,rv:176,a:"Ctra. Nacional V km 12,5",p:"+34 916 49 65 00",s:"cubierta",t:"Terraza pintxos",h:"Lun-Sáb 10-22 · Dom 11-21",pr:"€€",via:"a",zp:"libre",b:"Valderas - Los Castillos"},
+  // NUEVOS DE BÚSQUEDA — TheFork / TripAdvisor / Google
+  {n:"TOTALE Ristorante Pizzería",lat:40.3383,lng:-3.8276,r:4.5,rv:890,a:"Av. las Retamas, 69B",p:"+34 910 55 00 22",s:"sombrilla",t:"Pizzería italiana terraza — sin gluten disponible",h:"Lun-Jue 13-16 y 19:30-23:30 · Vie-Sáb 13-00 · Dom 13-23",pr:"€€",via:"a",zp:"retamas",b:"Parque Mayor"},
+  {n:"Tony Roma's Alcorcón Sur",lat:40.3294,lng:-3.8289,r:4.4,rv:1820,a:"C. Martín Luther King, 72",p:"+34 916 42 00 72",s:"sombrilla",t:"Costillería americana con terraza — parque bolas infantil",h:"Lun-Dom 13-23:30 · Vie-Sáb hasta 00:30",pr:"€€",via:"c",zp:"libre",b:"Bellasvistas - Hipercor"},
+  {n:"Bunji - The Place Alcorcón",lat:40.3508,lng:-3.8166,r:4.4,rv:1240,a:"Av. Alcalde José Aranda, 47",p:"+34 916 10 54 47",s:"sombrilla",t:"Burgers & costillares — terraza amplia",h:"Lun-Jue 13-23 · Vie-Sáb 13-00 · Dom 13-23",pr:"€€",via:"a",zp:"centro",b:"Centro"},
+  {n:"Hamburguesa Nostra - X Madrid",lat:40.3407,lng:-3.8478,r:4.6,rv:2100,a:"C. Oslo, 53 (X-Madrid)",p:"+34 910 05 50 58",s:"cubierta",t:"Hamburguesas artesanales — terraza exterior X-Madrid",h:"Lun-Dom 13-23",pr:"€€",via:"c",zp:"oslo",b:"Prado de Santo Domingo"},
+  {n:"Himalaya Tandoori",lat:40.3499,lng:-3.8396,r:4.8,rv:780,a:"C. Oslo, 49",p:"+34 916 89 00 23",s:"sombrilla",t:"Restaurante indio-nepalí — terraza en Oslo",h:"Mar-Dom 13-16 y 19:30-23:30 · Lun cerrado",pr:"€€",via:"c",zp:"oslo",b:"Parque Ondarreta - Urtinsa"},
+  {n:"PANSHI Restaurante Indio",lat:40.351,lng:-3.8101,r:4.5,rv:560,a:"C. Carballino, 21",p:"+34 910 25 20 02",s:"sombrilla",t:"Cocina india — terraza exterior",h:"Mar-Dom 13-16 y 19:30-23 · Lun cerrado",pr:"€",via:"c",zp:"carballino",b:"Valderas - Los Castillos"},
+  {n:"Hamburguesas El Pecador (El P3cador)",lat:40.3295,lng:-3.829,r:4.5,rv:890,a:"C. las Amapolas, 10",p:"+34 910 26 15 10",s:"sombrilla",t:"Hamburguesas artesanales — terraza barrio sur",h:"Mar-Dom 13-00 · Lun cerrado · Vie-Sáb hasta 1",pr:"€",via:"c",zp:"libre",b:"Bellasvistas - Hipercor"},
+  {n:"Jowke Terraza (discoteca verano)",lat:40.337,lng:-3.8383,r:4.0,rv:1850,a:"Av. San Martín de Valdeiglesias, 22",s:"cubierta",t:"Discoteca terraza verano con piscina (+18)",h:"Vie-Sáb 00-6 · Festivos especiales",pr:"€€",via:"a",zp:"libre",b:"Campodón - Ventorro del Cano"},
+  {n:"Viena Capellanes (San Martín)",lat:40.3492,lng:-3.8455,r:4.3,rv:420,a:"Av. San Martín de Valdeiglesias, 24",p:"+34 916 42 88 44",s:"sombrilla",t:"Cafetería pastelería — terraza avenida",h:"Lun-Dom 8-21:30",pr:"€",via:"a",zp:"parque_oeste",b:"Parque Oeste - Fuente Cisneros"},
+  {n:"Muerde la Pasta Parque Oeste",lat:40.3506,lng:-3.848,r:4.0,rv:1250,a:"C. Luxemburgo, 2 (CC Parque Oeste)",p:"+34 916 11 14 58",s:"cubierta",t:"Restaurante italiano — terraza CC Parque Oeste",h:"Lun-Dom 12-16 y 20-23:30",pr:"€€",via:"c",zp:"parque_oeste",b:"Parque Oeste - Fuente Cisneros"},
+  {n:"La Terraza del Prado",lat:40.337,lng:-3.843,r:3.9,rv:420,a:"Prado de Santo Domingo",s:"natural",t:"Terraza asador en entorno natural",h:"Mar-Dom 11-23",pr:"€€",via:"b",zp:"oslo",b:"Prado de Santo Domingo"},
+  {n:"El Alfar Alcorcón",lat:40.3503,lng:-3.8156,r:4.9,rv:310,a:"Av. Alcalde José Aranda, 53 posterior",p:"+34 910 53 33 29",s:"sombrilla",t:"Gastrobar local — terraza posterior",h:"Mar-Sáb 13-16 y 20-00 · Dom 13-16",pr:"€",via:"a",zp:"centro",b:"Centro"},
+  {n:"2 Tierras Madrid",lat:40.352,lng:-3.8177,r:4.5,rv:680,a:"Pl. la Coruña, local 4/6",p:"+34 617 77 28 53",s:"sombrilla",t:"Restaurante madrileño — terraza en plaza",h:"Lun y Mié-Dom 12-23 · Mar cerrado",pr:"€€",via:"pl",zp:"centro",b:"Zona Renfe"},
+  {n:"Houston Burger Alcorcón",lat:40.3472,lng:-3.826,r:4.2,rv:390,a:"Alcorcón (centro)",s:"sombrilla",t:"Hamburguesería americana — terraza",h:"Mar-Dom 13-23 · Lun cerrado",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Rinconcito Cuzqueño",lat:40.3465,lng:-3.8255,r:4.7,rv:480,a:"C. Fuenlabrada, 16",p:"+34 910 44 91 88",s:"sombrilla",t:"Cocina peruana — terraza exterior",h:"Mar-Dom 13-16:30 y 20-23 · Lun cerrado",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"WOW Bar Restaurante",lat:40.3474,lng:-3.8241,r:4.3,rv:220,a:"Alcorcón centro",s:"sombrilla",t:"Fusión asiática — terraza",h:"Mar-Dom 13-23",pr:"€€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Bohio Bar Alcorcón",lat:40.3488,lng:-3.8185,r:4.9,rv:140,a:"Alcorcón",s:"sombrilla",t:"Cocina española — bar con terraza",h:"Lun-Dom 8-23",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"El Rincón de Loly & David (Gastrobar)",lat:40.3474,lng:-3.8193,r:4.5,rv:310,a:"C. Sierra de la Estrella",s:"sombrilla",t:"Gastrobar español — terraza",h:"Mar-Dom 13-23 · Lun cerrado",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Muerde la Pasta Tres Aguas",lat:40.3586,lng:-3.8334,r:4.0,rv:870,a:"Av. San Martín de Valdeiglesias, 20 (CC Tres Aguas)",p:"+34 916 42 04 52",s:"cubierta",t:"Italiano — terraza CC Tres Aguas",h:"Lun-Dom 12-23:30",pr:"€€",via:"a",zp:"tres_aguas",b:"Campodón - Ventorro del Cano"},
+  {n:"Espazo Enxebre (CC Parque Oeste)",lat:40.3505,lng:-3.8485,r:4.3,rv:1280,a:"CC Parque Oeste (Luxemburgo, 2)",p:"+34 916 42 07 72",s:"cubierta",t:"Marisquería gallega — terraza interior+exterior CC",h:"Lun-Dom 12-23:30",pr:"€€",via:"c",zp:"parque_oeste",b:"Parque Oeste - Fuente Cisneros"},
+  {n:"Entrebrasas Alcorcón",lat:40.3487,lng:-3.8179,r:4.4,rv:390,a:"Alcorcón",s:"sombrilla",t:"Brasa y parrilla — terraza",h:"Mar-Dom 13-23 · Lun cerrado",pr:"€€",via:"c",zp:"centro",b:"Centro"},
+  {n:"Gastronomía Xian",lat:40.347,lng:-3.825,r:4.3,rv:280,a:"Alcorcón centro",s:"cubierta",t:"Cocina china — terraza acristalada",h:"Lun-Dom 12-23:30",pr:"€",via:"c",zp:"centro",b:"Centro"},
+  // TRIPADVISOR
+  {n:"Sibuya Urban Sushi Bar X-Madrid",lat:40.3405,lng:-3.8477,r:4.6,rv:396,a:"C. Oslo, 53 (X-Madrid)",s:"cubierta",t:"Sushi fusión — TripAdvisor Top 7",h:"Consultar",pr:"€€",via:"c",zp:"oslo",b:"Prado de Santo Domingo",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d19488194-Reviews-Sibuya_Urban_Sushi_Bar_X_Madrid-Alcorcon.html"},
+  {n:"Kamado Asian Food X-Madrid",lat:40.3408,lng:-3.8479,r:4.4,rv:258,a:"C. Oslo, 53 (X-Madrid)",s:"cubierta",t:"Asiática fusión — TripAdvisor Top 8",h:"Consultar",pr:"€€",via:"c",zp:"oslo",b:"Prado de Santo Domingo",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d19526813-Reviews-Kamado_Asian_Food_X_Madrid-Alcorcon.html"},
+  {n:"Bálamo Restaurante",lat:40.349,lng:-3.8302,r:3.4,rv:961,a:"Av. de Leganés",s:"sombrilla",t:"Pescado y marisco — TripAdvisor Top 4",h:"Consultar",pr:"€€",via:"a",zp:"centro",b:"Centro",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d15635942-Reviews-Balamo_Restaurante-Alcorcon.html"},
+  {n:"Sidrería Camino",lat:40.3478,lng:-3.8195,r:4.3,rv:324,a:"Alcorcón centro",s:"sombrilla",t:"Mediterránea española — TripAdvisor Top 5",h:"Consultar",pr:"€€",via:"c",zp:"centro",b:"Centro",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d13344759-Reviews-Sidreria_Camino-Alcorcon.html"},
+  {n:"La Boscaiola",lat:40.3465,lng:-3.822,r:4.4,rv:97,a:"Alcorcón",s:"sombrilla",t:"Italiano — TripAdvisor destacado",h:"Consultar",pr:"€€",via:"c",zp:"centro",b:"Centro",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d12879453-Reviews-La_Boscaiola-Alcorcon.html"},
+  {n:"Amphora Madrid",lat:40.3447,lng:-3.8122,r:4.2,rv:133,a:"Av. de Leganés",s:"sombrilla",t:"Mediterránea — TripAdvisor Top 10",h:"Consultar",pr:"€€€€",via:"a",zp:"centro",b:"Centro",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d23209976-Reviews-Amphora_Madrid-Alcorcon.html"},
+  {n:"Chino Dragón Oriental",lat:40.347,lng:-3.8248,r:4.4,rv:152,a:"Alcorcón",s:"sombrilla",t:"China e internacional — TripAdvisor Top 12",h:"Consultar",pr:"€€",via:"c",zp:"centro",b:"Centro",trip:true,tripUrl:"https://www.tripadvisor.es/Restaurant_Review-g562646-d990417-Reviews-Dragon_Oriental-Alcorcon.html"},
 ];
 
-const SH={natural:{i:"🌳",l:"Sombra natural",c:"tn",col:"#2e7d32"},sombrilla:{i:"⛱️",l:"Sombrilla",c:"ts",col:"#bf360c"},cubierta:{i:"🏠",l:"Cubierta",c:"tc",col:"#1565c0"}};
 const MUN="28007",BASE="https://opendata.aemet.es/opendata/api";
 const DEFAULT_KEY='eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJpZ25hY2lvdG9ycmVzNjJAZ21haWwuY29tIiwianRpIjoiNzgwYjY0NDQtN2I4ZS00NDZhLWFiZTMtNDM4ZDIyYjhmZTBjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3Nzg1Nzk5MzksInVzZXJJZCI6Ijc4MGI2NDQ0LTdiOGUtNDQ2YS1hYmUzLTQzOGQyMmI4ZmUwYyIsInJvbGUiOiIifQ.EAJF0HEXpxkqgNDRaAXfQG6Dr3wrxJRPkmFCxoAeswg';
 let map,mkrs=[],vis=[...Array(BARS.length).keys()],af="all",q="",sel=null;
-let hForecast={},dForecast=[],selDay=0,selHour=null;
-let panelOpen=true;
+let hForecast={},dForecast=[],selDay=0,selHour=null,panelOpen=true;
 
 map=L.map('map',{zoomControl:true,tap:true,tapTolerance:15}).setView([40.347,-3.825],13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:19}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',maxZoom:19,subdomains:'abcd'}).addTo(map);
 
 BARS.forEach((b,i)=>{
   const sh=SH[b.s];
-  const col=b.trip?'#ff6f00':sh.col;
+  const col=b.trip?'#c8a000':sh.col;
   const icon=b.trip?'⭐':sh.i;
-  const ic=L.divIcon({className:'',html:`<div style="background:${col};color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;border:2px solid white;box-shadow:0 2px 5px rgba(0,0,0,.3);cursor:pointer">${icon}</div>`,iconSize:[28,28],iconAnchor:[14,14],popupAnchor:[0,-14]});
+  const glowCol=b.trip?'rgba(200,160,0,.4)':sh.col.replace(')',',').replace('rgb','rgba')+',.35)';
+  const ic=L.divIcon({className:'',html:`<div style="background:${col};color:white;border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:14px;border:1.5px solid rgba(255,255,255,.25);box-shadow:0 2px 8px rgba(0,0,0,.6),0 0 0 4px ${b.trip?'rgba(200,160,0,.2)':sh.col+'33'};cursor:pointer;transition:transform .15s">${icon}</div>`,iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-15]});
   const m=L.marker([b.lat,b.lng],{icon:ic}).addTo(map);
-  m.on('click',()=>{pick(i);openPanel();});
-  mkrs.push(m);
+  m.on('click',()=>{pick(i);openPanel();});mkrs.push(m);
 });
 
-function togglePanel(){
-  panelOpen=!panelOpen;
-  const p=document.getElementById('panel');
-  const btn=document.getElementById('panel-toggle');
-  if(window.innerWidth<640){
-    p.style.height=panelOpen?'45vh':'44px';
-    btn.textContent=panelOpen?'▼':'▲';
-  }
-}
-function openPanel(){
-  if(window.innerWidth<640){
-    panelOpen=true;
-    document.getElementById('panel').style.height='45vh';
-    document.getElementById('panel-toggle').textContent='▼';
-  }
-}
+function togglePanel(){panelOpen=!panelOpen;const p=document.getElementById('panel'),btn=document.getElementById('panel-toggle');if(window.innerWidth<640){p.style.height=panelOpen?'45vh':'44px';btn.textContent=panelOpen?'▼':'▲';}}
+function openPanel(){if(window.innerWidth<640){panelOpen=true;document.getElementById('panel').style.height='45vh';document.getElementById('panel-toggle').textContent='▼';}}
 
-async function loadAEMET(key){
-  if(!key) return;
-  document.getElementById('met-st').textContent='Cargando tiempo...';
-  try{
-    const r1=await fetch(`${BASE}/prediccion/especifica/municipio/horaria/${MUN}?api_key=${key}`);
-    const j1=await r1.json();
-    if(j1.estado!==200) throw new Error(j1.descripcion);
-    hForecast=parseH(await(await fetch(j1.datos)).json());
-    const r2=await fetch(`${BASE}/prediccion/especifica/municipio/diaria/${MUN}?api_key=${key}`);
-    const j2=await r2.json();
-    dForecast=parseD(await(await fetch(j2.datos)).json());
-    document.getElementById('met-st').textContent='✅ Tiempo cargado';
-    localStorage.setItem('aemet_key',key);
-    buildTabs();renderHours();if(sel!==null)pick(sel);
-  }catch(e){document.getElementById('met-st').textContent='⚠️ Error tiempo';}
-}
-
-function parseH(data){
-  const r={};
-  (data[0]?.prediccion?.dia||[]).forEach(dia=>{
-    const date=dia.fecha?.substring(0,10);if(!date)return;r[date]=[];
-    const T=dia.temperatura||[],S=dia.estadoCielo||[],W=dia.viento||[],P=dia.precipitacion||[],PR=dia.probPrecipitacion||[];
-    for(let h=0;h<24;h++){
-      const hs=String(h).padStart(2,'0');
-      const temp=T.find(t=>t.periodo===hs)?.value;if(temp===undefined)continue;
-      const probRain=+(PR.find(p=>p.periodo===hs)?.value||PR.find(p=>+p.periodo<=h&&+(p.periodo||0)+6>h)?.value||0);
-      r[date].push({h,temp:+temp,sky:+(S.find(s=>s.periodo===hs)?.value||0),wind:+(W.find(w=>w.periodo===hs)?.velocidad||0),rain:+(P.find(p=>p.periodo===hs)?.value||0),probRain});
-    }
-  });return r;
-}
+async function loadAEMET(key){if(!key)return;document.getElementById('met-st').textContent='Cargando tiempo...';try{const r1=await fetch(`${BASE}/prediccion/especifica/municipio/horaria/${MUN}?api_key=${key}`);const j1=await r1.json();if(j1.estado!==200)throw new Error();hForecast=parseH(await(await fetch(j1.datos)).json());const r2=await fetch(`${BASE}/prediccion/especifica/municipio/diaria/${MUN}?api_key=${key}`);const j2=await r2.json();dForecast=parseD(await(await fetch(j2.datos)).json());document.getElementById('met-st').textContent='✅ Tiempo cargado';localStorage.setItem('aemet_key',key);buildTabs();renderHours();if(sel!==null)pick(sel);}catch(e){document.getElementById('met-st').textContent='⚠️ Error tiempo';}}
+function parseH(data){const r={};(data[0]?.prediccion?.dia||[]).forEach(dia=>{const date=dia.fecha?.substring(0,10);if(!date)return;r[date]=[];const T=dia.temperatura||[],S=dia.estadoCielo||[],W=dia.viento||[],P=dia.precipitacion||[],PR=dia.probPrecipitacion||[];for(let h=0;h<24;h++){const hs=String(h).padStart(2,'0');const temp=T.find(t=>t.periodo===hs)?.value;if(temp===undefined)continue;const probRain=+(PR.find(p=>p.periodo===hs)?.value||PR.find(p=>+p.periodo<=h&&+(p.periodo||0)+6>h)?.value||0);r[date].push({h,temp:+temp,sky:+(S.find(s=>s.periodo===hs)?.value||0),wind:+(W.find(w=>w.periodo===hs)?.velocidad||0),rain:+(P.find(p=>p.periodo===hs)?.value||0),probRain});}});return r;}
 function parseD(data){return(data[0]?.prediccion?.dia||[]).map(d=>({date:d.fecha?.substring(0,10),tmax:d.temperatura?.maxima,tmin:d.temperatura?.minima,sky:d.estadoCielo?.[0]?.descripcion||'',skyCode:+(d.estadoCielo?.[0]?.value||0),rain:+(d.probPrecipitacion?.[0]?.value||0)}));}
 function skyI(c){if(!c)return'🌤';if(c<=11)return'☀️';if(c<=15)return'⛅';if(c<=17)return'🌥';if(c<=26)return'☁️';if(c<=35)return'🌧';if(c<=46)return'⛈';return'🌩';}
-
-function score(h){
-  if(!h)return{s:'warn',msg:'Sin datos'};
-  const{temp,wind,rain,probRain}=h;
-  if(rain>0.5&&probRain>=20)return{s:'bad',msg:`🌧 Lluvia probable (${probRain}%, ${rain}mm)`};
-  if(rain>2)return{s:'bad',msg:`🌧 Lluvia (${rain}mm)`};
-  if(temp>37)return{s:'bad',msg:`🌡️ Demasiado calor (${temp}°C)`};
-  if(temp<9)return{s:'bad',msg:`🥶 Demasiado frío (${temp}°C)`};
-  if(wind>40)return{s:'bad',msg:`💨 Viento fuerte (${wind}km/h)`};
-  if(rain>0||probRain>=20)return{s:'warn',msg:`🌦 Posible lluvia (${probRain}%, ${rain}mm)`};
-  if(temp>33||temp<13)return{s:'warn',msg:`🌡️ Temperatura límite (${temp}°C)`};
-  if(wind>25)return{s:'warn',msg:`💨 Algo de viento (${wind}km/h)`};
-  return{s:'good',msg:`✅ Ideal — ${temp}°C, viento ${wind}km/h`};
-}
-function shadeNote(shade,s,temp){
-  if(shade==='cubierta'&&s==='bad'&&temp<37)return'🏠 Al ser cubierta puede ser viable';
-  if(shade==='natural'&&temp>30)return'🌳 Sombra natural ayuda con el calor';
-  if(shade==='sombrilla'&&temp>28)return'⛱️ Sombrilla protege del sol';
-  return'';
-}
+function score(h){if(!h)return{s:'warn',msg:'Sin datos'};const{temp,wind,rain,probRain}=h;if(rain>0.5&&probRain>=20)return{s:'bad',msg:`🌧 Lluvia probable (${probRain}%, ${rain}mm)`};if(rain>2)return{s:'bad',msg:`🌧 Lluvia (${rain}mm)`};if(temp>37)return{s:'bad',msg:`🌡️ Demasiado calor (${temp}°C)`};if(temp<9)return{s:'bad',msg:`🥶 Frío (${temp}°C)`};if(wind>40)return{s:'bad',msg:`💨 Viento fuerte (${wind}km/h)`};if(rain>0||probRain>=20)return{s:'warn',msg:`🌦 Posible lluvia (${probRain}%, ${rain}mm)`};if(temp>33||temp<13)return{s:'warn',msg:`🌡️ Temperatura límite (${temp}°C)`};if(wind>25)return{s:'warn',msg:`💨 Algo de viento (${wind}km/h)`};return{s:'good',msg:`✅ Ideal — ${temp}°C, viento ${wind}km/h`};}
+function shadeNote(shade,s,temp){if(shade==='cubierta'&&s==='bad'&&temp<37)return'🏠 Al ser cubierta puede ser viable';if(shade==='natural'&&temp>30)return'🌳 Sombra natural ayuda';if(shade==='sombrilla'&&temp>28)return'⛱️ Sombrilla protege';return'';}
 function allDays(){return[...new Set([...Object.keys(hForecast).sort(),...dForecast.map(d=>d.date)])].sort().slice(0,7);}
 function selDate(){return allDays()[selDay]||null;}
-
-function buildTabs(){
-  const el=document.getElementById('dtabs');el.innerHTML='';
-  const days=allDays(),names=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-  days.forEach((date,i)=>{
-    const d=new Date(date+'T12:00:00'),df=dForecast.find(x=>x.date===date);
-    const btn=document.createElement('div');
-    btn.className='dt'+(i===selDay?' on':'');
-    btn.innerHTML=`${df?skyI(df.skyCode):'📅'} ${names[d.getDay()]} ${d.getDate()}`;
-    btn.onclick=()=>{selDay=i;selHour=null;document.querySelectorAll('.dt').forEach((t,j)=>t.classList.toggle('on',j===i));renderHours();if(sel!==null)pick(sel);};
-    el.appendChild(btn);
-  });
-}
-
-function renderHours(){
-  const grid=document.getElementById('hgrid'),date=selDate(),hours=hForecast[date];
-  if(!hours||!hours.length){grid.innerHTML='<span style="font-size:.7rem;color:#aaa">Sin datos horarios</span>';return;}
-  grid.innerHTML='';
-  hours.forEach(h=>{
-    const sc=score(h),card=document.createElement('div');
-    card.className=`hc ${sc.s}`;
-    card.innerHTML=`<div class="ht">${String(h.h).padStart(2,'0')}h</div><div class="hi">${skyI(h.sky)}</div><div class="htp">${h.temp}°</div><div class="hw">💨${h.wind}</div>`;
-    card.title=sc.msg;
-    card.onclick=()=>{selHour=h.h;document.querySelectorAll('.hc').forEach(c=>c.classList.remove('sel'));card.classList.add('sel');if(sel!==null)pick(sel);};
-    grid.appendChild(card);
-  });
-}
-
-function fmtRange(hrs){
-  if(!hrs.length)return'';
-  const g=[];let st=hrs[0].h,pv=hrs[0].h;
-  for(let i=1;i<hrs.length;i++){if(hrs[i].h===pv+1){pv=hrs[i].h;}else{g.push(`${String(st).padStart(2,'0')}-${String(pv+1).padStart(2,'0')}h`);st=hrs[i].h;pv=hrs[i].h;}}
-  g.push(`${String(st).padStart(2,'0')}-${String(pv+1).padStart(2,'0')}h`);
-  return g.join(', ');
-}
+function buildTabs(){const el=document.getElementById('dtabs');el.innerHTML='';const days=allDays(),names=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];days.forEach((date,i)=>{const d=new Date(date+'T12:00:00'),df=dForecast.find(x=>x.date===date);const btn=document.createElement('div');btn.className='dt'+(i===selDay?' on':'');btn.innerHTML=`${df?skyI(df.skyCode):'📅'} ${names[d.getDay()]} ${d.getDate()}`;btn.onclick=()=>{selDay=i;selHour=null;document.querySelectorAll('.dt').forEach((t,j)=>t.classList.toggle('on',j===i));renderHours();if(sel!==null)pick(sel);};el.appendChild(btn);});}
+function renderHours(){const grid=document.getElementById('hgrid'),date=selDate(),hours=hForecast[date];if(!hours||!hours.length){grid.innerHTML='<span style="font-size:.7rem;color:#aaa">Sin datos horarios</span>';return;}grid.innerHTML='';hours.forEach(h=>{const sc=score(h),card=document.createElement('div');card.className=`hc ${sc.s}`;card.innerHTML=`<div class="ht">${String(h.h).padStart(2,'0')}h</div><div class="hi">${skyI(h.sky)}</div><div class="htp">${h.temp}°</div><div class="hw">💨${h.wind}</div>`;card.title=sc.msg;card.onclick=()=>{selHour=h.h;document.querySelectorAll('.hc').forEach(c=>c.classList.remove('sel'));card.classList.add('sel');if(sel!==null)pick(sel);};grid.appendChild(card);});}
+function fmtRange(hrs){if(!hrs.length)return'';const g=[];let st=hrs[0].h,pv=hrs[0].h;for(let i=1;i<hrs.length;i++){if(hrs[i].h===pv+1){pv=hrs[i].h;}else{g.push(`${String(st).padStart(2,'0')}-${String(pv+1).padStart(2,'0')}h`);st=hrs[i].h;pv=hrs[i].h;}}g.push(`${String(st).padStart(2,'0')}-${String(pv+1).padStart(2,'0')}h`);return g.join(', ');}
 
 function pick(i){
-  sel=i;
-  document.querySelectorAll('.bi').forEach(e=>e.classList.toggle('sel',+e.dataset.i===i));
-  const bar=BARS[i],sh=SH[bar.s];
+  sel=i;document.querySelectorAll('.bi').forEach(e=>e.classList.toggle('sel',+e.dataset.i===i));
+  const bar=BARS[i],sh=SH[bar.s],via=VIA[bar.via||'c']||VIA.c;
   const date=selDate(),hours=hForecast[date]||[],df=dForecast.find(d=>d.date===date);
   const curH=selHour!==null?hours.find(h=>h.h===selHour):null;
   const evalH=curH||hours[Math.floor(hours.length/2)]||null;
   const sc=score(evalH),sn=evalH?shadeNote(bar.s,sc.s,evalH.temp):'';
-  const goodH=hours.filter(h=>score(h).s==='good');
-  const warnH=hours.filter(h=>score(h).s==='warn');
+  const goodH=hours.filter(h=>score(h).s==='good'),warnH=hours.filter(h=>score(h).s==='warn');
+  const hora=selHour??new Date().getHours();
+  const pk=parkInfo(bar.zp||'libre',hora);
   const gm=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(bar.n+' '+bar.a+' Alcorcón')}`;
-
   document.getElementById('ph').textContent=bar.n;
   document.getElementById('pb').innerHTML=`
-    <div class="bar-detail">
-      <button class="back-btn" onclick="showList()">← Volver a la lista</button>
-      <div class="bn">${bar.n}${bar.trip?' <span class="tag trip">⭐ TripAdvisor</span>':''}</div>
-      <div class="br">${'★'.repeat(Math.round(bar.r))} ${bar.r} · ${bar.rv.toLocaleString()} reseñas · ${bar.pr}</div>
-      <div class="ba">📍 ${bar.a}${bar.p?' · 📞 '+bar.p:''}</div>
-      <div class="ba">🕐 ${bar.h}</div>
-      <div class="bt" style="margin:6px 0">
-        <span class="tag ${sh.c}">${sh.i} ${SH[bar.s].l}</span>
-        <span class="tag tt">🪑 ${bar.t}</span>
-      </div>
-      ${evalH?`
-      <div class="prec ${sc.s}">
-        <strong>${selHour!==null?String(selHour).padStart(2,'0')+'h — ':''}${sc.msg}</strong>
-        ${sn?`<div style="font-size:.72rem;margin-top:3px">${sn}</div>`:''}
-      </div>
-      ${goodH.length?`<div style="font-size:.72rem;color:#2e7d32;margin-top:4px">✅ Mejor franja: ${fmtRange(goodH)}</div>`:''}
-      ${!goodH.length&&warnH.length?`<div style="font-size:.72rem;color:#f57f17;margin-top:4px">⚠️ Aceptable: ${fmtRange(warnH)}</div>`:''}
-      `:`<div class="prec warn">Carga la API AEMET para ver recomendación meteorológica</div>`}
-      ${df?`<div style="font-size:.7rem;color:#666;margin-top:5px">📊 ${df.tmin}°-${df.tmax}° · ${df.sky} · 🌧${df.rain}%</div>`:''}
-      <a href="${gm}" target="_blank" class="gmaps-btn">📍 Ver en Google Maps</a>
-      ${bar.trip&&bar.tripUrl?`<a href="${bar.tripUrl}" target="_blank" class="trip-btn">⭐ Ver en TripAdvisor</a>`:''}
-    </div>`;
-
+  <div class="bar-detail">
+    <button class="back-btn" onclick="showList()">← Volver</button>
+    <div class="bn">${bar.n}${bar.trip?' <span class="tag trip">⭐ TripAdvisor</span>':''}</div>
+    <div class="br">${'★'.repeat(Math.round(bar.r))} ${bar.r} · ${bar.rv.toLocaleString()} reseñas · ${bar.pr}</div>
+    <div class="ba">📍 ${bar.a}${bar.p?` · 📞 ${bar.p}`:''}${bar.b?` · 🏘️ ${bar.b}`:''}</div>
+    <div class="ba">🕐 ${bar.h}</div>
+    <div class="bt" style="margin:5px 0">
+      <span class="tag ${sh.c}">${sh.i} ${sh.l}</span>
+      <span class="tag ${via.c}">${via.i} ${via.l}</span>
+      <span class="tag tt">🪑 ${bar.t}</span>
+    </div>
+    ${evalH?`<div class="prec ${sc.s}"><strong>${selHour!==null?String(selHour).padStart(2,'0')+'h — ':''}${sc.msg}</strong>${sn?`<div style="font-size:.7rem;margin-top:3px;opacity:.8">${sn}</div>`:''}</div>${goodH.length?`<div style="font-size:.67rem;color:#81c784;margin-top:3px">✅ Mejor franja: ${fmtRange(goodH)}</div>`:''}${!goodH.length&&warnH.length?`<div style="font-size:.67rem;color:#ffd54f;margin-top:3px">⚠️ Aceptable: ${fmtRange(warnH)}</div>`:''}`:`<div class="prec warn" style="font-size:.7rem">Añade API Key AEMET para ver meteorología</div>`}
+    ${df?`<div style="font-size:.65rem;color:#6a8a62;margin-top:3px">📊 ${df.tmin}°-${df.tmax}° · ${df.sky} · 🌧${df.rain}%</div>`:''}
+    <div class="park-box park-${pk.c}">${pk.txt}<div style="font-size:.62rem;margin-top:2px;opacity:.65">Estimación ${String(hora).padStart(2,'0')}h — ${hora>=8&&hora<14?'mañana':hora>=14&&hora<21?'tarde':'noche'}</div></div>
+    <a href="${gm}" target="_blank" class="gmaps-btn">📍 Ver en Google Maps</a>
+    ${bar.trip&&bar.tripUrl?`<a href="${bar.tripUrl}" target="_blank" class="trip-btn">⭐ Ver en TripAdvisor</a>`:''}
+  </div>`;
   const sh2=SH[bar.s];
   mkrs[i].bindPopup(`<div class="pw">
     <div class="pn">${bar.n}${bar.trip?' ⭐':''}</div>
     <div class="pr">${'★'.repeat(Math.round(bar.r))} ${bar.r} · ${bar.rv.toLocaleString()} · ${bar.pr}</div>
-    <div class="pa">📍 ${bar.a}${bar.p?' · 📞 '+bar.p:''}</div>
-    <div class="ptg"><span class="tag ${sh2.c}">${sh2.i} ${sh2.l}</span><span class="tag tt">🪑 ${bar.t}</span>${bar.trip?'<span class="tag trip">⭐ TripAdvisor</span>':''}</div>
+    <div class="pa">📍 ${bar.a}</div>
+    <div class="ptg"><span class="tag ${sh2.c}">${sh2.i} ${sh2.l}</span><span class="tag ${via.c}">${via.i} ${via.l}</span>${bar.trip?'<span class="tag trip">⭐</span>':''}</div>
     ${evalH?`<div class="prec-sm prec ${sc.s}">${sc.msg}</div>`:''}
-    ${goodH.length?`<div style="font-size:.68rem;color:#2e7d32">✅ ${fmtRange(goodH)}</div>`:''}
-    <div style="font-size:.68rem;color:#555;margin-top:3px">🕐 ${bar.h}</div>
-    <a class="pg" href="${gm}" target="_blank">📍 Ver en Google Maps</a>
-    ${bar.trip&&bar.tripUrl?`<a class="pg" style="background:#ff6f00;margin-top:4px" href="${bar.tripUrl}" target="_blank">⭐ TripAdvisor</a>`:''}
-  </div>`,{maxWidth:240}).openPopup();
+    <div class="prec-sm park-box park-${pk.c}" style="padding:4px 7px">${pk.txt}</div>
+    ${goodH.length?`<div style="font-size:.63rem;color:#81c784">✅ ${fmtRange(goodH)}</div>`:''}
+    <div style="font-size:.63rem;color:#6a8a62;margin-top:2px">🕐 ${bar.h}</div>
+    <a class="pg" href="${gm}" target="_blank">📍 Google Maps</a>
+    ${bar.trip&&bar.tripUrl?`<a class="pg" style="background:rgba(255,193,7,.15);color:#ffd54f;border:1px solid rgba(255,193,7,.3);margin-top:3px" href="${bar.tripUrl}" target="_blank">⭐ TripAdvisor</a>`:''}
+  </div>`,{maxWidth:230}).openPopup();
   map.setView([bar.lat,bar.lng],15);
-  const el=document.querySelector(`.bi[data-i="${i}"]`);
-  if(el) el.scrollIntoView({block:'nearest'});
+  const el=document.querySelector(`.bi[data-i="${i}"]`);if(el)el.scrollIntoView({block:'nearest'});
 }
 
-function showList(){
-  sel=null;
-  render();
-  document.getElementById('ph').textContent=`${vis.length} terraza${vis.length!==1?'s':''}`;
-}
+function showList(){sel=null;render();document.getElementById('ph').textContent=`${vis.length} local${vis.length!==1?'es':''}`;}
 
 function render(){
-  const pb=document.getElementById('pb');
-  if(sel!==null){pick(sel);return;}
-  document.getElementById('ph').textContent=`${vis.length} terraza${vis.length!==1?'s':''}`;
-  const date=selDate(),hours=hForecast[date]||[],evalH=hours[Math.floor(hours.length/2)]||null;
-  pb.innerHTML=vis.map(i=>{
-    const b=BARS[i],sh=SH[b.s],sc=score(evalH);
-    const dot=sc.s==='good'?'🟢':sc.s==='warn'?'🟡':'🔴';
-    return`<div class="bi${sel===i?' sel':''}" data-i="${i}" onclick="pick(${i});openPanel()">
-      <div class="bn">${b.n}${b.trip?' <span class="tag trip" style="font-size:.6rem">⭐ TA</span>':''}</div>
-      <div class="br">${'★'.repeat(Math.round(b.r))} ${b.r} · ${b.rv.toLocaleString()} · ${b.pr}</div>
-      <div class="ba">📍 ${b.a}</div>
-      <div class="bt">
-        <span class="tag ${sh.c}">${sh.i} ${sh.l}</span>
-        <span class="tag tt">🪑 ${b.t}</span>
-        ${evalH?`<span class="tag tw-${sc.s}">${dot} ${evalH.temp}°C</span>`:''}
-      </div>
-    </div>`;
+  const pb=document.getElementById('pb');if(sel!==null){pick(sel);return;}
+  document.getElementById('ph').textContent=`${vis.length} local${vis.length!==1?'es':''}`;
+  const date=selDate(),hours=hForecast[date]||[];
+  const curH=selHour!==null?hours.find(h=>h.h===selHour):null;
+  const useH=curH||hours[Math.floor(hours.length/2)]||null;
+  const hora=selHour??new Date().getHours();
+  const byBarrio={};
+  vis.forEach(i=>{const br=BARS[i].b||'Otros';if(!byBarrio[br])byBarrio[br]=[];byBarrio[br].push(i);});
+  pb.innerHTML=Object.keys(byBarrio).sort().map(br=>{
+    const items=byBarrio[br].map(i=>{
+      const b=BARS[i],sh=SH[b.s],sc=score(useH),via=VIA[b.via||'c']||VIA.c;
+      const pk=parkInfo(b.zp||'libre',hora);
+      const wdot=useH?(sc.s==='good'?'🟢':sc.s==='warn'?'🟡':'🔴'):'';
+      const pdot=pk.c==='good'?'🟢':pk.c==='med'?'🟡':'🔴';
+      return`<div class="bi${sel===i?' sel':''}" data-i="${i}" onclick="pick(${i});openPanel()">
+        <div class="bn">${b.n}${b.trip?' <span class="tag trip" style="font-size:.58rem">⭐TA</span>':''}</div>
+        <div class="br">${'★'.repeat(Math.round(b.r))} ${b.r} · ${b.rv.toLocaleString()} · ${b.pr}</div>
+        <div class="ba">📍 ${b.a}</div>
+        <div class="bt">
+          <span class="tag ${sh.c}">${sh.i} ${sh.l}</span>
+          <span class="tag ${via.c}">${via.i} ${via.l}</span>
+          ${useH?`<span class="tag tw-${sc.s}">${wdot} ${useH.temp}°C</span>`:''}
+          <span class="tag park-${pk.c}">${pdot} Aparc.</span>
+        </div>
+      </div>`;
+    }).join('');
+    return`<div class="section-header">🏘️ ${br} · ${byBarrio[br].length} locales</div>${items}`;
   }).join('');
 }
 
 function filt(){
   vis=BARS.map((_,i)=>i).filter(i=>{
     const b=BARS[i];
-    if(af==='tripadvisor') return b.trip===true && (!q||[b.n,b.a,b.s,b.t].some(x=>x.toLowerCase().includes(q)));
-    return(af==='all'||b.s===af)&&(!q||[b.n,b.a,b.s,b.t].some(x=>x.toLowerCase().includes(q)));
+    if(af==='tripadvisor')return b.trip===true&&(!q||[b.n,b.a,b.b||''].some(x=>x.toLowerCase().includes(q)));
+    return(af==='all'||b.s===af)&&(!q||[b.n,b.a,b.s,b.t,b.b||''].some(x=>x.toLowerCase().includes(q)));
   });
   mkrs.forEach((m,i)=>{vis.includes(i)?m.addTo(map):map.removeLayer(m);});
-  document.getElementById('badge').textContent=`${vis.length}`;
+  document.getElementById('badge').textContent=vis.length;
   if(sel===null)render();
 }
-
 function sf(btn,shade){document.querySelectorAll('.fb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');af=shade;sel=null;filt();}
 function clr(){document.getElementById('si').value='';q='';document.getElementById('cb').style.display='none';sel=null;filt();}
-document.getElementById('si').addEventListener('input',function(){
-  q=this.value.toLowerCase().trim();
-  document.getElementById('cb').style.display=q?'inline':'none';
-  sel=null;filt();
-});
+document.getElementById('si').addEventListener('input',function(){q=this.value.toLowerCase().trim();document.getElementById('cb').style.display=q?'inline':'none';sel=null;filt();});
 
 function adjustLayout(){
-  const tb=document.getElementById('topbar').offsetHeight;
-  const dt=document.getElementById('dtabs').offsetHeight;
-  const hb=document.getElementById('hbar').offsetHeight;
-  const used=tb+dt+hb;
-  document.getElementById('main').style.height=`calc(100vh - ${used}px)`;
-  map.invalidateSize();
+  const tb=document.getElementById('topbar').offsetHeight+document.getElementById('dtabs').offsetHeight+document.getElementById('hbar').offsetHeight;
+  document.getElementById('main').style.height=`calc(100vh - ${tb}px)`;map.invalidateSize();
 }
-window.addEventListener('resize',adjustLayout);
-setTimeout(adjustLayout,100);
+window.addEventListener('resize',adjustLayout);setTimeout(adjustLayout,100);
 
 filt();
 const savedKey=localStorage.getItem('aemet_key')||DEFAULT_KEY;
 if(savedKey){document.getElementById('akey').value=savedKey;loadAEMET(savedKey);}
-else{
-  document.getElementById('dtabs').innerHTML='<span style="font-size:.7rem;color:#689f38;padding:4px">Añade tu API Key de AEMET para ver el tiempo →</span>';
-  document.getElementById('hgrid').innerHTML='<span style="font-size:.7rem;color:#aaa">Sin API Key de AEMET</span>';
-}
+else{document.getElementById('dtabs').innerHTML='<span style="font-size:.7rem;color:#689f38;padding:4px">Añade tu API Key de AEMET para ver el tiempo →</span>';document.getElementById('hgrid').innerHTML='<span style="font-size:.7rem;color:#aaa">Sin API Key AEMET</span>';}
 </script>
 </body>
 </html>
